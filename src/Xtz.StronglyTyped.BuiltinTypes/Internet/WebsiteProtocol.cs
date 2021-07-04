@@ -1,0 +1,27 @@
+﻿using System;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Internet
+{
+    /// <summary>
+    /// Website protocol.
+    /// </summary>
+    /// <remarks>Only: HTTP or HTTPS</remarks>
+    [StrongType(typeof(string))]
+    public partial class WebsiteProtocol
+    {
+        /// <summary>
+        /// HTTP protocol.
+        /// </summary>
+        public static readonly WebsiteProtocol HTTP = new WebsiteProtocol("http");
+
+        /// <summary>
+        /// HTTPS protocol.
+        /// </summary>
+        public static readonly WebsiteProtocol HTTPS = new WebsiteProtocol("https");
+
+        protected override bool IsValid(string value)
+        {
+            return string.Equals(value, "https", StringComparison.InvariantCultureIgnoreCase) || string.Equals(value, "http", StringComparison.InvariantCultureIgnoreCase);
+        }
+    }
+}
