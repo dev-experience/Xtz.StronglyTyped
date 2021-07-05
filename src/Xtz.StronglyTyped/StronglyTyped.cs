@@ -16,8 +16,8 @@ namespace Xtz.StronglyTyped
 
         protected StronglyTyped(TInnerType value)
         {
-            ThrowIfInvalid(value);
             Value = value;
+            ThrowIfInvalid(value);
         }
 
         private void ThrowIfInvalid(TInnerType value)
@@ -39,10 +39,7 @@ namespace Xtz.StronglyTyped
             }
         }
 
-        protected void Throw(string errorMessage)
-        {
-            throw new StronglyTypedException(GetType(), errorMessage);
-        }
+        protected void Throw(string errorMessage) => throw new StronglyTypedException(GetType(), errorMessage);
 
         protected virtual bool IsValid(TInnerType value)
         {

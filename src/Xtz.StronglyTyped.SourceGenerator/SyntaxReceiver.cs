@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -27,6 +28,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
         /// <summary>
         /// Called for every syntax node in the compilation, we can inspect the nodes and save any information useful for generation
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
             try
@@ -38,6 +40,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
                     var declaration = new StrongTypeDeclaration(typeDeclarationSyntax);
                     _declarations.Add(declaration);
+                    _log.Add($"Found a type '{typeDeclarationSyntax.Identifier}' ({typeDeclarationSyntax.Kind()}). Parent syntax: '{(typeDeclarationSyntax.Parent as NamespaceDeclarationSyntax)?.Name}'");
                 }
             }
             catch (Exception ex)

@@ -54,37 +54,42 @@ namespace Xtz.StronglyTyped.SourceGenerator
             var typeDeclarationSyntax = declaration.TypeDeclarationSyntax;
 
             var originalTypeName = typeDeclarationSyntax.Identifier.ValueText;
-            var workItemType = ExtractWorkItemType(typeDeclarationSyntax);
-            _log.Add($"Found a type ({workItemType}) '{originalTypeName}'");
-            if (workItemType == WorkItemKind.Unknown) return false;
-
-            var hasBaseType = HasBaseClass(semanticModel, typeDeclarationSyntax);
+            var itemKind = ExtractItemKind(typeDeclarationSyntax);
+            if (itemKind == WorkItemKind.Unknown)
+            {
+                _log.Add($"Unknown kind '{itemKind}' for type '{originalTypeName}'. Ignoring");
+                return false;
+            }
 
             var originalNamespace = ExtractNamespace(semanticModel, typeDeclarationSyntax);
-            _log.Add($"Identified a namespace '{originalNamespace}' for type ({workItemType}) '{originalTypeName}'");
 
             var innerType = ExtractInnerType(semanticModel, receiver, typeDeclarationSyntax);
-            if (innerType == null) return false;
+            if (innerType == null)
+            {
+                _log.Add($"Unable to identify inner type for type '{originalTypeName}'. Ignoring");
+                return false;
+            }
 
-            _log.Add($"Identified inner type '{innerType}' for type ({workItemType}) '{originalTypeName}'");
+            var extraFeatures = ExtractExtraFeatures(semanticModel, typeDeclarationSyntax, innerType);
 
-            var extraFeatures = ExtractExtraFeatures(semanticModel, receiver, typeDeclarationSyntax, innerType);
-
+            _log.Add($"Found a type ({itemKind}) '{originalNamespace}.{originalTypeName}'");
+            _log.Add($"Inner type '{innerType}'");
+            _log.Add($"{extraFeatures}");
             _log.Add(string.Empty);
 
-            workItem = new StronglyTypedWorkItem(declaration, workItemType, originalNamespace, originalTypeName, innerType, hasBaseType, extraFeatures);
+            workItem = new StronglyTypedWorkItem(declaration, itemKind, originalNamespace, originalTypeName, innerType, extraFeatures);
             return true;
         }
 
-        public WorkItemKind ExtractWorkItemType(SyntaxNode syntaxNode)
+        public WorkItemKind ExtractItemKind(SyntaxNode syntaxNode)
         {
-            var itemType = syntaxNode switch
+            var itemKind = syntaxNode switch
             {
                 ClassDeclarationSyntax => WorkItemKind.Class,
                 StructDeclarationSyntax => WorkItemKind.Struct,
                 _ => WorkItemKind.Unknown,
             };
-            return itemType;
+            return itemKind;
         }
 
         public Type? ExtractInnerType(
@@ -102,6 +107,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 return innerType;
             }
 
+            // Never happens
             return null;
         }
 
@@ -155,54 +161,67 @@ namespace Xtz.StronglyTyped.SourceGenerator
             return null;
         }
 
-        private string ExtractNamespace(SemanticModel semanticModel, TypeDeclarationSyntax typeDeclarationSyntax)
+        private string? ExtractNamespace(SemanticModel semanticModel, TypeDeclarationSyntax typeDeclarationSyntax)
         {
-            var namespaceDeclarationSyntax = typeDeclarationSyntax.FirstAncestorOrSelf<NamespaceDeclarationSyntax>(x => true);
-            var typeSymbolInfo = semanticModel.GetDeclaredSymbol(namespaceDeclarationSyntax!) as INamespaceSymbol;
-            if (typeSymbolInfo is null) throw new SyntaxReceiverException($"Failed to find the namespace for '{typeDeclarationSyntax.Identifier.ValueText}'");
+            var namespaceDeclarationSyntax = typeDeclarationSyntax.FirstAncestorOrSelf<NamespaceDeclarationSyntax>(_ => true);
+            if (namespaceDeclarationSyntax is null) return null;
 
-            var result = typeSymbolInfo.ToDisplayString();
+            var typeSymbolInfo = semanticModel.GetDeclaredSymbol(namespaceDeclarationSyntax) as INamespaceSymbol;
+            var result = typeSymbolInfo?.ToDisplayString();
             return result;
         }
 
         private ExtraFeatures ExtractExtraFeatures(
             SemanticModel semanticModel,
-            SyntaxReceiver receiver,
             TypeDeclarationSyntax typeDeclarationSyntax,
             Type innerType)
         {
             var isAbstract = typeDeclarationSyntax.Modifiers.Any(x => Equals(x.Value, "abstract"));
 
+            var hasBaseType = HasBaseClass(semanticModel, typeDeclarationSyntax);
+
+            var innerTypeHasStringConstructor = innerType.GetConstructor(new[] { typeof(string) }) != null;
+
             var hasStringConstructor = false;
-            if (typeDeclarationSyntax is ClassDeclarationSyntax classDeclarationSyntax)
+            if (innerTypeHasStringConstructor && typeDeclarationSyntax is ClassDeclarationSyntax classDeclarationSyntax)
             {
                 var constructorDeclarationSyntaxes = classDeclarationSyntax.Members
                     .Where(x => x is ConstructorDeclarationSyntax)
                     .Cast<ConstructorDeclarationSyntax>();
-                if (constructorDeclarationSyntaxes.Any(x => x.ParameterList.Parameters.Count == 1 && IsString(semanticModel, x)))
+                if (constructorDeclarationSyntaxes.Any(x => HasSingleParameter(semanticModel, x, "string")))
                 {
                     hasStringConstructor = true;
                 }
             }
 
-            var doGenerateStringConstructor = innerType.GetConstructor(new[] {typeof(string)}) != null;
+            var doGenerateStringConstructor = innerType != typeof(string) && innerTypeHasStringConstructor && !hasStringConstructor;
 
-            var isStruct = typeDeclarationSyntax is StructDeclarationSyntax;
-            if (isStruct)
+            var hasToString = false;
+            var methodDeclarationSyntaxes = typeDeclarationSyntax.Members
+                .Where(x => x is MethodDeclarationSyntax)
+                .Cast<MethodDeclarationSyntax>()
+                .ToArray();
+            if (methodDeclarationSyntaxes.Any(x => x.Identifier.Text == "ToString" && x.ParameterList.Parameters.Count == 0))
             {
-                // IsValid
+                hasToString = true;
             }
 
-            return new ExtraFeatures(isAbstract, hasStringConstructor, doGenerateStringConstructor);
+            var hasIsValid = false;
+            if (methodDeclarationSyntaxes.Any(x => HasSingleParameter(semanticModel, x, innerType.FullName!)))
+            {
+                hasIsValid = true;
+            }
+
+            return new ExtraFeatures(isAbstract, hasBaseType, doGenerateStringConstructor, hasToString, hasIsValid);
         }
 
-        private static bool IsString(SemanticModel semanticModel, ConstructorDeclarationSyntax x)
+        private static bool HasSingleParameter(SemanticModel semanticModel, BaseMethodDeclarationSyntax x, string expectedParameterType)
         {
-            var typeSyntax = x.ParameterList.Parameters.FirstOrDefault()?.Type;
-            if (typeSyntax is null) return false;
+            if (x.ParameterList.Parameters.Count != 1) return false;
 
-            var symbolInfo = semanticModel.GetTypeInfo(typeSyntax);
-            var result = symbolInfo.Type?.ToDisplayString() == "string";
+            var typeSyntax = x.ParameterList.Parameters.First().Type;
+            var symbolInfo = semanticModel.GetTypeInfo(typeSyntax!);
+            var result = symbolInfo.Type?.ToDisplayString() == expectedParameterType;
             return result;
         }
     }

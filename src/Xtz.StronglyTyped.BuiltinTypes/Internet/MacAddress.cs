@@ -9,22 +9,9 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Internet
     [StrongType(typeof(PhysicalAddress))]
     public partial class MacAddress
     {
-        public MacAddress(string value)
-            : base(PhysicalAddress.Parse(Normalize(value)))
-        {
-        }
-
         public MacAddress(byte[] value)
             : base(new PhysicalAddress(value))
         {
-        }
-
-        private static string Normalize(string value)
-        {
-            return value
-                .Replace("-", string.Empty)
-                .Replace(":", string.Empty)
-                .ToUpperInvariant();
         }
 
         public override string ToString()

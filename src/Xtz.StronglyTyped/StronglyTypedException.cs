@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Xtz.StronglyTyped
 {
+    [ExcludeFromCodeCoverage]
     public class StronglyTypedException : Exception
     {
         public Type Type { get; }

@@ -8,21 +8,21 @@ namespace Xtz.StronglyTyped.SourceGenerator
         private readonly ScopeTracker _scopeTracker;
 
         public StringBuilder Content { get; } = new();
-        
+
         public int IndentLevel { get; set; }
-        
+
         public CodeWriter()
         {
             // We only need one. It can be reused.
-            _scopeTracker = new(this);
+            _scopeTracker = new ScopeTracker(this);
         }
 
         public void Append(string text) => Content.Append(text);
 
         public void AppendLine(string line) => Content.Append(new string(' ', IndentLevel * 4)).AppendLine(line);
-        
+
         public void AppendLine() => Content.AppendLine();
-        
+
         public IDisposable BeginScope(string line)
         {
             AppendLine(line);
@@ -31,6 +31,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         public IDisposable BeginScope()
         {
+            // TODO: Replace by pre-built array of spaces. Do substring
             Content.Append(new string(' ', IndentLevel * 4)).AppendLine("{");
             IndentLevel += 1;
             return _scopeTracker;
@@ -45,8 +46,6 @@ namespace Xtz.StronglyTyped.SourceGenerator
         public void StartLine() => Content.Append(new string(' ', IndentLevel * 4));
 
         public void EndLine() => Content.AppendLine();
-
-        public string EscapeString(string text) => text.Replace("\"", "\"\"");
 
         public override string ToString() => Content.ToString();
 

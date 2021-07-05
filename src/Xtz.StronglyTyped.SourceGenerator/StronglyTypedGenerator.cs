@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -10,6 +12,26 @@ namespace Xtz.StronglyTyped.SourceGenerator
     [Generator]
     public class StronglyTypedGenerator : IStronglyTypedGenerator
     {
+        private static readonly Dictionary<Type, ConstructorDescriptor> KNOWN_CONSTRUCTORS = new()
+        {
+            { typeof(bool), new("bool", "bool.Parse(value)") },
+            { typeof(byte), new("byte", "byte.Parse(value)") },
+            { typeof(char), new("char", "char.Parse(value)") },
+            { typeof(decimal), new("decimal", "decimal.Parse(value)") },
+            { typeof(double), new("double", "double.Parse(value)") },
+            { typeof(float), new("float", "float.Parse(value)") },
+            { typeof(int), new("int", "int.Parse(value)") },
+            { typeof(long), new("long", "long.Parse(value)") },
+            { typeof(sbyte), new("sbyte", "sbyte.Parse(value)") },
+            { typeof(short), new("short", "short.Parse(value)") },
+            { typeof(uint), new("uint", "uint.Parse(value)") },
+            { typeof(ulong), new("ulong", "ulong.Parse(value)") },
+            { typeof(ushort), new("ushort", "ushort.Parse(value)") },
+            { typeof(Guid), new("System.Guid", "System.Guid.Parse(value)") },
+            { typeof(IPAddress), new("System.Net.IPAddress", "System.Net.IPAddress.Parse(value)") },
+            { typeof(PhysicalAddress), new("System.Net.NetworkInformation.PhysicalAddress", "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
+        };
+        
         private readonly IDataExtractor _dataExtractor = new DataExtractor();
 
         private readonly List<string> _log = new();
@@ -40,24 +62,40 @@ namespace Xtz.StronglyTyped.SourceGenerator
                         var semanticModel = context.Compilation.GetSemanticModel(declaration.TypeDeclarationSyntax.SyntaxTree, true);
                         if (_dataExtractor.BuildWorkItem(semanticModel, receiver, declaration, out var workItem))
                         {
-                            var fileName = $"{workItem!.Namespace}.{workItem.TypeName}.cs";
+                            if (workItem is null)
+                            {
+                                _log.Add($"Error: Work item is <null>. Syntax '{declaration.TypeDeclarationSyntax.Identifier}'");
+                                continue;
+                            }
+
+                            if (workItem.Namespace is null)
+                            {
+                                _log.Add($"Error: Work namespace is <null>. Syntax '{declaration.TypeDeclarationSyntax.Identifier}'");
+                                continue;
+                            }
+
+                            var fileName = $"{workItem.Namespace}.{workItem.TypeName}.cs";
                             var generatedSourceCode = GenerateSourceCode(workItem, now);
                             context.AddSource(fileName, SourceText.From(generatedSourceCode, Encoding.UTF8));
                         }
                     }
                     catch (Exception e)
                     {
+#if DEBUG
                         if (!Debugger.IsAttached) Debugger.Launch();
+#endif
 
-                        _log.Add($"Method '{nameof(WriteTypeConverter)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\nStack trace: {e.StackTrace}");
+                        _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\nStack trace: {e.StackTrace}");
                     }
                 }
             }
             catch (Exception e)
             {
+#if DEBUG
                 if (!Debugger.IsAttached) Debugger.Launch();
+#endif
 
-                _log.Add($"Method '{nameof(WriteTypeConverter)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\nStack trace: {e.StackTrace}");
+                _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\nStack trace: {e.StackTrace}");
             }
             finally
             {
@@ -132,7 +170,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         private void WriteClass(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
-            var baseType = !workItem.HasBaseType
+            var baseType = !workItem.ExtraFeatures.HasBaseType
                 ? $" Xtz.StronglyTyped.StronglyTyped<{workItem.InnerType.FullName}>,"
                 : String.Empty;
 
@@ -142,6 +180,8 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
             using (writer.BeginScope($"public{sealedStr} partial class {workItem.TypeName} :{baseType} System.IEquatable<{workItem.TypeName}>"))
             {
+                WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> class.");
+                WriteXmlParam(writer, "value", "Inner value");
                 writer.AppendLine($"public {workItem.TypeName}({workItem.InnerType.FullName} value)");
                 writer.AppendLine("    : base(value)");
                 using (writer.BeginScope())
@@ -149,48 +189,17 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 }
                 writer.AppendLine();
 
-                TryWriteCustomConstructor(writer, workItem);
+                TryWriteCustomConstructors(writer, workItem);
+
+                TryWriteToString(writer, workItem);
 
                 WriteEquatableEquals(writer, workItem);
                 writer.AppendLine();
 
-                WriteExplicitOperatorToInnerType(writer, workItem);
+                WriteExplicitOperatorToStrongType(writer, workItem);
                 writer.AppendLine();
 
-                WriteImplicitOperatorToStrongType(writer, workItem);
-            }
-        }
-
-        private void TryWriteCustomConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
-        {
-            if (workItem.InnerType == typeof(Guid))
-            {
-                writer.AppendLine($"public {workItem.TypeName}()");
-                writer.AppendLine("    : base(System.Guid.NewGuid())");
-                using (writer.BeginScope())
-                {
-                }
-                writer.AppendLine();
-                return;
-            }
-
-            if (!workItem.ExtraFeatures.HasStringConstructor)
-            {
-                TryWriteStringConstructor(writer, workItem);
-            }
-        }
-
-        private void TryWriteStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
-        {
-            var innerTypeStringConstructor = workItem.InnerType.GetConstructor(new[] { typeof(string)});
-            if (innerTypeStringConstructor != null)
-            {
-                writer.AppendLine($"public {workItem.TypeName}(string value)");
-                writer.AppendLine($"    : base(new {workItem.InnerType.FullName}(value))");
-                using (writer.BeginScope())
-                {
-                }
-                writer.AppendLine();
+                WriteImplicitOperatorsFromStrongType(writer, workItem);
             }
         }
 
@@ -199,51 +208,169 @@ namespace Xtz.StronglyTyped.SourceGenerator
             writer.AppendLine("[System.Diagnostics.DebuggerDisplay(\"[struct {GetType().Name,nq}] {Value}\")]");
             using (writer.BeginScope($"public readonly partial struct {workItem.TypeName} : Xtz.StronglyTyped.IStronglyTyped<{workItem.InnerType.FullName}>, System.IEquatable<{workItem.TypeName}>"))
             {
+                WriteXmlSummary(writer, "Default instance.");
                 writer.AppendLine($"public static readonly {workItem.TypeName} Default;");
+                writer.AppendLine();
 
+                WriteXmlSummary(writer, $"Inner value.");
                 writer.AppendLine($"public {workItem.InnerType.FullName} Value {{ get; }}");
                 writer.AppendLine();
 
+                WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> struct.");
+                WriteXmlParam(writer, "value", "Inner value");
                 writer.AppendLine($"public {workItem.TypeName}({workItem.InnerType.FullName} value)");
                 using (writer.BeginScope())
                 {
                     writer.AppendLine("Value = value;");
-                    //writer.AppendLine("ThrowIfInvalid(value);");
+                    writer.AppendLine("ThrowIfInvalid(value);");
                 }
                 writer.AppendLine();
 
-                WriteEquatableEquals(writer, workItem);
-                writer.AppendLine();
+                TryWriteCustomConstructors(writer, workItem);
 
-                WriteToString(writer);
+                WriteStructThrowIfInvalid(writer, workItem);
+
+                TryWriteToString(writer, workItem);
+
+                WriteEquatableEquals(writer, workItem);
                 writer.AppendLine();
 
                 WriteStructEqualityMethods(writer, workItem);
                 writer.AppendLine();
 
-                WriteExplicitOperatorToInnerType(writer, workItem);
+                WriteExplicitOperatorToStrongType(writer, workItem);
                 writer.AppendLine();
 
-                WriteImplicitOperatorToStrongType(writer, workItem);
+                WriteImplicitOperatorsFromStrongType(writer, workItem);
             }
+        }
+
+        private void TryWriteCustomConstructors(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            if (workItem.InnerType == typeof(Guid))
+            {
+                WriteGuidStringConstructor(writer, workItem);
+            }
+
+            if (workItem.ExtraFeatures.DoGenerateStringConstructor)
+            {
+                WriteStringConstructor(writer, workItem);
+            }
+            else
+            {
+                TryWriteParsingStringConstructor(writer, workItem);
+            }
+        }
+
+        private void WriteGuidStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            var typeKindStr = workItem.Kind == WorkItemKind.Struct
+                ? "struct"
+                : "class";
+
+            if (workItem.Kind == WorkItemKind.Class)
+            {
+                WriteXmlSummary(writer,
+                    $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> {typeKindStr}.");
+                writer.AppendLine($"public {workItem.TypeName}()");
+                writer.AppendLine("    : this(System.Guid.NewGuid())");
+
+                using (writer.BeginScope())
+                {
+                }
+
+                writer.AppendLine();
+            }
+        }
+
+        private void WriteStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> class.");
+            WriteXmlParam(writer, "value", "String value to convert");
+            writer.AppendLine($"public {workItem.TypeName}(string value)");
+            writer.AppendLine($"    : this(new {workItem.InnerType.FullName}(value))");
+            using (writer.BeginScope())
+            {
+            }
+            writer.AppendLine();
+        }
+
+        private void TryWriteParsingStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            if (KNOWN_CONSTRUCTORS.TryGetValue(workItem.InnerType, out var descriptor))
+            {
+                WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> class.");
+                WriteXmlParam(writer, "value", "String value to convert");
+                writer.AppendLine($"public {workItem.TypeName}(string value)");
+                writer.AppendLine($"    : this({descriptor.ParsingExpression})");
+                using (writer.BeginScope())
+                {
+                }
+                writer.AppendLine();
+            }
+        }
+
+        private void WriteStructThrowIfInvalid(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            using (writer.BeginScope($"private void ThrowIfInvalid({workItem.InnerType.FullName} value)"))
+            {
+                using (writer.BeginScope("if (value == null)"))
+                {
+                    writer.AppendLine("Throw($\"<null> value is invalid for type {GetType()}\");");
+                }
+
+                writer.AppendLine();
+                using (writer.BeginScope("if (object.Equals(value, string.Empty))"))
+                {
+                    writer.AppendLine("Throw($\"'' value is invalid for type {GetType()}\");");
+                }
+
+                if (workItem.ExtraFeatures.HasIsValid)
+                {
+                    writer.AppendLine();
+                    using (writer.BeginScope("if (!IsValid(value!))"))
+                    {
+                        writer.AppendLine("Throw($\"'' value is invalid for type {GetType()}\");");
+                    }
+                }
+            }
+            writer.AppendLine();
+
+            writer.AppendLine("private void Throw(string errorMessage) => throw new Xtz.StronglyTyped.StronglyTypedException(GetType(), errorMessage);");
+            writer.AppendLine();
         }
 
         private void WriteStructEqualityMethods(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
+            WriteXmlSummary(writer, "Determines whether the specified object is equal to the current struct.");
+            WriteXmlParam(writer, "obj", "The object to compare with the current struct.");
+            WriteXmlReturns(writer, "<see langword=\"true\" /> if the specified object  is equal to the current object; otherwise, <see langword=\"false\" />.");
             using (writer.BeginScope("public override bool Equals(object obj)"))
             {
                 writer.AppendLine($"return obj is {workItem.TypeName} other && Equals(other);");
             }
             writer.AppendLine();
 
+            WriteXmlSummary(writer, "Returns the hash code for this instance (hash code of the inner value).");
+            WriteXmlReturns(writer, "A 32-bit signed integer that is the hash code for this instance.");
             using (writer.BeginScope("public override int GetHashCode()"))
             {
-                writer.AppendLine("return Value.GetHashCode();");
+                if (workItem.InnerType.IsValueType)
+                {
+                    writer.AppendLine("return Value.GetHashCode();");
+                }
+                else
+                {
+                    writer.AppendLine("return Value?.GetHashCode() ?? default;");
+                }
             }
         }
 
         private static void WriteEquatableEquals(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
+            WriteXmlSummary(writer, "Determines whether the specified object is equal to the current instance.");
+            WriteXmlParam(writer, "other", "The object to compare with the current instance.");
+            WriteXmlReturns(writer, "<see langword=\"true\" /> if the specified object is equal to the current instance; otherwise, <see langword=\"false\" />.");
             using (writer.BeginScope($"public bool Equals({workItem.TypeName} other)"))
             {
                 writer.AppendLine("if (ReferenceEquals(null, other)) return false;");
@@ -252,25 +379,76 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
-        private static void WriteToString(CodeWriter writer)
+        private static void TryWriteToString(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
-            using (writer.BeginScope($"public override string ToString()"))
+            if (workItem.Kind == WorkItemKind.Struct && !workItem.ExtraFeatures.HasToString)
             {
-                writer.AppendLine($"return Value.ToString();");
+                WriteXmlSummary(writer, "Returns a string that represents inner value.");
+                WriteXmlReturns(writer, "A string that represents inner value.");
+                using (writer.BeginScope("public override string ToString()"))
+                {
+                    if (workItem.InnerType == typeof(Guid))
+                    {
+                        writer.AppendLine("return $\"{Value:D}\";");
+                    }
+                    else
+                    {
+                        writer.AppendLine("return $\"{Value}\";");
+                    }
+                }
+                writer.AppendLine();
+                return;
+            }
+
+            if (workItem.Kind == WorkItemKind.Class && !workItem.ExtraFeatures.HasToString && workItem.InnerType == typeof(Guid))
+            {
+                WriteXmlSummary(writer, "Returns a string that represents inner <see cref=\"System.Guid\"/>.");
+                WriteXmlReturns(writer, "A string that represents inner <see cref=\"System.Guid\"/>.");
+                using (writer.BeginScope("public override string ToString()"))
+                {
+                    writer.AppendLine("return $\"{Value:D}\";");
+                }
+                writer.AppendLine();
+                return;
             }
         }
 
-        private static void WriteExplicitOperatorToInnerType(CodeWriter writer, StronglyTypedWorkItem workItem)
+        /// <summary>
+        /// <see cref="String"/>
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="workItem"></param>
+        private static void WriteExplicitOperatorToStrongType(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
+            WriteXmlSummary(writer, $"Explicitly converts <see cref=\"{workItem.InnerType.FullName}\"/> to <see cref=\"{workItem.TypeName}\"/>.");
+            WriteXmlParam(writer, "value", "A value to convert from.");
+            WriteXmlReturns(writer, $"A converted <see cref=\"{workItem.TypeName}\"/> value.");
             using (writer.BeginScope(
                 $"public static explicit operator {workItem.TypeName}({workItem.InnerType.FullName} value)"))
             {
                 writer.AppendLine($"return new {workItem.TypeName}(value);");
             }
+
+            if (workItem.InnerType != typeof(string))
+            {
+                writer.AppendLine();
+                WriteXmlSummary(writer,
+                    $"Explicitly converts <see cref=\"string\"/> to <see cref=\"{workItem.TypeName}\"/>.");
+                WriteXmlParam(writer, "value", "A value to convert from.");
+                WriteXmlReturns(writer, $"A converted <see cref=\"{workItem.TypeName}\"/> value.");
+                using (writer.BeginScope(
+                    $"public static explicit operator {workItem.TypeName}(string value)"))
+                {
+                    writer.AppendLine($"return new {workItem.TypeName}(value);");
+                }
+            }
         }
 
-        private static void WriteImplicitOperatorToStrongType(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteImplicitOperatorsFromStrongType(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
+            WriteXmlSummary(writer, $"Implicitly converts <see cref=\"{workItem.TypeName}\"/> to <see cref=\"{workItem.InnerType.FullName}\"/>.");
+            WriteXmlParam(writer, "stronglyTyped", "A value to convert from.");
+            WriteXmlReturns(writer, $"A converted <see cref=\"{workItem.InnerType.FullName}\"/> value.");
             using (writer.BeginScope(
                 $"public static implicit operator {workItem.InnerType.FullName}({workItem.TypeName} stronglyTyped)"))
             {
@@ -283,6 +461,41 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     writer.AppendLine($"return stronglyTyped.Value;");
                 }
             }
+
+            if (workItem.InnerType != typeof(string))
+            {
+                writer.AppendLine();
+                WriteXmlSummary(writer, $"Implicitly converts <see cref=\"{workItem.TypeName}\"/> to <see cref=\"string\"/>.");
+                WriteXmlParam(writer, "stronglyTyped", "A value to convert from.");
+                WriteXmlReturns(writer, $"A converted <see cref=\"string\"/> value.");
+                using (writer.BeginScope(
+                    $"public static implicit operator string({workItem.TypeName} stronglyTyped)"))
+                {
+                    if (workItem.Kind == WorkItemKind.Class)
+                    {
+                        writer.AppendLine($"return stronglyTyped?.ToString() ?? string.Empty;");
+                    }
+                    else
+                    {
+                        writer.AppendLine($"return stronglyTyped.ToString();");
+                    }
+                }
+            }
+        }
+
+        private static void WriteXmlSummary(CodeWriter writer, string summary)
+        {
+            writer.AppendLine($"/// <summary>{summary}</summary>");
+        }
+
+        private static void WriteXmlReturns(CodeWriter writer, string description)
+        {
+            writer.AppendLine($"/// <returns>{description}</returns>");
+        }
+
+        private static void WriteXmlParam(CodeWriter writer, string paramName, string description)
+        {
+            writer.AppendLine($"/// <param name=\"{paramName}\">{description}</param>");
         }
 
         private static SourceText BuildLogText(IReadOnlyCollection<string> log, string title)

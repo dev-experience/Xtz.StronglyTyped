@@ -8,4 +8,3 @@ namespace Xtz.StronglyTyped.Benchmark.Models
     {
     }
 }
-
