@@ -1,4 +1,12 @@
-﻿namespace Xtz.StronglyTyped.SourceGenerator
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Xtz.StronglyTyped.SourceGenerator
 {
-    public record ExtraFeatures(bool IsAbstract, bool HasStringConstructor, bool DoGenerateStringConstructor);
+    [ExcludeFromCodeCoverage]
+    public record ExtraFeatures(
+        bool IsAbstract,
+        bool HasBaseType,
+        bool DoGenerateStringConstructor,
+        bool HasToString,
+        bool HasIsValid);
 }

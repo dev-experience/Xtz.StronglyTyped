@@ -8,11 +8,6 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Internet
     [StrongType(typeof(IPAddress))]
     public partial class IpV6Address : IHasIpAddress
     {
-        public IpV6Address(string value)
-            : base(IPAddress.Parse(value))
-        {
-        }
-
         public IpV6Address(byte[] value)
             : base(new IPAddress(value))
         {

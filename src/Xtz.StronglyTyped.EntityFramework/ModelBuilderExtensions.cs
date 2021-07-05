@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -8,6 +13,26 @@ namespace Xtz.StronglyTyped.EntityFramework
 {
     public static class ModelBuilderExtensions
     {
+        private static readonly IReadOnlyCollection<Type> PRIMITIVE_TYPES = new[]
+        {
+            typeof(bool),
+            typeof(byte),
+            typeof(char),
+            typeof(decimal),
+            typeof(double),
+            typeof(float),
+            typeof(int),
+            typeof(long),
+            typeof(sbyte),
+            typeof(short),
+            typeof(string),
+            typeof(uint),
+            typeof(ulong),
+            typeof(ushort),
+        };
+
+        private static readonly Type DEFAULT_BASE_TYPE = typeof(string);
+
         /// <summary>
         /// Registers value converters for strong types.
         /// </summary>
@@ -38,7 +63,6 @@ namespace Xtz.StronglyTyped.EntityFramework
 
         private static bool IsSupportedType(PropertyInfo propertyInfo)
         {
-            // TODO: Add `IPAddress`, `PhysicalAddress`, `Uri`, `MailAddress`
             return typeof(IStronglyTyped<string>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<char>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<sbyte>).IsAssignableFrom(propertyInfo.PropertyType)
@@ -53,21 +77,28 @@ namespace Xtz.StronglyTyped.EntityFramework
                 || typeof(IStronglyTyped<float>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<double>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<bool>).IsAssignableFrom(propertyInfo.PropertyType)
-                || typeof(IStronglyTyped<Guid>).IsAssignableFrom(propertyInfo.PropertyType);
+                || typeof(IStronglyTyped<Guid>).IsAssignableFrom(propertyInfo.PropertyType)
+                || typeof(IStronglyTyped<Uri>).IsAssignableFrom(propertyInfo.PropertyType)
+                || typeof(IStronglyTyped<MailAddress>).IsAssignableFrom(propertyInfo.PropertyType)
+                || typeof(IStronglyTyped<IPAddress>).IsAssignableFrom(propertyInfo.PropertyType)
+                || typeof(IStronglyTyped<PhysicalAddress>).IsAssignableFrom(propertyInfo.PropertyType);
         }
 
         private static Type ExtractInnerType(Type innerType)
         {
-            var currentType = innerType;
-            while (currentType.BaseType != typeof(object) && currentType.BaseType == typeof(ValueType))
+            try
             {
-                currentType = currentType.BaseType!;
+                var stronglyTypedInterface = innerType.GetInterface("IStronglyTyped`1");
+                var result = stronglyTypedInterface?.GenericTypeArguments.FirstOrDefault();
+                if (result == null) return DEFAULT_BASE_TYPE;
+
+                return PRIMITIVE_TYPES.Contains(result) ? result : DEFAULT_BASE_TYPE;
             }
-
-            var stronglyTypedInterface = currentType.GetInterface("IStronglyTyped`1");
-            var result = stronglyTypedInterface?.GenericTypeArguments.FirstOrDefault();
-            return result ?? typeof(string);
-
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Exception '{e.GetType()}': {e.Message}");
+                return DEFAULT_BASE_TYPE;
+            }
         }
 
         private static ValueConverter BuildValueConverter(Type innerType, Type strongType)

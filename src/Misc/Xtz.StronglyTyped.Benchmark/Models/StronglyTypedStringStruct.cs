@@ -1,6 +1,6 @@
 ﻿namespace Xtz.StronglyTyped.Benchmark.Models
 {
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial struct StronglyTypedStringStruct
     {
     }

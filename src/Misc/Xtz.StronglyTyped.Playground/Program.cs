@@ -13,11 +13,11 @@ namespace Xtz.StronglyTyped.Playground
 
             // NOTE: Generate random strongly-typed negative `Int32` number
             var negativeInt = numberFaker.BuildNegativeInt32Faker(-1, 7).Generate();
-            Console.WriteLine(negativeInt);
+            Console.WriteLine((string)negativeInt);
 
             // NOTE: Generate random strongly-typed negative `Int32` number
             var negativeInt2 = numberFaker.BuildNegativeInt32Faker(-567, 7).Generate();
-            Console.WriteLine(negativeInt2);
+            Console.WriteLine((string)negativeInt2);
 
             RunAddressFakers();
             RunInternetFakers();
@@ -99,7 +99,7 @@ namespace Xtz.StronglyTyped.Playground
             Console.WriteLine(macAddress);
 
             var portNumber = fakerBuilder.BuildPortNumberFaker().Generate();
-            Console.WriteLine(portNumber);
+            Console.WriteLine((string)portNumber);
 
             var relativeUri = fakerBuilder.BuildRelativeUriFaker().Generate();
             Console.WriteLine(relativeUri);

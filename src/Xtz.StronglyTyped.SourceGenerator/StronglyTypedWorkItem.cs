@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Xtz.StronglyTyped.SourceGenerator
 {
+    [ExcludeFromCodeCoverage]
     public record StronglyTypedWorkItem(
         StrongTypeDeclaration TypeDeclarationSyntax,
         WorkItemKind Kind,
-        string Namespace,
+        string? Namespace,
         string TypeName,
         Type InnerType,
-        bool HasBaseType,
         ExtraFeatures ExtraFeatures);
 }

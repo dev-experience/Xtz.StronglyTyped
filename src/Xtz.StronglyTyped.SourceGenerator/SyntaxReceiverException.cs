@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Xtz.StronglyTyped.SourceGenerator
 {
+    [ExcludeFromCodeCoverage]
     public class SyntaxReceiverException : ApplicationException
     {
         public SyntaxReceiverException(string message)

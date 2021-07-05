@@ -5,7 +5,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Ids
     /// <summary>
     /// Base class for GUID-based IDs.
     /// </summary>
-    public abstract class GuidId : StronglyTyped<Guid>
+    public abstract class GuidId : StronglyTyped<Guid>, IStronglyTypedId
     {
         protected GuidId(Guid value)
             : base(value)

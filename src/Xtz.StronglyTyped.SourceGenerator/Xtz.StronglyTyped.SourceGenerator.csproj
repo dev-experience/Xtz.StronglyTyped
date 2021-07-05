@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <PackageId>Xtz.StronglyTyped.SourceGenerator</PackageId>
-    <Version>0.0.12-rc</Version>
+    <Version>0.15.1</Version>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Authors>Vlad DX</Authors>
