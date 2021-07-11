@@ -1,10 +1,15 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Xtz.StronglyTyped.BuiltinTypes.Address;
+using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
+using Xtz.StronglyTyped.BuiltinTypes.Bogus;
 using Xtz.StronglyTyped.BuiltinTypes.Finance;
 using Xtz.StronglyTyped.BuiltinTypes.Internet;
 using Xtz.StronglyTyped.EntityFramework.IntegrationTests.StrongTypes;
@@ -13,50 +18,75 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 {
     public class DbContextTests
     {
-        private ServiceProvider _serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
 
-        [SetUp]
-        public void Setup()
+        private readonly AppDbContext _dbContext;
+
+        public DbContextTests()
         {
             var services = new ServiceCollection();
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(GetType().Namespace!));
 
             _serviceProvider = services.BuildServiceProvider();
+            _dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
         }
 
-        [Test]
-        public void ShouldSucceed_GetRequiredDbContext()
+        [SetUp]
+        public void Setup()
         {
-            // Act
-
-            var dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Database.EnsureCreated();
         }
 
         [Test]
-        public void ShouldSucceed_EnsureDatabase()
-        {
-            // Arrange
-
-            var dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
-
-            // Act
-
-            dbContext.Database.EnsureCreated();
-        }
-
-        [Test]
-        public void ShouldSucceed_SeedingData_ForGuidId()
+        [StrongAutoData]
+        public void ShouldSucceed_SeedingData_ForGuidId(IReadOnlyCollection<City> cityNames)
         {
             // Arrange
 
-            var dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
-            dbContext.Database.EnsureCreated();
+            var faker = new Faker();
 
-            var entities = Enumerable.Range(1, 5)
-                .Select(index => new WeatherForecast1
+            var cityEntities = cityNames
+                .Select(name => new CityEntity
                 {
-                    GuidId = new WeatherForecastGuidId(),
-                    City = new City("Amsterdam"),
+                    Name = name,
+                    Id = new CityIntId(faker.Random.Int(1, 1_000_000)),
+                })
+                .ToArray();
+
+            // Act
+
+            _dbContext.Cities.AddRange(cityEntities);
+            _dbContext.SaveChanges();
+
+            var cities = _dbContext.Cities.ToArray();
+
+            // Assert
+
+            Assert.AreEqual(cityNames.Count, cities.Length);
+        }
+
+            [Test]
+        [StrongAutoData]
+        public void ShouldSucceed_SeedingData_ForRelatedData(IReadOnlyCollection<City> cityNames)
+        {
+            // Arrange
+
+            var faker = new Faker();
+
+            var cityEntities = cityNames
+                .Select(name => new CityEntity
+                {
+                    Name = name,
+                    Id = new CityIntId(faker.Random.Int(1, 1_000_000)),
+                })
+                .ToArray();
+
+            var weatherForecastEntities = Enumerable.Range(1, 5)
+                .Select(index => new WeatherForecastEntity
+                {
+                    Id = new WeatherForecastGuidId(),
+                    City = faker.PickRandom(cityEntities),
                     Email = new Email("bob@example.com"),
                     Date = DateTime.Now.AddDays(index),
                     Amount = (Amount)55,
@@ -65,35 +95,17 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Act
 
-            dbContext.WeatherForecasts1.AddRange(entities);
-            dbContext.SaveChanges();
+            _dbContext.Cities.AddRange(cityEntities);
+            _dbContext.WeatherForecasts.AddRange(weatherForecastEntities);
+            _dbContext.SaveChanges();
 
-        }
+            var cities = _dbContext.Cities.ToArray();
+            var weatherForecasts = _dbContext.WeatherForecasts.ToArray();
 
-        [Test]
-        public void ShouldSucceed_SeedingData_ForIntId()
-        {
-            // Arrange
+            // Assert
 
-            var dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
-            dbContext.Database.EnsureCreated();
-
-            var entities = Enumerable.Range(1, 5)
-                .Select(index => new WeatherForecast2
-                {
-                    IntId = new WeatherForecastIntId(index),
-                    City = new City("Amsterdam"),
-                    Email = new Email("bob@example.com"),
-                    Date = DateTime.Now.AddDays(index),
-                    Amount = (Amount)55,
-                })
-                .ToArray();
-
-            // Act
-
-            dbContext.WeatherForecasts2.AddRange(entities);
-            dbContext.SaveChanges();
-
+            Assert.AreEqual(cityNames.Count, cities.Length);
+            Assert.AreEqual(weatherForecastEntities.Length, weatherForecasts.Length);
         }
 
         [Test]
@@ -101,25 +113,33 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
         {
             // Arrange
 
-            var dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
-            dbContext.Database.EnsureCreated();
+            var internetFakerBuilder = new InternetFakerBuilder();
+            var ipV4AddressFaker = internetFakerBuilder.BuildIpV4AddressFaker();
+            var macAddressFaker = internetFakerBuilder.BuildMacAddressFaker();
+            var emailFaker = internetFakerBuilder.BuildEmailFaker();
+            var avatarUriFaker = internetFakerBuilder.BuildAvatarUriFaker();
 
             var entities = Enumerable.Range(1, 5)
-                .Select(index => new WeatherForecast3
+                .Select(_ => new EmployeeEntity
                 {
-                    StructId = WeatherForecastStructId.New(),
-                    City = new City("Amsterdam"),
-                    Email = new Email("bob@example.com"),
-                    Date = DateTime.Now.AddDays(index),
-                    Amount = (Amount)55,
+                    StructGuidId = EmployeeStructGuidId.New(),
+                    Email = emailFaker.Generate(),
+                    IpV4Address = ipV4AddressFaker.Generate(),
+                    MacAddress = macAddressFaker.Generate(),
+                    AvatarUri = avatarUriFaker.Generate(),
                 })
                 .ToArray();
 
             // Act
 
-            dbContext.WeatherForecasts3.AddRange(entities);
-            dbContext.SaveChanges();
+            _dbContext.Employees.AddRange(entities);
+            _dbContext.SaveChanges();
 
+            var employees = _dbContext.Employees.ToArray();
+
+            // Assert
+
+            Assert.AreEqual(entities.Length, employees.Length);
         }
     }
 }

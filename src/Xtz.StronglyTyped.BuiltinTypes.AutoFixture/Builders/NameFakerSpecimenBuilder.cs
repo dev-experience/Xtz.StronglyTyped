@@ -12,6 +12,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders
 
         protected override Dictionary<Type, Func<IFakerTInternal>> FakerFactories => new()
         {
+            { typeof(DisplayName), () => _builder.BuildDisplayNameFaker() },
             { typeof(FirstName), () => _builder.BuildFirstNameFaker() },
             { typeof(FullName), () => _builder.BuildFullNameFaker() },
             { typeof(LastName), () => _builder.BuildLastNameFaker() },

@@ -1,9 +1,10 @@
+using System;
 using System.Reflection;
 using System.Runtime.Loader;
 
 namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
 {
-    internal class SimpleUnloadableAssemblyLoadContext : AssemblyLoadContext
+    internal class SimpleUnloadableAssemblyLoadContext : AssemblyLoadContext, IDisposable
     {
         public SimpleUnloadableAssemblyLoadContext()
             : base(true)
@@ -13,6 +14,11 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
         protected override Assembly Load(AssemblyName assemblyName)
         {
             return null;
+        }
+
+        public void Dispose()
+        {
+            Unload();
         }
     }
 }

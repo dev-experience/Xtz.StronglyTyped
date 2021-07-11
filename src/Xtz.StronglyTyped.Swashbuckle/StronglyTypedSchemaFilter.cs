@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Mail;
+using System.Net.NetworkInformation;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Xtz.StronglyTyped.TypeConverters;
@@ -29,8 +31,11 @@ namespace Xtz.StronglyTyped.Swashbuckle
             { typeof(short), ("integer", "int32") },
             { typeof(ushort), ("integer", "int32") },
             { typeof(DateTime), ("string", "date-time") },
+            { typeof(TimeSpan), ("string", "time-span") },
             { typeof(Guid), ("string", "uuid") },
             { typeof(MailAddress), ("string", "email") },
+            { typeof(IPAddress), ("string", "ip-address") },
+            { typeof(PhysicalAddress), ("string", "mac-address") },
             { typeof(Uri), ("string", "uri") },
         };
 
@@ -54,6 +59,9 @@ namespace Xtz.StronglyTyped.Swashbuckle
                 schema.Format = format;
                 schema.Properties.Clear();
                 schema.AdditionalPropertiesAllowed = true;
+                schema.AdditionalProperties = null;
+                schema.Items = null;
+                schema.Extensions.Clear();
             }
         }
 

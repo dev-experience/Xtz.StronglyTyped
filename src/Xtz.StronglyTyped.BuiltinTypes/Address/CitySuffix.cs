@@ -1,4 +1,6 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Address
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Address
 {
     /// <summary>
     /// City suffix.

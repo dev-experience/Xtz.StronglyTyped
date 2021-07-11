@@ -12,6 +12,24 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
         }
 
         /// <summary>
+        /// A random display name faker.
+        /// </summary>
+        /// <remarks>A gender-specific name is only supported on locales that support it.</remarks>
+        public Faker<DisplayName> BuildDisplayNameFaker(string locale = "en", Gender? gender = null)
+        {
+            var cacheKey = $"{locale}|{gender}";
+
+            var result = GetFaker(() => new Faker<DisplayName>()
+                .CustomInstantiator(f =>
+                {
+                    var fullName = BuildFullNameFaker(locale, gender).Generate();
+                    return new DisplayName($"{fullName.FirstName} {fullName.LastName}");
+                }),
+                cacheKey);
+            return result;
+        }
+
+        /// <summary>
         /// A random first name faker.
         /// </summary>
         /// <remarks>A gender-specific name is only supported on locales that support it.</remarks>

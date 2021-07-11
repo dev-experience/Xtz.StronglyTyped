@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using NUnit.Framework;
+using Xtz.StronglyTyped.TypeConverters;
 
 namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 {
@@ -44,7 +45,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.Throws<StronglyTypedException>(action);
+            Assert.Throws<TypeConverterException>(action);
         }
     }
 }

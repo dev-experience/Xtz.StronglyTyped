@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Xtz.StronglyTyped.BuiltinTypes.Address;
 
 namespace Xtz.StronglyTyped.UnitTests.Basic
 {
@@ -35,23 +36,6 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
             //// Assert
 
             Assert.AreEqual(country, result);
-        }
-
-        [TestCase("")]
-        [TestCase(null)]
-        [Test]
-        public void ShouldThrow_GivenInvalidString(string country)
-        {
-            //// Arrange
-
-
-            //// Act
-
-            void Action() => new Country(country);
-
-            //// Assert
-
-            Assert.Throws<StronglyTypedException>(Action);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Xtz.StronglyTyped.BuiltinTypes.Address;
 
 namespace Xtz.StronglyTyped.UnitTests.Values
 {
@@ -36,6 +37,22 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             Assert.IsTrue(value == objValue);
             Assert.IsTrue(objValue == value);
+        }
+
+        [Test]
+        public void EqualsOperator_ShouldBeFalse_ForStronglyTypedValue_AndSameString()
+        {
+            //// Arrange
+
+            //// Act
+
+            var value1 = new Country("Norway");
+            var value2 = "Norway";
+
+            //// Assert
+
+            Assert.IsFalse(value1 == value2);
+            Assert.IsFalse(value2 == value1);
         }
 
         [Test]

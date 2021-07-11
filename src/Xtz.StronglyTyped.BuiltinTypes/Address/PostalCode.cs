@@ -1,9 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Address
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Address
 {
     /// <summary>
     /// Postal code.
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class PostalCode
     {
     }

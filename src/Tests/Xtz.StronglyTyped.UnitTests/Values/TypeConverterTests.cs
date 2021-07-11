@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+using Xtz.StronglyTyped.TypeConverters;
 
 namespace Xtz.StronglyTyped.UnitTests.Values
 {
@@ -36,16 +38,17 @@ namespace Xtz.StronglyTyped.UnitTests.Values
         {
             //// Arrange
 
-            var strongType = typeof(UserIntId);
+            var strongType = typeof(UserStructIntId);
             var typeConverter = TypeDescriptor.GetConverter(strongType);
 
             //// Act
 
-            TestDelegate action = () => typeConverter.ConvertFrom(value);
+            [ExcludeFromCodeCoverage]
+            void Action() => typeConverter.ConvertFrom(value);
 
             //// Assert
 
-            Assert.Throws<StronglyTypedException>(action);
+            Assert.Throws<TypeConverterException>(Action);
         }
     }
 }

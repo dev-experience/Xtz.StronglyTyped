@@ -15,7 +15,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof(decimal))]
     public partial class DegreesCelsius2 : System.IEquatable<DegreesCelsius2>
@@ -35,7 +35,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
@@ -47,6 +47,7 @@ namespace IntegrationTests.Generated
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     public abstract class CustomGuidId : StronglyTyped<System.Guid>
     {
@@ -74,7 +75,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
@@ -85,7 +86,7 @@ namespace IntegrationTests.Generated
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof(System.Guid))]
     public partial class ExternalId
@@ -113,7 +114,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
@@ -125,6 +126,7 @@ namespace IntegrationTests.Generated
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
     using System.Net.Mail;
 
     [StrongType(typeof(MailAddress))]
@@ -150,7 +152,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
     }
 }

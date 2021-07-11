@@ -15,7 +15,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
     using IntegrationTests.WeatherForecast;
 
     public class Program
@@ -43,7 +43,7 @@ namespace IntegrationTests.Generated
 
 namespace IntegrationTests.WeatherForecast
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof(int))]
     public partial class DegreesCelsius3
@@ -84,7 +84,7 @@ namespace IntegrationTests.WeatherForecast
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
     using IntegrationTests.WeatherForecast;
 
     public class Program

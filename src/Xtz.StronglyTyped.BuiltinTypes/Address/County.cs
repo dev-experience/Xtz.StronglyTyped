@@ -1,9 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Address
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Address
 {
     /// <summary>
     /// County.
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class County
     {
     }

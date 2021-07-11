@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Xtz.StronglyTyped.UnitTests.Basic
 {
@@ -30,11 +31,12 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Act
 
-            TestDelegate action = () => new UserId(value);
+            [ExcludeFromCodeCoverage]
+            void Action() => new UserId(value);
 
             //// Assert
 
-            Assert.Throws<StronglyTypedException>(action);
+            Assert.Throws<InvalidValueException>(Action);
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Company
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Company
 {
-    [StrongType(typeof(string))]
+    /// <summary>
+    /// Job title.
+    /// </summary>
+    [StrongType]
     public partial class JobTitle
     {
     }

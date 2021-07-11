@@ -16,7 +16,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType]
     public partial struct City2
@@ -36,7 +36,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace IntegrationTests.Generated
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType]
     public partial class City2
@@ -67,7 +67,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
@@ -121,6 +121,8 @@ namespace IntegrationTests.Generated
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
+    using Xtz.StronglyTyped.SourceGenerator;
+
     public class Program
     {
         public static int Main(string[] args)
@@ -165,7 +167,7 @@ namespace IntegrationTests.Generated
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof(System.Attribute))]
     public partial class City2
@@ -199,7 +201,7 @@ namespace IntegrationTests.Generated
             //// Arrange
 
             var sourceCode = @"
-using Xtz.StronglyTyped;
+using Xtz.StronglyTyped.SourceGenerator;
 
 [StrongType]
 public partial class City2
@@ -234,7 +236,7 @@ public partial class City2
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType]
     public partial record City2
@@ -270,7 +272,7 @@ namespace IntegrationTests.Generated
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     public class ExoticType
     {

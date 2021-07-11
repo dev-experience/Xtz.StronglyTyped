@@ -1,9 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Commerce
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Commerce
 {
     /// <summary>
     /// Product color.
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class ProductColor
     {
     }

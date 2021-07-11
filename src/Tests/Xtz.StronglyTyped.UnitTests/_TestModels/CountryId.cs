@@ -4,6 +4,7 @@ using Xtz.StronglyTyped.TypeConverters;
 
 namespace Xtz.StronglyTyped.UnitTests
 {
+    // TODO: Replace by auto-generated class with [StrongType(typeof(int))]
     [TypeConverter(typeof(TypeConverter<CountryId, int>))]
     public class CountryId : StronglyTyped<int>, IConvertible
     {

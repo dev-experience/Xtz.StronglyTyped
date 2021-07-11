@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Xtz.StronglyTyped.BuiltinTypes.Address;
 
 namespace Xtz.StronglyTyped.UnitTests.Basic
 {

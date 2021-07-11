@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes.AutoFixture\Xtz.StronglyTyped.BuiltinTypes.AutoFixture.csproj" />
+    <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes.Bogus\Xtz.StronglyTyped.BuiltinTypes.Bogus.csproj" />
     <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes\Xtz.StronglyTyped.BuiltinTypes.csproj" />
     <ProjectReference Include="..\..\Xtz.StronglyTyped.EntityFramework\Xtz.StronglyTyped.EntityFramework.csproj" />
   </ItemGroup>

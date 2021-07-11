@@ -15,7 +15,14 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders
             { typeof(CompanyName), () => _builder.BuildCompanyNameFaker() },
             { typeof(CompanySuffix), () => _builder.BuildCompanySuffixFaker() },
             { typeof(CostCenterId), () => _builder.BuildCostCenterIdFaker() },
+            { typeof(CostCenterName), () => _builder.BuildCostCenterNameFaker() },
             { typeof(EnterpriseName), () => _builder.BuildEnterpriseNameFaker() },
+            { typeof(JobArea), () => _builder.BuildJobAreaFaker() },
+            { typeof(JobDescriptor), () => _builder.BuildJobDescriptorFaker() },
+            { typeof(JobKey), () => _builder.BuildJobKeyFaker() },
+            { typeof(JobTitle), () => _builder.BuildJobTitleFaker() },
+            { typeof(JobType), () => _builder.BuildJobTypeFaker() },
+            { typeof(SiteCode), () => _builder.BuildSiteCodeFaker() },
         };
     }
 }

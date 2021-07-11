@@ -39,7 +39,7 @@ namespace Xtz.StronglyTyped.IntegrationTests
                 }
             };
 
-            var expected = "{\"Inner\":{\"Country\":\"" + country + "\"}}";
+            var expected = $@"{{""Inner"":{{""Country"":""{country}""}}}}";
 
             // Act
 
@@ -57,7 +57,7 @@ namespace Xtz.StronglyTyped.IntegrationTests
             // Arrange
 
             var country = "Canada";
-            var serialized = "{\"Country\": \"" + country + "\"}";
+            var serialized = $@"{{""Country"": ""{country}""}}";
             var expected = new Country(country);
 
             // Act
@@ -76,7 +76,7 @@ namespace Xtz.StronglyTyped.IntegrationTests
             // Arrange
 
             var country = "Canada";
-            var serialized = "{\"Inner\":{\"Country\":\"" + country + "\"}}";
+            var serialized = $@"{{""Inner"":{{""Country"":""{country}""}}}}";
             var expected = new Country(country);
 
             // Act

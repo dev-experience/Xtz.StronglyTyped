@@ -27,10 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Xtz.StronglyTyped.SourceGenerator\Xtz.StronglyTyped.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-    <ProjectReference Include="..\..\Xtz.StronglyTyped\Xtz.StronglyTyped.csproj">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Xtz.StronglyTyped\Xtz.StronglyTyped.csproj" />
   </ItemGroup>
 
 </Project>
