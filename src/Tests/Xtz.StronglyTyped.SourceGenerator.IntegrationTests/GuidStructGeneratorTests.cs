@@ -14,7 +14,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof(System.Guid))]
     public partial struct CityGuidStruct2
@@ -39,7 +39,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace IntegrationTests.Generated
             var sourceCode = @"
 namespace IntegrationTests.Generated
 {
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof(System.Guid))]
     public partial struct CityGuidStruct2
@@ -76,7 +76,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Xtz.StronglyTyped.SourceGenerator
             { "uint", typeof(uint) },
             { "ulong", typeof(ulong) },
             { "ushort", typeof(ushort) },
+            { typeof(DateTime).FullName, typeof(DateTime) },
+            { typeof(TimeSpan).FullName, typeof(TimeSpan) },
             { typeof(Guid).FullName, typeof(Guid) },
             { typeof(Uri).FullName, typeof(Uri) },
             { typeof(MailAddress).FullName, typeof(MailAddress) },
@@ -63,14 +65,23 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
             var originalNamespace = ExtractNamespace(semanticModel, typeDeclarationSyntax);
 
-            var innerType = ExtractInnerType(semanticModel, receiver, typeDeclarationSyntax);
-            if (innerType == null)
+            var strongTypeAttributeSyntax = typeDeclarationSyntax.AttributeLists
+                .SelectMany(x => x.Attributes)
+                .FirstOrDefault(x => receiver.IsStrongTypeAttribute(x));
+            if (strongTypeAttributeSyntax is null)
+            {
+                _log.Add($"Unable to to find '[{nameof(StrongTypeAttribute)}]' attribute on type '{originalTypeName}'. Ignoring");
+                return false;
+            }
+
+            var innerType = ExtractInnerType(semanticModel, strongTypeAttributeSyntax);
+            if (innerType is null)
             {
                 _log.Add($"Unable to identify inner type for type '{originalTypeName}'. Ignoring");
                 return false;
             }
 
-            var extraFeatures = ExtractExtraFeatures(semanticModel, typeDeclarationSyntax, innerType);
+            var extraFeatures = ExtractExtraFeatures2(semanticModel, typeDeclarationSyntax, strongTypeAttributeSyntax, innerType);
 
             _log.Add($"Found a type ({itemKind}) '{originalNamespace}.{originalTypeName}'");
             _log.Add($"Inner type '{innerType}'");
@@ -92,36 +103,25 @@ namespace Xtz.StronglyTyped.SourceGenerator
             return itemKind;
         }
 
-        public Type? ExtractInnerType(
-            SemanticModel semanticModel,
-            SyntaxReceiver receiver,
-            TypeDeclarationSyntax typeDeclarationSyntax)
+        private Type? ExtractInnerType(SemanticModel semanticModel, AttributeSyntax strongTypeAttributeSyntax)
         {
-            var attributeSyntax = typeDeclarationSyntax.AttributeLists
-                .SelectMany(x => x.Attributes)
-                .FirstOrDefault(x => receiver.IsStrongTypeAttribute(x));
-
-            if (attributeSyntax != null)
-            {
-                var innerType = ExtractInnerType(semanticModel, attributeSyntax);
-                return innerType;
-            }
-
-            // Never happens
-            return null;
-        }
-
-        private Type? ExtractInnerType(SemanticModel semanticModel, AttributeSyntax attributeSyntax)
-        {
-            var firstArgument = attributeSyntax.ArgumentList?.Arguments.FirstOrDefault();
+            // [StrongType()]
+            //            ^
+            var firstArgument = strongTypeAttributeSyntax.ArgumentList?.Arguments.FirstOrDefault();
             if (firstArgument is null) return DEFAULT_INNER_TYPE;
 
+            // [StrongType(...))]
+            //             ^
             if (firstArgument.Expression is not TypeOfExpressionSyntax typeOfExpressionSyntax) return DEFAULT_INNER_TYPE;
 
+            // [StrongType(typeof(System.Guid, ...))]
+            //             ^
             var typeSyntax = typeOfExpressionSyntax.Type;
 
             var typeSymbolInfo = semanticModel.GetTypeInfo(typeSyntax);
             var typeSymbol = typeSymbolInfo.Type;
+            // [StrongType(typeof(System.Guid, ...))]
+            //                    ^
             if (typeSymbol == null) return DEFAULT_INNER_TYPE;
 
             var typeName = typeSymbol.ToDisplayString();
@@ -129,24 +129,10 @@ namespace Xtz.StronglyTyped.SourceGenerator
             return result;
         }
 
-        private bool HasBaseClass(SemanticModel semanticModel, TypeDeclarationSyntax typeDeclarationSyntax)
+        private static Type? GetTypeByName(string? typeName)
         {
-            if (typeDeclarationSyntax.BaseList?.Types is null) return false;
+            if (string.IsNullOrEmpty(typeName)) return null;
 
-            foreach (var baseTypeSyntax in typeDeclarationSyntax.BaseList.Types)
-            {
-                var typeKind = semanticModel.GetTypeInfo(baseTypeSyntax.Type).Type?.TypeKind;
-                if (typeKind == TypeKind.Class)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static Type? GetTypeByName(string typeName)
-        {
             if (KNOWN_TYPES.TryGetValue(typeName, out var knownType))
             {
                 return knownType;
@@ -171,57 +157,237 @@ namespace Xtz.StronglyTyped.SourceGenerator
             return result;
         }
 
-        private ExtraFeatures ExtractExtraFeatures(
+        private ExtraFeatures ExtractExtraFeatures2(
             SemanticModel semanticModel,
             TypeDeclarationSyntax typeDeclarationSyntax,
+            AttributeSyntax strongTypeAttributeSyntax,
             Type innerType)
         {
-            var isAbstract = typeDeclarationSyntax.Modifiers.Any(x => Equals(x.Value, "abstract"));
+            var isAbstract = IsAbstract(typeDeclarationSyntax);
 
             var hasBaseType = HasBaseClass(semanticModel, typeDeclarationSyntax);
 
-            var innerTypeHasStringConstructor = innerType.GetConstructor(new[] { typeof(string) }) != null;
+            var doesAllowEmpty = ExtractAllowEmpty(semanticModel, strongTypeAttributeSyntax);
 
-            var hasStringConstructor = false;
+            var innerTypeHasStringConstructor = InnerTypeHasStringConstructor(innerType);
+
+            var hasStringConstructor = HasStringConstructor(semanticModel, typeDeclarationSyntax, innerTypeHasStringConstructor);
+
+            var doGenerateStringConstructor = DoGenerateStringConstructor(innerType, innerTypeHasStringConstructor, hasStringConstructor);
+
+            var methodDeclarationSyntaxes = typeDeclarationSyntax.Members
+                .Where(x => x is MethodDeclarationSyntax)
+                .Cast<MethodDeclarationSyntax>()
+                .ToArray();
+            var hasIsValid = HasIsValid(semanticModel, methodDeclarationSyntaxes, innerType);
+            var hasToString = HasToString(methodDeclarationSyntaxes);
+
+            var result = new ExtraFeatures(
+                isAbstract,
+                hasBaseType,
+                doesAllowEmpty,
+                doGenerateStringConstructor,
+                hasToString,
+                hasIsValid);
+            return result;
+        }
+
+        private IsAbstract IsAbstract(TypeDeclarationSyntax typeDeclarationSyntax)
+        {
+            return (IsAbstract)typeDeclarationSyntax.Modifiers.Any(x => Equals(x.Value, "abstract"));
+        }
+
+        private HasBaseClass HasBaseClass(SemanticModel semanticModel, TypeDeclarationSyntax typeDeclarationSyntax)
+        {
+            if (typeDeclarationSyntax.BaseList?.Types is null) return (HasBaseClass)false;
+
+            foreach (var baseTypeSyntax in typeDeclarationSyntax.BaseList.Types)
+            {
+                var typeKind = semanticModel.GetTypeInfo(baseTypeSyntax.Type).Type?.TypeKind;
+                if (typeKind == TypeKind.Class)
+                {
+                    return (HasBaseClass)true;
+                }
+            }
+
+            return (HasBaseClass)false;
+        }
+
+        private DoesAllowEmpty ExtractAllowEmpty(SemanticModel semanticModel, AttributeSyntax strongTypeAttributeSyntax)
+        {
+            // [StrongType(..., allow: Allow.Empty)]
+            //             ^ Any arguments
+            var attributeArgumentSyntaxes = strongTypeAttributeSyntax.ArgumentList?.Arguments;
+            if (attributeArgumentSyntaxes is null || attributeArgumentSyntaxes.Value.Count == 0) return (DoesAllowEmpty)false;
+
+            // [StrongType(..., allow: Allow.Empty)]
+            //  ^ Constructor method
+            var attributeSymbol = semanticModel.GetSymbolInfo(strongTypeAttributeSyntax);
+            var methodSymbol = attributeSymbol.Symbol as IMethodSymbol;
+
+            var result = HasEnumArgument(semanticModel, methodSymbol!, attributeArgumentSyntaxes, Allow.Empty);
+            return (DoesAllowEmpty)result;
+        }
+
+        private InnerTypeHasStringConstructor InnerTypeHasStringConstructor(Type innerType)
+        {
+            return (InnerTypeHasStringConstructor)(innerType.GetConstructor(new[] { typeof(string) }) != null);
+        }
+
+        private HasStringConstructor HasStringConstructor(
+            SemanticModel semanticModel,
+            TypeDeclarationSyntax typeDeclarationSyntax,
+            InnerTypeHasStringConstructor innerTypeHasStringConstructor)
+        {
             if (innerTypeHasStringConstructor && typeDeclarationSyntax is ClassDeclarationSyntax classDeclarationSyntax)
             {
                 var constructorDeclarationSyntaxes = classDeclarationSyntax.Members
                     .Where(x => x is ConstructorDeclarationSyntax)
                     .Cast<ConstructorDeclarationSyntax>();
-                if (constructorDeclarationSyntaxes.Any(x => HasSingleParameter(semanticModel, x, "string")))
+                if (constructorDeclarationSyntaxes.Any(x => HasSingleParameter(semanticModel, x, typeof(string))))
                 {
-                    hasStringConstructor = true;
+                    return (HasStringConstructor)true;
                 }
             }
 
-            var doGenerateStringConstructor = innerType != typeof(string) && innerTypeHasStringConstructor && !hasStringConstructor;
-
-            var hasToString = false;
-            var methodDeclarationSyntaxes = typeDeclarationSyntax.Members
-                .Where(x => x is MethodDeclarationSyntax)
-                .Cast<MethodDeclarationSyntax>()
-                .ToArray();
-            if (methodDeclarationSyntaxes.Any(x => x.Identifier.Text == "ToString" && x.ParameterList.Parameters.Count == 0))
-            {
-                hasToString = true;
-            }
-
-            var hasIsValid = false;
-            if (methodDeclarationSyntaxes.Any(x => HasSingleParameter(semanticModel, x, innerType.FullName!)))
-            {
-                hasIsValid = true;
-            }
-
-            return new ExtraFeatures(isAbstract, hasBaseType, doGenerateStringConstructor, hasToString, hasIsValid);
+            return (HasStringConstructor)false;
         }
 
-        private static bool HasSingleParameter(SemanticModel semanticModel, BaseMethodDeclarationSyntax x, string expectedParameterType)
+        private DoGenerateStringConstructor DoGenerateStringConstructor(
+            Type innerType,
+            InnerTypeHasStringConstructor innerTypeHasStringConstructor,
+            HasStringConstructor hasStringConstructor)
         {
-            if (x.ParameterList.Parameters.Count != 1) return false;
+            return (DoGenerateStringConstructor)(innerType != typeof(string) && innerTypeHasStringConstructor && !hasStringConstructor);
+        }
 
-            var typeSyntax = x.ParameterList.Parameters.First().Type;
-            var symbolInfo = semanticModel.GetTypeInfo(typeSyntax!);
-            var result = symbolInfo.Type?.ToDisplayString() == expectedParameterType;
+        private HasIsValid HasIsValid(SemanticModel semanticModel, MethodDeclarationSyntax[] methodDeclarationSyntaxes, Type innerType)
+        {
+            return (HasIsValid)methodDeclarationSyntaxes.Any(x =>
+                HasSingleParameter(semanticModel, x, innerType)
+                && HasNameAndReturnType(x, "IsValid", "bool"));
+        }
+
+        private HasToString HasToString(MethodDeclarationSyntax[] methodDeclarationSyntaxes)
+        {
+            return (HasToString)methodDeclarationSyntaxes.Any(x => x.Identifier.Text == "ToString" && x.ParameterList.Parameters.Count == 0);
+        }
+
+        private bool HasEnumArgument<TEnum>(
+            SemanticModel semanticModel,
+            IMethodSymbol methodSymbol,
+            IReadOnlyCollection<AttributeArgumentSyntax> attributeArgumentSyntaxes,
+            TEnum enumValue)
+                where TEnum : Enum
+        {
+            // [StrongType((Allow)1)]
+            // [StrongType((Allow)2)]
+            // [StrongType((Allow)3)]
+            // NOTE: We don't support such exotic values. Why a developer would do this?
+
+            // [StrongType(..., allow: Allow.Null)]
+            //                  ^
+            var hasParameterOfType = methodSymbol!.Parameters.Any(x => x.Type.ToDisplayString() == typeof(TEnum).FullName);
+            if (!hasParameterOfType) return false;
+
+            // [StrongType(..., allow: Allow.Null)]
+            //             ^    ^
+            foreach (var argumentSyntax in attributeArgumentSyntaxes)
+            {
+                // [StrongType(..., allow: Allow.Null)]
+                //                         ^
+                var expressionSyntax = argumentSyntax.Expression;
+
+                // [StrongType(..., allow: Allow.Null | Allow.Empty)]
+                //                                    ^
+                if (expressionSyntax is BinaryExpressionSyntax binaryExpressionSyntax)
+                {
+                    // [StrongType(..., allow: Allow.Null | Allow.Empty)]
+                    //                         ^
+                    var binaryOperation = semanticModel.GetOperation(binaryExpressionSyntax);
+                    if (binaryOperation?.Type.ToDisplayString() == typeof(TEnum).FullName)
+                    {
+                        // [StrongType(..., allow: Allow.Null | Allow.Empty)]
+                        //                         ^
+                        // Will be `null` for `Allow.Null | Allow.Empty | Allow.Empty` value
+                        // NOTE: We don't support such exotic values. Why a developer would do this?
+                        var left = binaryExpressionSyntax.Left as MemberAccessExpressionSyntax;
+                        // [StrongType(..., allow: Allow.Null | Allow.Empty)]
+                        //                                      ^
+                        var right = binaryExpressionSyntax.Right as MemberAccessExpressionSyntax;
+
+                        // [StrongType(..., allow: Allow.Null)]
+                        //                               ^
+                        var result = IsEnumValue(semanticModel, left, enumValue)
+                            || IsEnumValue(semanticModel, right, enumValue);
+                        return result;
+                    }
+                }
+
+                // [StrongType(..., allow: Allow.Null)]
+                //                         ^
+                if (expressionSyntax is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+                {
+                        // [StrongType(..., allow: Allow.Null)]
+                        //                               ^
+                        var result = IsEnumValue(semanticModel, memberAccessExpressionSyntax, enumValue);
+                        return result;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsEnumValue<TEnum>(
+            SemanticModel semanticModel,
+            MemberAccessExpressionSyntax? memberAccessExpressionSyntax,
+            TEnum value)
+            where TEnum : Enum
+        {
+            if (memberAccessExpressionSyntax is null) return false;
+
+            // [StrongType(..., allow: Allow.Null)]
+            //                              ^
+            var symbolInfo = semanticModel.GetSymbolInfo(memberAccessExpressionSyntax);
+            // [StrongType(..., allow: Allow.Null)]
+            //                         ^
+            var result = symbolInfo.Symbol?.ContainingType.ToDisplayString() == typeof(TEnum).FullName
+                // [StrongType(..., allow: Allow.Null)]
+                //                               ^
+                && symbolInfo.Symbol?.Name == value.ToString();
+            return result;
+        }
+
+        private static bool HasSingleParameter(
+            SemanticModel semanticModel,
+            BaseMethodDeclarationSyntax methodDeclarationSyntax,
+            Type expectedType)
+        {
+            // constructor(...)
+            //             ^
+            if (methodDeclarationSyntax.ParameterList.Parameters.Count != 1) return false;
+
+            // constructor(string value)
+            //             ^
+            var firstParameter = methodDeclarationSyntax.ParameterList.Parameters.First();
+            var symbolInfo = semanticModel.GetTypeInfo(firstParameter.Type!);
+            // constructor(string value)
+            //             ^
+            var typeName = symbolInfo.Type?.ToDisplayString();
+            var type = GetTypeByName(typeName);
+            if (type == null) return false;
+
+            var result = type == expectedType;
+            return result;
+        }
+
+        private static bool HasNameAndReturnType(
+            MethodDeclarationSyntax methodDeclarationSyntax,
+            string expectedName,
+            string expectedReturnType)
+        {
+            var result = methodDeclarationSyntax.Identifier.Text == expectedName
+                && methodDeclarationSyntax.ReturnType.ToString() == expectedReturnType;
             return result;
         }
     }

@@ -1,10 +1,12 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Vehicle
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Vehicle
 {
     /// <summary>
     /// Vehicle type.
     /// </summary>
     /// <remarks>Example: Minivan, SUV, Sedan.</remarks>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class VehicleType
     {
     }

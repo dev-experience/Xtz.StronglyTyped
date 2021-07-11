@@ -1,4 +1,5 @@
 ﻿using System;
+using Xtz.StronglyTyped.SourceGenerator;
 
 namespace Xtz.StronglyTyped.BuiltinTypes.Internet
 {
@@ -6,7 +7,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Internet
     /// Website protocol.
     /// </summary>
     /// <remarks>Only: HTTP or HTTPS</remarks>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class WebsiteProtocol
     {
         /// <summary>

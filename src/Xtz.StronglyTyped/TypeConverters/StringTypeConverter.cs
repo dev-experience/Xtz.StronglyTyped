@@ -36,7 +36,7 @@ namespace Xtz.StronglyTyped.TypeConverters
                 return Activator.CreateInstance(strongType, stringValue);
             }
 
-            throw new StronglyTypedException(strongType, $"Can't convert from '{value.GetType().Name}' to '{strongType.Name}'");
+            throw new StringTypeConverterException(strongType, $"Can't convert from '{value.GetType().Name}' to '{strongType.Name}'");
         }
     }
 }

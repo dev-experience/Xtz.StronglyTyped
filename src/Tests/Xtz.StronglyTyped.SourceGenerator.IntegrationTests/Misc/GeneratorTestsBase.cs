@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -83,7 +84,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
         protected static object LoadAndExecute(byte[] compiledAssembly, params string[] args)
         {
             using var assemblyStream = new MemoryStream(compiledAssembly);
-            var assemblyLoadContext = new SimpleUnloadableAssemblyLoadContext();
+            using var assemblyLoadContext = new SimpleUnloadableAssemblyLoadContext();
 
             var assembly = assemblyLoadContext.LoadFromStream(assemblyStream);
 
@@ -93,36 +94,38 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
                 throw new GeneratorTestsException("Entry point is not found");
             }
 
-            var result  = entryPoint.GetParameters().Length > 0
-                ? entryPoint.Invoke(null, new object[] { args })
-                : entryPoint.Invoke(null, null);
-
-            assemblyLoadContext.Unload();
-
-            //return new WeakReference(assemblyLoadContext);
-
-            return result;
+            try
+            {
+                var result = entryPoint.GetParameters().Length > 0
+                    ? entryPoint.Invoke(null, new object[] {args})
+                    : entryPoint.Invoke(null, null);
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new TestsExecutionException("Failed to run compiled code", e.InnerException);
+            }
         }
 
-        protected static void AssertGenerationSuccess(ImmutableArray<Diagnostic> diagnostics, Compilation outputCompilation,
+        protected static void AssertGenerationSuccess(int treeNumber, ImmutableArray<Diagnostic> diagnostics, Compilation outputCompilation,
             GeneratorDriverRunResult runResult)
         {
             Assert.IsTrue(diagnostics.IsEmpty);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(5, outputCompilation.SyntaxTrees.Count());
+            Assert.AreEqual(treeNumber + 1, outputCompilation.SyntaxTrees.Count());
 
             PrintDiagnosticsToDebug(outputCompilation);
             Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
 
             // A generated syntax tree and logs
-            Assert.AreEqual(4, runResult.GeneratedTrees.Length);
+            Assert.AreEqual(treeNumber, runResult.GeneratedTrees.Length);
             Assert.IsTrue(runResult.Diagnostics.IsEmpty);
 
             // Asserting the individual results on a by-generator basis
             var generatorResult = runResult.Results[0];
             Assert.AreEqual(typeof(StronglyTypedGenerator), generatorResult.Generator.GetType());
             Assert.IsTrue(generatorResult.Diagnostics.IsEmpty);
-            Assert.AreEqual(4, generatorResult.GeneratedSources.Length);
+            Assert.AreEqual(treeNumber, generatorResult.GeneratedSources.Length);
             Assert.IsNull(generatorResult.Exception);
         }
 

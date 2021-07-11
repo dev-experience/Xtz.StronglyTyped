@@ -1,9 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Vehicle
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Vehicle
 {
     /// <summary>
     /// Vehicle identification number (VIN).
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class Vin
     {
     }

@@ -53,7 +53,7 @@ namespace Xtz.StronglyTyped.TypeConverters
             }
             else
             {
-                throw new StronglyTypedException(strongType, $"Can't convert from '{value.GetType().Name}' to '{strongType.Name}'");
+                throw new TypeConverterException(strongType, $"Can't convert from '{value.GetType().Name}' to '{strongType.Name}'");
             }
 
             try
@@ -62,7 +62,7 @@ namespace Xtz.StronglyTyped.TypeConverters
             }
             catch (Exception e)
             {
-                throw new StronglyTypedException(strongType, $"Failed to create instance of '{strongType}'", e);
+                throw new TypeConverterException(strongType, $"Failed to create instance of '{strongType}'", e);
             }
         }
     }

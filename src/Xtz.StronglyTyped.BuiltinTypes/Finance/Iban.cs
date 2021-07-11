@@ -1,10 +1,12 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Finance
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Finance
 {
     // TODO: Implement validation.
     /// <summary>
     /// International Bank Account Number (IBAN).
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class Iban
     {
     }

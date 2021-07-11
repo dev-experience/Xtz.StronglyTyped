@@ -20,6 +20,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture
             fixture.Customizations.Add(new CommerceFakerSpecimenBuilder());
             fixture.Customizations.Add(new CompanyFakerSpecimenBuilder());
             fixture.Customizations.Add(new FinanceFakerSpecimenBuilder());
+            fixture.Customizations.Add(new IdFakerSpecimenBuilder());
             fixture.Customizations.Add(new InternetFakerSpecimenBuilder());
             fixture.Customizations.Add(new NameFakerSpecimenBuilder());
             fixture.Customizations.Add(new NumbersFakerSpecimenBuilder());

@@ -1,4 +1,5 @@
 ﻿using System;
+using Xtz.StronglyTyped.SourceGenerator;
 
 namespace Xtz.StronglyTyped.BuiltinTypes.Internet
 {

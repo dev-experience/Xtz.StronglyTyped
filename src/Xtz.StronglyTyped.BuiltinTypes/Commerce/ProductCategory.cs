@@ -1,6 +1,8 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Commerce
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Commerce
 {
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class ProductCategory
     {
     }

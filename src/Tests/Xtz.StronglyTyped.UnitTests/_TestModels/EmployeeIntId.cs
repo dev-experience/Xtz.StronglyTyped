@@ -3,6 +3,7 @@ using Xtz.StronglyTyped.TypeConverters;
 
 namespace Xtz.StronglyTyped.UnitTests
 {
+    // TODO: Replace by auto-generated struct with [StrongType(typeof(int))]
     [TypeConverter(typeof(TypeConverter<EmployeeIntId, int>))]
     public struct EmployeeIntId : IStronglyTyped<int>
     {

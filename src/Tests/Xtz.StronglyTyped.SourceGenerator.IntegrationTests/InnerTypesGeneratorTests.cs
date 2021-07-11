@@ -32,7 +32,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
             var sourceCode = $@"
 namespace IntegrationTests.Generated
 {{
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof({innerType.FullName}))]
     public partial class WithInnerType
@@ -52,10 +52,12 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
 
         [Test]
+        [TestCase(typeof(DateTime))]
+        [TestCase(typeof(TimeSpan))]
         [TestCase(typeof(Guid))]
         [TestCase(typeof(Uri))]
         [TestCase(typeof(MailAddress))]
@@ -68,7 +70,7 @@ namespace IntegrationTests.Generated
             var sourceCode = $@"
 namespace IntegrationTests.Generated
 {{
-    using Xtz.StronglyTyped;
+    using Xtz.StronglyTyped.SourceGenerator;
 
     [StrongType(typeof({innerType.FullName}))]
     public partial class WithInnerType
@@ -88,7 +90,7 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            AssertGenerationSuccess(diagnostics, outputCompilation, driver.GetRunResult());
+            AssertGenerationSuccess(4, diagnostics, outputCompilation, driver.GetRunResult());
         }
     }
 }

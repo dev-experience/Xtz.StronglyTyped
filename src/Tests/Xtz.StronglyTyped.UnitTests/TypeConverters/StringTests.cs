@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using NUnit.Framework;
+using Xtz.StronglyTyped.BuiltinTypes.Address;
 
 namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 {
@@ -69,6 +70,10 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
         public void TypeConverter_ShouldImplicitlyDeserializeTestCase_GivenString(Country value)
         {
             // Shouldn't fail
+
+            //// Assert
+
+            Assert.IsNotNull(value);
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Address
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Address
 {
     // TODO: Introduce record.
     /// <summary>
     /// Full address string.
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class FullAddress
     {
     }

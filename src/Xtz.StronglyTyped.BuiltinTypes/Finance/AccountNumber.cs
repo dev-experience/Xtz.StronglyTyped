@@ -1,9 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Finance
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Finance
 {
     /// <summary>
     /// Account number.
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class AccountNumber
     {
     }

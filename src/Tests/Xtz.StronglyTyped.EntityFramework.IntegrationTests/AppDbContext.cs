@@ -5,11 +5,11 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<WeatherForecast1> WeatherForecasts1 { get; set; }
+        public DbSet<WeatherForecastEntity> WeatherForecasts { get; set; }
 
-        public DbSet<WeatherForecast2> WeatherForecasts2 { get; set; }
+        public DbSet<CityEntity> Cities { get; set; }
 
-        public DbSet<WeatherForecast3> WeatherForecasts3 { get; set; }
+        public DbSet<EmployeeEntity> Employees { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

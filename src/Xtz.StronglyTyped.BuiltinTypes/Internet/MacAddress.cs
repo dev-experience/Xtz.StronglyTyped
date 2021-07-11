@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.NetworkInformation;
+using Xtz.StronglyTyped.SourceGenerator;
 
 namespace Xtz.StronglyTyped.BuiltinTypes.Internet
 {

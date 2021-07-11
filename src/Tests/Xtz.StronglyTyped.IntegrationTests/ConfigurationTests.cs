@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Xtz.StronglyTyped.IntegrationTests.Settings;
 
 namespace Xtz.StronglyTyped.IntegrationTests
 {
-
     public class ConfigurationTests
     {
         [Test]
@@ -84,11 +84,12 @@ namespace Xtz.StronglyTyped.IntegrationTests
 
             // Act
 
-            TestDelegate action = () => Validator.ValidateObject(settings, new ValidationContext(settings));
+            [ExcludeFromCodeCoverage]
+            void Action() => Validator.ValidateObject(settings, new ValidationContext(settings));
 
             // Assert
 
-            Assert.Throws<ValidationException>(action);
+            Assert.Throws<ValidationException>(Action);
         }
     }
 }

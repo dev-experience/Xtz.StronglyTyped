@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -27,9 +28,13 @@ namespace Xtz.StronglyTyped.SourceGenerator
             { typeof(uint), new("uint", "uint.Parse(value)") },
             { typeof(ulong), new("ulong", "ulong.Parse(value)") },
             { typeof(ushort), new("ushort", "ushort.Parse(value)") },
-            { typeof(Guid), new("System.Guid", "System.Guid.Parse(value)") },
-            { typeof(IPAddress), new("System.Net.IPAddress", "System.Net.IPAddress.Parse(value)") },
-            { typeof(PhysicalAddress), new("System.Net.NetworkInformation.PhysicalAddress", "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
+            { typeof(DateTime), new(typeof(DateTime).FullName, "System.DateTime.Parse(value)") },
+            { typeof(TimeSpan), new(typeof(TimeSpan).FullName, "System.TimeSpan.Parse(value)") },
+            { typeof(Guid), new(typeof(Guid).FullName, "System.Guid.Parse(value)") },
+            // Skipping `MailAddress` as it has `(string value)` constructor
+            { typeof(IPAddress), new(typeof(IPAddress).FullName, "System.Net.IPAddress.Parse(value)") },
+            { typeof(PhysicalAddress), new(typeof(PhysicalAddress).FullName, "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
+            // Skipping `Uri` as it has `(string value)` constructor
         };
         
         private readonly IDataExtractor _dataExtractor = new DataExtractor();
@@ -38,11 +43,6 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         public void Initialize(GeneratorInitializationContext context)
         {
-#if DEBUG_STRONGLY_TYPED_GENERATOR
-//#if DEBUG
-            if (!Debugger.IsAttached) Debugger.Launch();
-#endif
-
             // Register a syntax receiver that will be created for each generation pass
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
@@ -78,6 +78,20 @@ namespace Xtz.StronglyTyped.SourceGenerator
                             var generatedSourceCode = GenerateSourceCode(workItem, now);
                             context.AddSource(fileName, SourceText.From(generatedSourceCode, Encoding.UTF8));
                         }
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        var process = Process.GetCurrentProcess();
+                        var processId = process.Id;
+                        var processName = process.ProcessName;
+#if DEBUG
+                        if (!Debugger.IsAttached) Debugger.Launch();
+#endif
+                        // IMPORTANT: Check if you use any types from `Xtz.StronglyTyped` library or any other library. Remove if any. Dependencies are not copied along with source generator (if they are not analyzers as well).
+                        // https://github.com/dotnet/roslyn/discussions/47517#discussioncomment-63842
+                        
+                        _log.Add("\nIMPORTANT: Check if you use any types from `Xtz.StronglyTyped` library or any other library. Remove if any. Dependencies are not copied along with source generator (if they are not analyzers as well).\nhttps://github.com/dotnet/roslyn/discussions/47517#discussioncomment-63842\n");
+                        _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\n\nStack trace: {e.StackTrace}\n\nProcess ID: {processId}\n\nProcess name: {processName}\n\nFusion log: {e.FusionLog}");
                     }
                     catch (Exception e)
                     {
@@ -170,7 +184,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         private void WriteClass(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
-            var baseType = !workItem.ExtraFeatures.HasBaseType
+            var baseType = !workItem.ExtraFeatures.HasBaseClass
                 ? $" Xtz.StronglyTyped.StronglyTyped<{workItem.InnerType.FullName}>,"
                 : String.Empty;
 
@@ -191,6 +205,8 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
                 TryWriteCustomConstructors(writer, workItem);
 
+                TryWriteAllowEmpty(writer, workItem);
+
                 TryWriteToString(writer, workItem);
 
                 WriteEquatableEquals(writer, workItem);
@@ -200,6 +216,16 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 writer.AppendLine();
 
                 WriteImplicitOperatorsFromStrongType(writer, workItem);
+            }
+        }
+
+        private void TryWriteAllowEmpty(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            if (workItem.ExtraFeatures.DoesAllowEmpty)
+            {
+                WriteXmlSummary(writer, "Will throw if empty inner value provided");
+                writer.AppendLine("protected override bool ShouldThrowIfEmpty() => false;");
+                writer.AppendLine();
             }
         }
 
@@ -314,23 +340,29 @@ namespace Xtz.StronglyTyped.SourceGenerator
         {
             using (writer.BeginScope($"private void ThrowIfInvalid({workItem.InnerType.FullName} value)"))
             {
-                using (writer.BeginScope("if (value == null)"))
+                if (workItem.InnerType.IsClass)
                 {
-                    writer.AppendLine("Throw($\"<null> value is invalid for type {GetType()}\");");
+                    using (writer.BeginScope("if (value == null)"))
+                    {
+                        writer.AppendLine("Throw($\"<null> value is invalid for type {GetType()}\");");
+                    }
                 }
 
-                writer.AppendLine();
-                using (writer.BeginScope("if (object.Equals(value, string.Empty))"))
+                if (workItem.InnerType == typeof (string))
                 {
-                    writer.AppendLine("Throw($\"'' value is invalid for type {GetType()}\");");
+                    writer.AppendLine();
+                    using (writer.BeginScope("if (value == string.Empty)"))
+                    {
+                        writer.AppendLine("Throw($\"'' value is invalid for type {GetType()}\");");
+                    }
                 }
 
                 if (workItem.ExtraFeatures.HasIsValid)
                 {
                     writer.AppendLine();
-                    using (writer.BeginScope("if (!IsValid(value!))"))
+                    using (writer.BeginScope("if (!IsValid(value))"))
                     {
-                        writer.AppendLine("Throw($\"'' value is invalid for type {GetType()}\");");
+                        writer.AppendLine("Throw($\"'{Value}' value is invalid for type {GetType()}\");");
                     }
                 }
             }
@@ -458,7 +490,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 }
                 else
                 {
-                    writer.AppendLine($"return stronglyTyped.Value;");
+                    writer.AppendLine("return stronglyTyped.Value;");
                 }
             }
 
@@ -467,17 +499,17 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 writer.AppendLine();
                 WriteXmlSummary(writer, $"Implicitly converts <see cref=\"{workItem.TypeName}\"/> to <see cref=\"string\"/>.");
                 WriteXmlParam(writer, "stronglyTyped", "A value to convert from.");
-                WriteXmlReturns(writer, $"A converted <see cref=\"string\"/> value.");
+                WriteXmlReturns(writer, "A converted <see cref=\"string\"/> value.");
                 using (writer.BeginScope(
                     $"public static implicit operator string({workItem.TypeName} stronglyTyped)"))
                 {
                     if (workItem.Kind == WorkItemKind.Class)
                     {
-                        writer.AppendLine($"return stronglyTyped?.ToString() ?? string.Empty;");
+                        writer.AppendLine("return stronglyTyped?.ToString() ?? string.Empty;");
                     }
                     else
                     {
-                        writer.AppendLine($"return stronglyTyped.ToString();");
+                        writer.AppendLine("return stronglyTyped.ToString();");
                     }
                 }
             }
@@ -500,10 +532,15 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         private static SourceText BuildLogText(IReadOnlyCollection<string> log, string title)
         {
+            var version = typeof(StronglyTypedGenerator).Assembly.GetName().Version;
+            var assemblyVersion = $"{version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
+ 
             var result = SourceText.From(
-                string.Format(@"/*{0}{1}{0}{0}{2}*/",
+                string.Format(@"/*{0}{1}{0}{0}{2}{0}{0}{3}{0}{0}{4}{0}{0}*/",
                     Environment.NewLine,
                     title,
+                    $"This code was generated by generator '{typeof(StronglyTypedGenerator).FullName}'\nAssembly Version: {assemblyVersion}",
+                    $"{DateTime.UtcNow:s}Z",
                     string.Join(Environment.NewLine, log)),
                 Encoding.UTF8);
             return result;

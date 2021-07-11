@@ -1,9 +1,11 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Address
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Address
 {
     /// <summary>
     /// Street name.
     /// </summary>
-    [StrongType(typeof(string))]
+    [StrongType]
     public partial class StreetName
     {
     }

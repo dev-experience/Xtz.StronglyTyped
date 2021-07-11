@@ -13,7 +13,7 @@ namespace Xtz.StronglyTyped.EntityFramework
 {
     public static class ModelBuilderExtensions
     {
-        private static readonly IReadOnlyCollection<Type> PRIMITIVE_TYPES = new[]
+        private static readonly IReadOnlyCollection<Type> KNOWN_BASE_TYPES = new[]
         {
             typeof(bool),
             typeof(byte),
@@ -29,6 +29,9 @@ namespace Xtz.StronglyTyped.EntityFramework
             typeof(uint),
             typeof(ulong),
             typeof(ushort),
+            typeof(DateTime),
+            typeof(TimeSpan),
+            typeof(Guid),
         };
 
         private static readonly Type DEFAULT_BASE_TYPE = typeof(string);
@@ -46,7 +49,7 @@ namespace Xtz.StronglyTyped.EntityFramework
                 {
                     if (IsSupportedType(propertyInfo))
                     {
-                        var innerType = ExtractInnerType(propertyInfo.PropertyType.BaseType!);
+                        var innerType = ExtractInnerType(propertyInfo.PropertyType!);
                         var valueConverter = BuildValueConverter(innerType, propertyInfo.PropertyType);
 
                         modelBuilder
@@ -77,6 +80,8 @@ namespace Xtz.StronglyTyped.EntityFramework
                 || typeof(IStronglyTyped<float>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<double>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<bool>).IsAssignableFrom(propertyInfo.PropertyType)
+                || typeof(IStronglyTyped<TimeSpan>).IsAssignableFrom(propertyInfo.PropertyType)
+                || typeof(IStronglyTyped<DateTime>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<Guid>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<Uri>).IsAssignableFrom(propertyInfo.PropertyType)
                 || typeof(IStronglyTyped<MailAddress>).IsAssignableFrom(propertyInfo.PropertyType)
@@ -84,15 +89,15 @@ namespace Xtz.StronglyTyped.EntityFramework
                 || typeof(IStronglyTyped<PhysicalAddress>).IsAssignableFrom(propertyInfo.PropertyType);
         }
 
-        private static Type ExtractInnerType(Type innerType)
+        private static Type ExtractInnerType(Type type)
         {
             try
             {
-                var stronglyTypedInterface = innerType.GetInterface("IStronglyTyped`1");
+                var stronglyTypedInterface = type.GetInterface("IStronglyTyped`1");
                 var result = stronglyTypedInterface?.GenericTypeArguments.FirstOrDefault();
                 if (result == null) return DEFAULT_BASE_TYPE;
 
-                return PRIMITIVE_TYPES.Contains(result) ? result : DEFAULT_BASE_TYPE;
+                return KNOWN_BASE_TYPES.Contains(result) ? result : DEFAULT_BASE_TYPE;
             }
             catch (Exception e)
             {

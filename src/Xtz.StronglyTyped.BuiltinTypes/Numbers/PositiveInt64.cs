@@ -1,4 +1,6 @@
-﻿namespace Xtz.StronglyTyped.BuiltinTypes.Numbers
+﻿using Xtz.StronglyTyped.SourceGenerator;
+
+namespace Xtz.StronglyTyped.BuiltinTypes.Numbers
 {
     /// <summary>
     /// Positive (greater than zero) <see cref="System.Int64"/> number.

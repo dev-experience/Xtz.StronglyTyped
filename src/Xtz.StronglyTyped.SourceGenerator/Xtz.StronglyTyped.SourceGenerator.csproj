@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <PackageId>Xtz.StronglyTyped.SourceGenerator</PackageId>
-    <Version>0.15.1</Version>
+    <Version>0.19.0</Version>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Authors>Vlad DX</Authors>
@@ -33,10 +33,9 @@
     <PreserveCompilationContext>false</PreserveCompilationContext>
   </PropertyGroup>
 
-  <!-- Uncomment to debug the StronglyTypedGenerator during compilation -->
-  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE;DEBUG_STRONGLY_TYPED_GENERATOR</DefineConstants>
-  </PropertyGroup>-->
+  <ItemGroup>
+    <None Remove="Xtz.StronglyTyped.SourceGenerator.csproj.DotSettings" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />

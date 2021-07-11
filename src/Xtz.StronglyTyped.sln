@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped", "Xtz.St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.SourceGenerator.IntegrationTests", "Tests\Xtz.StronglyTyped.SourceGenerator.IntegrationTests\Xtz.StronglyTyped.SourceGenerator.IntegrationTests.csproj", "{F5E5B3F6-F0D7-4B11-A99C-87E3ADCEEFFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xtz.StronglyTyped.EntityFramework.IntegrationTests", "Tests\Xtz.StronglyTyped.EntityFramework.IntegrationTests\Xtz.StronglyTyped.EntityFramework.IntegrationTests.csproj", "{857370EC-A6FA-47FE-9005-8CC4D752630F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.EntityFramework.IntegrationTests", "Tests\Xtz.StronglyTyped.EntityFramework.IntegrationTests\Xtz.StronglyTyped.EntityFramework.IntegrationTests.csproj", "{857370EC-A6FA-47FE-9005-8CC4D752630F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.Api_3_1.IntegrationTests", "Xtz.StronglyTyped.Api_3_1.IntegrationTests\Xtz.StronglyTyped.Api_3_1.IntegrationTests.csproj", "{1AAE34E7-203E-41D3-A054-4767C5A99FAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{857370EC-A6FA-47FE-9005-8CC4D752630F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{857370EC-A6FA-47FE-9005-8CC4D752630F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{857370EC-A6FA-47FE-9005-8CC4D752630F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{0002B673-EEEC-42DE-BBD7-B434C01E4F3E} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{F5E5B3F6-F0D7-4B11-A99C-87E3ADCEEFFE} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{857370EC-A6FA-47FE-9005-8CC4D752630F} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
+		{1AAE34E7-203E-41D3-A054-4767C5A99FAC} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4FB6146-7992-4E75-B5F9-22B2ADA3C82F}

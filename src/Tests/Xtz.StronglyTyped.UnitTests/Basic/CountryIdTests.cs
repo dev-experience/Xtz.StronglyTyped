@@ -37,7 +37,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.Throws<StronglyTypedException>(Action);
+            Assert.Throws<InvalidValueException>(Action);
         }
 
         // Long.MaxValue

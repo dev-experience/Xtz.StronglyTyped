@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Xtz.StronglyTyped.SourceGenerator;
 
 namespace Xtz.StronglyTyped.IntegrationTests.Settings
 {
-    [ExcludeFromCodeCoverage]
     [StrongType]
     public sealed partial class Country
     {

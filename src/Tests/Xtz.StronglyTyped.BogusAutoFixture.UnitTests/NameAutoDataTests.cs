@@ -11,6 +11,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         [Test]
         [StrongAutoData]
         public void ShouldGenerateStronglyTypedValues(
+            DisplayName displayName,
             FirstName firstName,
             FullName fullName,
             LastName lastName,
@@ -19,6 +20,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         {
             var values = new object[]
             {
+                displayName,
                 firstName,
                 fullName,
                 lastName,

@@ -14,14 +14,28 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
             CompanyName companyName,
             CompanySuffix companySuffix,
             CostCenterId costCenterId,
-            EnterpriseName enterpriseName)
+            CostCenterName costCenterName,
+            EnterpriseName enterpriseName,
+            JobArea jobArea,
+            JobDescriptor jobDescriptor,
+            JobKey jobKey,
+            JobTitle jobTitle,
+            JobType jobType,
+            SiteCode siteCode)
         {
             var values = new object[]
             {
                 companyName,
                 companySuffix,
                 costCenterId,
+                costCenterName,
                 enterpriseName,
+                jobArea,
+                jobDescriptor,
+                jobKey,
+                jobTitle,
+                jobType,
+                siteCode
             };
 
             var nonBogusValues = values

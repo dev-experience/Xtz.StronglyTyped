@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes.AutoFixture\Xtz.StronglyTyped.BuiltinTypes.AutoFixture.csproj" />
     <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes\Xtz.StronglyTyped.BuiltinTypes.csproj" />
+    <ProjectReference Include="..\..\Xtz.StronglyTyped.SourceGenerator\Xtz.StronglyTyped.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
   </ItemGroup>
 
 </Project>

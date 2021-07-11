@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Xtz.StronglyTyped
 {
@@ -6,7 +7,7 @@ namespace Xtz.StronglyTyped
     /// Base strongly-typed class.
     /// </summary>
     /// <typeparam name="TInnerType">Inner type (can be a primitive or a more sophisticated one)</typeparam>
-    [DebuggerDisplay("[class {GetType().Name,nq}] {Value,nq}")]
+    [DebuggerDisplay("[class {GetType().Name,nq}] {ToString(),nq}")]
     public abstract partial class StronglyTyped<TInnerType> : IStronglyTyped<TInnerType>
         where TInnerType : notnull
     {
@@ -28,9 +29,12 @@ namespace Xtz.StronglyTyped
                 Throw($"<null> value is invalid for type {GetType()}");
             }
 
-            if (object.Equals(value, string.Empty))
+            if (ShouldThrowIfEmpty() && !typeof(TInnerType).IsPrimitive)
             {
-                Throw($"'' value is invalid for type {GetType()}");
+                if (Equals(value, string.Empty) || object.Equals(value, default(TInnerType)))
+                {
+                    Throw($"'{value}' value is invalid for type {GetType()}");
+                }
             }
 
             if (!IsValid(value!))
@@ -39,13 +43,13 @@ namespace Xtz.StronglyTyped
             }
         }
 
-        protected void Throw(string errorMessage) => throw new StronglyTypedException(GetType(), errorMessage);
+        // Bypass. Can be overriden
+        protected virtual bool ShouldThrowIfEmpty() => true;
 
-        protected virtual bool IsValid(TInnerType value)
-        {
-            // Bypass. Can be overriden
-            return true;
-        }
+        protected void Throw(string errorMessage) => throw new InvalidValueException(GetType(), errorMessage);
+
+        // Bypass. Can be overriden
+        protected virtual bool IsValid(TInnerType value) => true;
 
         public override bool Equals(object? obj)
         {
@@ -74,12 +78,12 @@ namespace Xtz.StronglyTyped
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return Value?.GetHashCode() ?? default;
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return Value?.ToString() ?? string.Empty;
         }
 
         // See more in `StronglyTyped.Operators.cs`
