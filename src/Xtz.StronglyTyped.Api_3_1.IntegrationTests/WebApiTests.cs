@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Xtz.StronglyTyped.Api_3_1.IntegrationTests.WebApi;
+using Xtz.StronglyTyped.BuiltinTypes.Address;
+using Xtz.StronglyTyped.NewtonsoftJson;
 
 namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 {
     public class WebApiTests : IDisposable
     {
+        private readonly JsonSerializerSettings _jsonSerializerSettings;
+
         private readonly WebApiFactory _factory = new();
         
         private readonly HttpClient _client;
@@ -17,6 +21,10 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
         public WebApiTests()
         {
             _client = _factory.CreateClient();
+
+            var jsonSerializerSettings = new JsonSerializerSettings();
+            jsonSerializerSettings.Converters.Add(new StronglyTypedNewtonsoftConverter());
+            _jsonSerializerSettings = jsonSerializerSettings;
         }
 
         [Test]
@@ -40,8 +48,11 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
             response.EnsureSuccessStatusCode();
             Assert.NotNull(response.Content);
 
+            Country country = null;
+            var x = JsonConvert.SerializeObject(country);
+
             var responseStr = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<IReadOnlyCollection<WeatherForecast>>(responseStr);
+            var responseObject = JsonConvert.DeserializeObject<IReadOnlyCollection<WeatherForecast>>(responseStr, _jsonSerializerSettings);
         }
 
         [Test]
@@ -80,7 +91,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
             Assert.NotNull(response.Content);
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr);
+            var responseObject = JsonConvert.DeserializeObject<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr, _jsonSerializerSettings);
         }
 
         [Test]
