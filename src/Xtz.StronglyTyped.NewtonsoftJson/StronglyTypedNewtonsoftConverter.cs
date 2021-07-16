@@ -69,6 +69,138 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             writer.WriteValue(stringValue);
         }
 
+        private IStronglyTyped ConvertFromLong(long longValue, ICustomTypeConverter typeConverter)
+        {
+            if (typeConverter.InnerType == typeof(byte))
+            {
+                var value = unchecked((byte)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(decimal))
+            {
+                var value = (decimal)longValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(double))
+            {
+                var value = (double)longValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(float))
+            {
+                var value = (float)longValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(int))
+            {
+                var value = unchecked((int)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(long))
+            {
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(longValue);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(sbyte))
+            {
+                var value = unchecked((sbyte)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(short))
+            {
+                var value = unchecked((short)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(uint))
+            {
+                var value = unchecked((uint)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(ulong))
+            {
+                var value = unchecked((ulong)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(ushort))
+            {
+                var value = unchecked((ushort)longValue);
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(long)}' to '{typeConverter.StrongType.FullName}'");
+        }
+
+        private IStronglyTyped ConvertFromDouble(double doubleValue, ICustomTypeConverter typeConverter)
+        {
+            if (typeConverter.InnerType == typeof(double))
+            {
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(doubleValue);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(decimal))
+            {
+                var value = (decimal)doubleValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(float))
+            {
+                var value = (float)doubleValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(double)}' to '{typeConverter.StrongType.FullName}'");
+        }
+
+        private IStronglyTyped ConvertFromBigInt(BigInteger bigIntValue, ICustomTypeConverter typeConverter)
+        {
+            if (typeConverter.InnerType == typeof(decimal))
+            {
+                var value = (decimal)bigIntValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            if (typeConverter.InnerType == typeof(ulong))
+            {
+                var value = (ulong)bigIntValue;
+                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
+                return (IStronglyTyped)result;
+            }
+
+            throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(BigInteger)}' to '{typeConverter.StrongType.FullName}'");
+        }
+
+        private IStronglyTyped ConvertToTimeSpan(object value, TypeConverter typeConverter)
+        {
+            var timeSpanValue = XmlConvert.ToTimeSpan(value.ToString());
+            var result = typeConverter.ConvertFrom(timeSpanValue);
+            return (IStronglyTyped)result;
+        }
+
         private bool TryWriteNumber(object value, Type innerType, JsonWriter writer)
         {
             if (innerType == typeof(decimal))
@@ -149,94 +281,6 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             }
 
             return false;
-        }
-
-        private IStronglyTyped ConvertFromLong(long longValue, ICustomTypeConverter typeConverter)
-        {
-            if (typeConverter.InnerType == typeof(ushort))
-            {
-                var value = unchecked((ushort)longValue);
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            if (typeConverter.InnerType == typeof(int))
-            {
-                var value = unchecked((int)longValue);
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            if (typeConverter.InnerType == typeof(decimal))
-            {
-                var value = (decimal)longValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(long)}' to '{typeConverter.StrongType.FullName}'");
-        }
-
-        private IStronglyTyped ConvertFromDouble(double doubleValue, ICustomTypeConverter typeConverter)
-        {
-            if (typeConverter.InnerType == typeof(decimal))
-            {
-                var value = (decimal)doubleValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            if (typeConverter.InnerType == typeof(float))
-            {
-                var value = (float)doubleValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(double)}' to '{typeConverter.StrongType.FullName}'");
-        }
-
-        private IStronglyTyped ConvertFromBigInt(BigInteger bigIntValue, ICustomTypeConverter typeConverter)
-        {
-            if (typeConverter.InnerType == typeof(decimal))
-            {
-                var value = (decimal)bigIntValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            // NOTE: It's not clear when `BigInteger` is being read from JSON `ushort` is here just in case
-            if (typeConverter.InnerType == typeof(ushort))
-            {
-                var value = (ushort)bigIntValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            // NOTE: It's not clear when `BigInteger` is being read from JSON `int` is here just in case
-            if (typeConverter.InnerType == typeof(int))
-            {
-                var value = (int)bigIntValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            // NOTE: It's not clear when `BigInteger` is being read from JSON `long` is here just in case
-            if (typeConverter.InnerType == typeof(long))
-            {
-                var value = (long)bigIntValue;
-                var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
-            }
-
-            throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(BigInteger)}' to '{typeConverter.StrongType.FullName}'");
-        }
-
-        private IStronglyTyped ConvertToTimeSpan(object value, TypeConverter typeConverter)
-        {
-            var timeSpanValue = XmlConvert.ToTimeSpan(value.ToString());
-            var result = typeConverter.ConvertFrom(timeSpanValue);
-            return (IStronglyTyped)result;
         }
     }
 }

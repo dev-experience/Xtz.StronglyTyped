@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Xml;
-using AutoFixture;
 using NUnit.Framework;
 using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
-using Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders;
 using Xtz.StronglyTyped.BuiltinTypes.Internet;
 
-namespace Xtz.StronglyTyped.UnitTests.Values
+namespace Xtz.StronglyTyped.UnitTests.SystemTextJson
 {
-    public class SystemTextJsonTests
+    public class SerializationTests
     {
         [Test]
         [TestCase("New York")]
@@ -213,14 +211,13 @@ namespace Xtz.StronglyTyped.UnitTests.Values
         }
 
         [Test]
-        [TestCase(false)]
-        [TestCase(true)]
-        public void ShouldSerialize_GivenStronglyTypedBoolClass(bool value)
+        [TestCase(false, "false")]
+        [TestCase(true, "true")]
+        public void ShouldSerialize_GivenStronglyTypedBoolClass(bool value, string expectedValue)
         {
             // Arrange
 
             var stronglyTyped = new StronglyTypedBool(value);
-            var json = JsonSerializer.Serialize(value);
 
             // Act
 
@@ -228,7 +225,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             // Assert
 
-            Assert.AreEqual(json, result);
+            Assert.AreEqual(expectedValue, result);
         }
 
         [Test]
