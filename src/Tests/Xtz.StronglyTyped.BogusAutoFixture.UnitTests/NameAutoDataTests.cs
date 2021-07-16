@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using Xtz.StronglyTyped.BogusAutoFixture.UnitTests.Extensions;
 using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
 using Xtz.StronglyTyped.BuiltinTypes.Name;
 
@@ -13,7 +14,6 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         public void ShouldGenerateStronglyTypedValues(
             DisplayName displayName,
             FirstName firstName,
-            FullName fullName,
             LastName lastName,
             NamePrefix namePrefix,
             NameSuffix nameSuffix)
@@ -22,16 +22,19 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
             {
                 displayName,
                 firstName,
-                fullName,
                 lastName,
                 namePrefix,
                 nameSuffix,
             };
 
-            var nonBogusValues = values
-                .Where(x => x.ToString()!.Length >= 36 && Guid.TryParse(x.ToString()![^36..], out _));
+            Assert.That(values, Is.All.Matches<object>(x => !x.ToString().IsBogusGeneratedValue()));
+        }
 
-            Assert.IsEmpty(nonBogusValues);
+        [Test]
+        [StrongAutoData]
+        public void ShouldGenerateStronglyTypedFullName(FullName value)
+        {
+            Assert.IsFalse(value.FirstName.ToString().IsBogusGeneratedValue());
         }
     }
 }

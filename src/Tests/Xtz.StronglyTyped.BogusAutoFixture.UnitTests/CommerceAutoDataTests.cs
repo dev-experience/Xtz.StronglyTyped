@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using Xtz.StronglyTyped.BogusAutoFixture.UnitTests.Extensions;
 using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
 using Xtz.StronglyTyped.BuiltinTypes.Commerce;
 
@@ -14,13 +15,11 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
             Department department,
             Ean13 ean13,
             Ean8 ean8,
-            Price price,
             ProductShortName productShortName,
             ProductAdjective productAdjective,
             ProductCategory productCategory,
             ProductColor productColor,
             ProductMaterial productMaterial,
-            ProductFullName productFullName,
             SubDepartment subDepartment)
         {
             var values = new object[]
@@ -28,20 +27,33 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
                 department,
                 ean13,
                 ean8,
-                price,
                 productShortName,
                 productAdjective,
                 productCategory,
                 productColor,
                 productMaterial,
-                productFullName,
                 subDepartment,
             };
 
-            var nonBogusValues = values
-                .Where(x => x.ToString()!.Length >= 36 && Guid.TryParse(x.ToString()![^36..], out _));
+            Assert.That(values, Is.All.Matches<object>(x => !x.ToString().IsBogusGeneratedValue()));
+        }
 
-            Assert.IsEmpty(nonBogusValues);
+        [Test]
+        [StrongAutoData]
+        public void ShouldGenerateStronglyTypedPrice(Price value)
+        {
+            Assert.IsFalse(value.Currency.Code.ToString().IsBogusGeneratedValue());
+            Assert.IsFalse(value.Currency.Name.ToString().IsBogusGeneratedValue());
+            Assert.IsFalse(value.Currency.Symbol?.ToString().IsBogusGeneratedValue());
+        }
+
+        [Test]
+        [StrongAutoData]
+        public void ShouldGenerateStronglyTypedProductFullName(ProductFullName value)
+        {
+            Assert.IsFalse(value.ProductAdjective.ToString().IsBogusGeneratedValue());
+            Assert.IsFalse(value.ProductMaterial.ToString().IsBogusGeneratedValue());
+            Assert.IsFalse(value.ProductShortName.ToString().IsBogusGeneratedValue());
         }
     }
 }
