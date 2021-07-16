@@ -75,7 +75,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
             //// Act
 
             [ExcludeFromCodeCoverage]
-            void Action() => new CountryAllowingEmpty(value);
+            void Action() => new StronglyTypedStringAllowEmpty(value);
 
             //// Assert
 
@@ -91,7 +91,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Act
 
-            var result = new CountryAllowingEmpty(value);
+            var result = new StronglyTypedStringAllowEmpty(value);
 
             //// Assert
 
