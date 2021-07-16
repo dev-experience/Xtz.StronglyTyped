@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Xtz.StronglyTyped.BuiltinTypes\Xtz.StronglyTyped.BuiltinTypes.csproj" />
+    <ProjectReference Include="..\Xtz.StronglyTyped.NewtonsoftJson\Xtz.StronglyTyped.NewtonsoftJson.csproj" />
   </ItemGroup>
 
   <ItemGroup>
