@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes.AutoFixture\Xtz.StronglyTyped.BuiltinTypes.AutoFixture.csproj" />
     <ProjectReference Include="..\..\Xtz.StronglyTyped.BuiltinTypes\Xtz.StronglyTyped.BuiltinTypes.csproj" />
     <ProjectReference Include="..\..\Xtz.StronglyTyped.SourceGenerator\Xtz.StronglyTyped.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
     <ProjectReference Include="..\..\Xtz.StronglyTyped\Xtz.StronglyTyped.csproj" />
