@@ -32,28 +32,28 @@ namespace Xtz.StronglyTyped.Benchmark
         }
 
         [Benchmark(Baseline = true, Description = "int")]
-        public string SerializeEmailStrings()
+        public string SerializeInts()
         {
             var result = JsonSerializer.Serialize(_ints);
             return result;
         }
 
         [Benchmark(Description = "StronglyTyped<ValueType<int>>")]
-        public string SerializeStronglyTypedStringStructs()
+        public string SerializeStronglyTypedIntStructs()
         {
             var result = JsonSerializer.Serialize(_stronglyTypedIntStructs);
             return result;
         }
 
         [Benchmark(Description = "StronglyTyped<int>")]
-        public string SerializeStronglyTypedEmails()
+        public string SerializeStronglyTypedIntIds()
         {
             var result = JsonSerializer.Serialize(_companyIntIds);
             return result;
         }
 
         [Benchmark(Description = "Other StronglyTyped<int>")]
-        public string SerializeOtherStronglyTypedEmails()
+        public string SerializeOtherStronglyTypedIntIds()
         {
             var result = JsonSerializer.Serialize(_otherCompanyIntIds);
             return result;

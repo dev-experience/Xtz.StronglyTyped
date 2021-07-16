@@ -38,21 +38,21 @@ namespace Xtz.StronglyTyped.Benchmark
         }
 
         [Benchmark(Description = "StronglyTyped<ValueType<Guid>>")]
-        public string SerializeStronglyTypedStringStructs()
+        public string SerializeStronglyTypedGuidStructs()
         {
             var result = JsonSerializer.Serialize(_stronglyTypedGuidStructs);
             return result;
         }
 
         [Benchmark(Description = "StronglyTyped<Guid>")]
-        public string SerializeStronglyTypedEmails()
+        public string SerializeStronglyTypedGuids()
         {
             var result = JsonSerializer.Serialize(_employeeGuidIds);
             return result;
         }
 
         [Benchmark(Description = "Other StronglyTyped<Guid>")]
-        public string SerializeOtherStronglyTypedEmails()
+        public string SerializeOtherStronglyTypedGuids()
         {
             var result = JsonSerializer.Serialize(_otherEmployeeGuidIds);
             return result;

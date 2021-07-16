@@ -16,9 +16,9 @@ namespace Xtz.StronglyTyped.Benchmark
 #endif
 
             BenchmarkRunner.Run<SystemTextJsonSerializationEmails>(config);
-            BenchmarkRunner.Run<SystemTextJsonSerializationMacAddress>();
-            BenchmarkRunner.Run<SystemTextJsonSerializationGuidIds>();
-            BenchmarkRunner.Run<SystemTextJsonSerializationIntIds>();
+            BenchmarkRunner.Run<SystemTextJsonSerializationMacAddress>(config);
+            BenchmarkRunner.Run<SystemTextJsonSerializationGuidIds>(config);
+            BenchmarkRunner.Run<SystemTextJsonSerializationIntIds>(config);
         }
     }
 }

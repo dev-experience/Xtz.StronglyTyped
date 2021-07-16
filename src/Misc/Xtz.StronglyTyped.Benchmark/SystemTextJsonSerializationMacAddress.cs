@@ -40,7 +40,7 @@ namespace Xtz.StronglyTyped.Benchmark
         }
 
         [Benchmark(Baseline = true, Description = "string")]
-        public string SerializeEmailStrings()
+        public string SerializeMacAddressStrings()
         {
             var result = JsonSerializer.Serialize(_strings);
             return result;
@@ -60,15 +60,15 @@ namespace Xtz.StronglyTyped.Benchmark
             return result;
         }
 
-        [Benchmark(Description = "StronglyTyped<MailAddress>")]
-        public string SerializeStronglyTypedEmails()
+        [Benchmark(Description = "StronglyTyped<PhysicalAddress>")]
+        public string SerializeStronglyTypedMacAddresses()
         {
             var result = JsonSerializer.Serialize(_macAddresses);
             return result;
         }
 
-        [Benchmark(Description = "Other StronglyTyped<MailAddress>")]
-        public string SerializeOtherStronglyTypedEmails()
+        [Benchmark(Description = "Other StronglyTyped<PhysicalAddress>")]
+        public string SerializeOtherStronglyTypedMacAddresses()
         {
             var result = JsonSerializer.Serialize(_otherMacAddresses);
             return result;
