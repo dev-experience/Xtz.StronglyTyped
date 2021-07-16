@@ -27,7 +27,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
                 nameSuffix,
             };
 
-            Assert.That(values, Is.All.Matches<object>(x => !x.ToString().IsBogusGeneratedValue()));
+            Assert.That(values, Is.All.Matches<object>(x => !x.ToString()!.IsBogusGeneratedValue()));
         }
 
         [Test]

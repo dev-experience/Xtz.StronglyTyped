@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <PackageId>Xtz.StronglyTyped.Swashbuckle</PackageId>
-    <Version>0.20.0</Version>
+    <Version>0.20.1</Version>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Authors>Vlad DX</Authors>
@@ -38,7 +38,7 @@ Make compiler your friend, introduce semantics to your code.</Description>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
   </ItemGroup>
 
   <ItemGroup>

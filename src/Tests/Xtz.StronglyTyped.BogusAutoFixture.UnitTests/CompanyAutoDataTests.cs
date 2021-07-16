@@ -39,7 +39,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
                 siteCode
             };
 
-            Assert.That(values, Is.All.Matches<object>(x => !x.ToString().IsBogusGeneratedValue()));
+            Assert.That(values, Is.All.Matches<object>(x => !x.ToString()!.IsBogusGeneratedValue()));
         }
     }
 }

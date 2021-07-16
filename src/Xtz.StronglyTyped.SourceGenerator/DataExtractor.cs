@@ -133,12 +133,12 @@ namespace Xtz.StronglyTyped.SourceGenerator
         {
             if (string.IsNullOrEmpty(typeName)) return null;
 
-            if (KNOWN_TYPES.TryGetValue(typeName, out var knownType))
+            if (KNOWN_TYPES.TryGetValue(typeName!, out var knownType))
             {
                 return knownType;
             }
 
-            var systemType = SYSTEM_PRIVATE_CORE_LIB_ASSEMBLY.GetType(typeName);
+            var systemType = SYSTEM_PRIVATE_CORE_LIB_ASSEMBLY.GetType(typeName!);
             if (systemType != null)
             {
                 return systemType;
@@ -305,7 +305,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     // [StrongType(..., allow: Allow.Null | Allow.Empty)]
                     //                         ^
                     var binaryOperation = semanticModel.GetOperation(binaryExpressionSyntax);
-                    if (binaryOperation?.Type.ToDisplayString() == typeof(TEnum).FullName)
+                    if (binaryOperation?.Type?.ToDisplayString() == typeof(TEnum).FullName)
                     {
                         // [StrongType(..., allow: Allow.Null | Allow.Empty)]
                         //                         ^
