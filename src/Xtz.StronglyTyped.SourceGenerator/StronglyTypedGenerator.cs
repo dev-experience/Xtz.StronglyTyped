@@ -348,7 +348,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     }
                 }
 
-                if (workItem.InnerType == typeof (string))
+                if (workItem.InnerType == typeof(string) && !workItem.ExtraFeatures.DoesAllowEmpty)
                 {
                     writer.AppendLine();
                     using (writer.BeginScope("if (value == string.Empty)"))
@@ -413,35 +413,57 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         private static void TryWriteToString(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
-            if (workItem.Kind == WorkItemKind.Struct && !workItem.ExtraFeatures.HasToString)
+            if (!workItem.ExtraFeatures.HasToString)
             {
-                WriteXmlSummary(writer, "Returns a string that represents inner value.");
-                WriteXmlReturns(writer, "A string that represents inner value.");
-                using (writer.BeginScope("public override string ToString()"))
+                // Order of ifs is important
+
+                if (workItem.InnerType == typeof(Guid))
                 {
-                    if (workItem.InnerType == typeof(Guid))
+                    WriteXmlSummary(writer, "Returns a string that represents inner <see cref=\"System.Guid\"/>.");
+                    WriteXmlReturns(writer, "A string that represents inner <see cref=\"System.Guid\"/>.");
+                    using (writer.BeginScope("public override string ToString()"))
                     {
                         writer.AppendLine("return $\"{Value:D}\";");
                     }
-                    else
+                    writer.AppendLine();
+                    return;
+                }
+
+                if (workItem.InnerType == typeof(DateTime))
+                {
+                    WriteXmlSummary(writer, "Returns an ISO-8601 string that represents inner <see cref=\"System.DateTime\"/>.");
+                    WriteXmlReturns(writer, "An ISO-8601 string that represents inner <see cref=\"System.DateTime\"/>.");
+                    using (writer.BeginScope("public override string ToString()"))
+                    {
+                        writer.AppendLine("return $\"{Value.ToUniversalTime():s}Z\";");
+                    }
+                    writer.AppendLine();
+                    return;
+                }
+
+                if (workItem.InnerType == typeof(TimeSpan))
+                {
+                    WriteXmlSummary(writer, "Returns an ISO-8601 string that represents inner <see cref=\"System.TimeSpan\"/>.");
+                    WriteXmlReturns(writer, "An ISO-8601 string that represents inner <see cref=\"System.TimeSpan\"/>.");
+                    using (writer.BeginScope("public override string ToString()"))
+                    {
+                        writer.AppendLine("return $\"{System.Xml.XmlConvert.ToString(Value)}\";");
+                    }
+                    writer.AppendLine();
+                    return;
+                }
+
+                if (workItem.Kind == WorkItemKind.Struct)
+                {
+                    WriteXmlSummary(writer, "Returns a string that represents inner value.");
+                    WriteXmlReturns(writer, "A string that represents inner value.");
+                    using (writer.BeginScope("public override string ToString()"))
                     {
                         writer.AppendLine("return $\"{Value}\";");
                     }
+                    writer.AppendLine();
+                    return;
                 }
-                writer.AppendLine();
-                return;
-            }
-
-            if (workItem.Kind == WorkItemKind.Class && !workItem.ExtraFeatures.HasToString && workItem.InnerType == typeof(Guid))
-            {
-                WriteXmlSummary(writer, "Returns a string that represents inner <see cref=\"System.Guid\"/>.");
-                WriteXmlReturns(writer, "A string that represents inner <see cref=\"System.Guid\"/>.");
-                using (writer.BeginScope("public override string ToString()"))
-                {
-                    writer.AppendLine("return $\"{Value:D}\";");
-                }
-                writer.AppendLine();
-                return;
             }
         }
 
