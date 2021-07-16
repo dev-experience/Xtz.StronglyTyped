@@ -29,7 +29,7 @@ namespace Xtz.StronglyTyped
                 Throw($"<null> value is invalid for type {GetType()}");
             }
 
-            if (ShouldThrowIfEmpty() && !typeof(TInnerType).IsPrimitive)
+            if (ShouldThrowIfEmpty() && !(typeof(TInnerType).IsPrimitive || typeof(TInnerType) == typeof(decimal)))
             {
                 if (Equals(value, string.Empty) || object.Equals(value, default(TInnerType)))
                 {
