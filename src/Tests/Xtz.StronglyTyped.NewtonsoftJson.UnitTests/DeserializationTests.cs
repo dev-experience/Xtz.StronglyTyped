@@ -173,7 +173,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedInt>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -197,7 +197,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedIntStruct>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -219,7 +219,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedIntId>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -232,23 +232,27 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
         }
 
         [Test]
-        [TestCase(false)]
-        [TestCase(true)]
-        public void ShouldDeserialize_ToStronglyTypedBoolClass(bool value)
+        public void ShouldDeserialize_ToStronglyTypedBoolClass()
         {
             // Arrange
 
-            var stronglyTyped = new SerializationDto<StronglyTypedBool>(value);
-            var json = BuildString(value);
+            var values = new[] { false, true };
+
+            var stronglyTyped = values
+                .Select(x => new SerializationDto<StronglyTypedBool>(x))
+                .ToArray();
+            var json = "[{\"testValue\": false }, {\"testValue\": true }]";
 
             // Act
 
-            var result = JsonConvert.DeserializeObject<SerializationDto<StronglyTypedBool>>(json, JSON_SERIALIZER_SETTINGS);
+            var result = JsonConvert.DeserializeObject<IReadOnlyCollection<SerializationDto<StronglyTypedBool>>>(json, JSON_SERIALIZER_SETTINGS);
 
             // Assert
 
             Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.IsNotEmpty(result);
+            Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
+            Assert.That(result, Is.All.Matches<SerializationDto<StronglyTypedBool>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
         }
 
         [Test]
@@ -262,7 +266,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedByte>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -317,7 +321,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedDecimal>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -368,7 +372,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedDouble>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -395,7 +399,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedFloat>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -420,7 +424,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedLong>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -444,7 +448,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedSbyte>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -470,7 +474,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedShort>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -495,7 +499,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedUint>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -521,7 +525,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             // Arrange
 
             var stronglyTyped = new SerializationDto<StronglyTypedUlong>(value);
-            var json = BuildString(value);
+            var json = BuildNonString(value);
 
             // Act
 
@@ -631,104 +635,104 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
         }
 
-        //[Test]
-        //[StrongAutoData]
-        //public void ShouldDeserialize_ToStronglyTypedEmailClass(Email value)
-        //{
-        //    // Arrange
+        [Test]
+        [StrongAutoData]
+        public void ShouldDeserialize_ToStronglyTypedEmailClass(Email value)
+        {
+            // Arrange
 
-        //    var stronglyTyped = new SerializationDto<Email>(value);
-        //    var json = BuildString(stronglyTyped.TestValue.Value.Address);
+            var stronglyTyped = new SerializationDto<Email>(value);
+            var json = BuildString(stronglyTyped.TestValue.Value.Address);
 
-        //    // Act
+            // Act
 
-        //    var result = JsonConvert.DeserializeObject<SerializationDto<Email>>(json, JSON_SERIALIZER_SETTINGS);
+            var result = JsonConvert.DeserializeObject<SerializationDto<Email>>(json, JSON_SERIALIZER_SETTINGS);
 
-        //    // Assert
+            // Assert
 
-        //    Assert.NotNull(result);
-        //    Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
-        //}
+            Assert.NotNull(result);
+            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+        }
 
-        //[Test]
-        //[StrongAutoData]
-        //public void ShouldDeserialize_ToStronglyTypedEmailsClass(IReadOnlyCollection<Email> values)
-        //{
-        //    // Arrange
+        [Test]
+        [StrongAutoData]
+        public void ShouldDeserialize_ToStronglyTypedEmailsClass(IReadOnlyCollection<Email> values)
+        {
+            // Arrange
 
-        //    var stronglyTyped = values
-        //        .Select(x => new SerializationDto<Email>(x))
-        //        .ToArray();
-        //    var json = BuildStringArray(stronglyTyped.Select(x => x.TestValue.Value.Address));
+            var stronglyTyped = values
+                .Select(x => new SerializationDto<Email>(x))
+                .ToArray();
+            var json = BuildStringArray(stronglyTyped.Select(x => x.TestValue.Value.Address));
 
-        //    // Act
+            // Act
 
-        //    var result = JsonConvert.DeserializeObject<IReadOnlyCollection<SerializationDto<Email>>>(json, JSON_SERIALIZER_SETTINGS);
+            var result = JsonConvert.DeserializeObject<IReadOnlyCollection<SerializationDto<Email>>>(json, JSON_SERIALIZER_SETTINGS);
 
-        //    // Assert
+            // Assert
 
-        //    Assert.NotNull(result);
-        //    Assert.IsNotEmpty(result);
-        //    Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
-        //    Assert.That(result, Is.All.Matches<SerializationDto<Email>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
-        //}
+            Assert.NotNull(result);
+            Assert.IsNotEmpty(result);
+            Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
+            Assert.That(result, Is.All.Matches<SerializationDto<Email>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
+        }
 
-        //[Test]
-        //[StrongAutoData]
-        //public void ShouldDeserialize_ToStronglyTypedIpV4AddressClass(IpV4Address value)
-        //{
-        //    // Arrange
+        [Test]
+        [StrongAutoData]
+        public void ShouldDeserialize_ToStronglyTypedIpV4AddressClass(IpV4Address value)
+        {
+            // Arrange
 
-        //    var stronglyTyped = new SerializationDto<IpV4Address>(value);
-        //    var json = BuildString(value);
+            var stronglyTyped = new SerializationDto<IpV4Address>(value);
+            var json = BuildString(value);
 
-        //    // Act
+            // Act
 
-        //    var result = JsonConvert.DeserializeObject<SerializationDto<IpV4Address>>(json, JSON_SERIALIZER_SETTINGS);
+            var result = JsonConvert.DeserializeObject<SerializationDto<IpV4Address>>(json, JSON_SERIALIZER_SETTINGS);
 
-        //    // Assert
+            // Assert
 
-        //    Assert.NotNull(result);
-        //    Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
-        //}
+            Assert.NotNull(result);
+            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+        }
 
-        //[Test]
-        //[StrongAutoData]
-        //public void ShouldDeserialize_ToStronglyTypedIpV6AddressClass(IpV6Address value)
-        //{
-        //    // Arrange
+        [Test]
+        [StrongAutoData]
+        public void ShouldDeserialize_ToStronglyTypedIpV6AddressClass(IpV6Address value)
+        {
+            // Arrange
 
-        //    var stronglyTyped = new SerializationDto<IpV6Address>(value);
-        //    var json = BuildString(value);
+            var stronglyTyped = new SerializationDto<IpV6Address>(value);
+            var json = BuildString(value);
 
-        //    // Act
+            // Act
 
-        //    var result = JsonConvert.DeserializeObject<SerializationDto<IpV6Address>>(json, JSON_SERIALIZER_SETTINGS);
+            var result = JsonConvert.DeserializeObject<SerializationDto<IpV6Address>>(json, JSON_SERIALIZER_SETTINGS);
 
-        //    // Assert
+            // Assert
 
-        //    Assert.NotNull(result);
-        //    Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
-        //}
+            Assert.NotNull(result);
+            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+        }
 
-        //[Test]
-        //[StrongAutoData]
-        //public void ShouldDeserialize_ToStronglyTypedMacAddressClass(MacAddress value)
-        //{
-        //    // Arrange
+        [Test]
+        [StrongAutoData]
+        public void ShouldDeserialize_ToStronglyTypedMacAddressClass(MacAddress value)
+        {
+            // Arrange
 
-        //    var stronglyTyped = new SerializationDto<MacAddress>(value);
-        //    var json = BuildString(value);
+            var stronglyTyped = new SerializationDto<MacAddress>(value);
+            var json = BuildString(value);
 
-        //    // Act
+            // Act
 
-        //    var result = JsonConvert.DeserializeObject<SerializationDto<MacAddress>>(json, JSON_SERIALIZER_SETTINGS);
+            var result = JsonConvert.DeserializeObject<SerializationDto<MacAddress>>(json, JSON_SERIALIZER_SETTINGS);
 
-        //    // Assert
+            // Assert
 
-        //    Assert.NotNull(result);
-        //    Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
-        //}
+            Assert.NotNull(result);
+            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+        }
 
         private static string BuildStringArray(IEnumerable<object> values)
         {
@@ -736,7 +740,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             foreach (var value in values)
             {
-                stringBuilder.AppendFormat("    {0},\n", BuildString(value));
+                stringBuilder.AppendFormat("  {0},\n", BuildString(value));
             }
 
             stringBuilder.Append("]");
@@ -750,7 +754,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             foreach (var value in values)
             {
-                stringBuilder.AppendFormat("{0},\n", BuildNonString(value));
+                stringBuilder.AppendFormat("  {0},\n", BuildNonString(value));
             }
 
             stringBuilder.Append("]");
