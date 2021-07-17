@@ -17,9 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Xtz.StronglyTyped.BuiltinTypes\Xtz.StronglyTyped.BuiltinTypes.csproj" />
     <ProjectReference Include="..\Xtz.StronglyTyped.NewtonsoftJson\Xtz.StronglyTyped.NewtonsoftJson.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Xtz.StronglyTyped.SourceGenerator\Xtz.StronglyTyped.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
   </ItemGroup>
 
