@@ -16,35 +16,32 @@ namespace Xtz.StronglyTyped.TypeConverters
             return typeof(IStronglyTyped).IsAssignableFrom(typeToConvert);
         }
 
-        public override TStronglyTyped? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override TStronglyTyped Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var typeConverter = TypeDescriptor.GetConverter(typeToConvert);
+            var typeConverter = TypeDescriptor.GetConverter(typeToConvert) as ICustomTypeConverter;
 
-            if (typeConverter is ICustomTypeConverter customTypeConverter)
+            if (typeConverter!.InnerType == typeof(TimeSpan))
             {
-                if (customTypeConverter.InnerType == typeof(TimeSpan))
-                {
-                    return (TStronglyTyped)typeConverter.ConvertFrom(XmlConvert.ToTimeSpan(reader.GetString()));
-                }
+                return (TStronglyTyped)typeConverter.ConvertFrom(XmlConvert.ToTimeSpan(reader.GetString()!))!;
+            }
 
-                if (customTypeConverter.InnerType == typeof(DateTime))
-                {
-                    return ReadDateTime(reader, customTypeConverter.StrongType, typeConverter);
-                }
+            if (typeConverter.InnerType == typeof(DateTime))
+            {
+                return ReadDateTime(reader, typeConverter);
+            }
 
-                if (reader.TokenType is JsonTokenType.True or JsonTokenType.False)
-                {
-                    return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetBoolean());
-                }
+            if (reader.TokenType is JsonTokenType.True or JsonTokenType.False)
+            {
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetBoolean()!)!;
+            }
 
-                if (reader.TokenType == JsonTokenType.Number)
-                {
-                    return ReadNumber(reader, customTypeConverter.StrongType, customTypeConverter.InnerType, typeConverter);
-                }
+            if (reader.TokenType == JsonTokenType.Number)
+            {
+                return ReadNumber(reader, typeConverter);
             }
 
             var stringValue = reader.GetString();
-            return (TStronglyTyped)typeConverter.ConvertFrom(stringValue);
+            return (TStronglyTyped)typeConverter.ConvertFrom(stringValue!)!;
         }
 
         public override void Write(Utf8JsonWriter writer, TStronglyTyped? value, JsonSerializerOptions options)
@@ -65,98 +62,88 @@ namespace Xtz.StronglyTyped.TypeConverters
                     return;
                 }
 
-                if (TryWriteNumber(value, customTypeConverter.InnerType, writer))
-                {
-                    return;
-                }
+                if (TryWriteNumber(value, customTypeConverter.InnerType, writer)) return;
             }
 
             var stringValue = typeConverter.ConvertTo(value, typeof(string)) as string;
             writer.WriteStringValue(stringValue);
         }
 
-        private TStronglyTyped? ReadNumber(Utf8JsonReader reader, Type strongType, Type innerType, TypeConverter typeConverter)
+        private TStronglyTyped ReadNumber(Utf8JsonReader reader, ICustomTypeConverter typeConverter)
         {
 
-            if (innerType == typeof(int))
+            if (typeConverter.InnerType == typeof(int))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetInt32());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetInt32())!;
             }
 
-            if (innerType == typeof(float))
+            if (typeConverter.InnerType == typeof(float))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetSingle());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetSingle())!;
             }
 
-            if (innerType == typeof(decimal))
+            if (typeConverter.InnerType == typeof(decimal))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetDecimal());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetDecimal())!;
             }
 
-            if (innerType == typeof(long))
+            if (typeConverter.InnerType == typeof(long))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetInt64());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetInt64())!;
             }
 
-            if (innerType == typeof(double))
+            if (typeConverter.InnerType == typeof(double))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetDouble());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetDouble())!;
             }
 
-            if (innerType == typeof(byte))
+            if (typeConverter.InnerType == typeof(byte))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetByte());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetByte())!;
             }
 
-            if (innerType == typeof(sbyte))
+            if (typeConverter.InnerType == typeof(sbyte))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetSByte());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetSByte())!;
             }
 
-            if (innerType == typeof(short))
+            if (typeConverter.InnerType == typeof(short))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetInt16());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetInt16())!;
             }
 
-            if (innerType == typeof(uint))
+            if (typeConverter.InnerType == typeof(uint))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetUInt32());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetUInt32())!;
             }
 
-            if (innerType == typeof(ulong))
+            if (typeConverter.InnerType == typeof(ulong))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetUInt64());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetUInt64())!;
             }
 
-            if (innerType == typeof(ushort))
+            if (typeConverter.InnerType == typeof(ushort))
             {
-                return (TStronglyTyped) typeConverter.ConvertFrom(reader.GetUInt16());
+                return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetUInt16())!;
             }
 
-            throw new JsonConverterException(strongType, $"Can't convert value to '{strongType.FullName}'");
+            throw new JsonConverterException(typeConverter.StrongType, $"Can't convert value to '{typeConverter.StrongType.FullName}'");
         }
 
-        private TStronglyTyped? ReadDateTime(Utf8JsonReader reader, Type strongType, TypeConverter typeConverter)
+        private TStronglyTyped ReadDateTime(Utf8JsonReader reader, ICustomTypeConverter typeConverter)
         {
             if (reader.TryGetDateTime(out var dateTimeValue))
             {
-                return (TStronglyTyped)typeConverter.ConvertFrom(dateTimeValue);
+                return (TStronglyTyped)typeConverter.ConvertFrom(dateTimeValue)!;
             }
 
             var stringValue = reader.GetString();
             if (DateTime.TryParse(stringValue, out var dateTimeValue2))
             {
-                return (TStronglyTyped)typeConverter.ConvertFrom(dateTimeValue2);
+                return (TStronglyTyped)typeConverter.ConvertFrom(dateTimeValue2)!;
             }
         
-            throw new JsonConverterException(strongType, $"Can't convert from '{stringValue}' to '{strongType.FullName}'");
-        }
-
-        private IStronglyTyped ConvertToTimeSpan(string value, TypeConverter typeConverter)
-        {
-            var timeSpanValue = XmlConvert.ToTimeSpan(value.ToString());
-            var result = typeConverter.ConvertFrom(timeSpanValue);
-            return (IStronglyTyped)result;
+            throw new JsonConverterException(typeConverter.StrongType, $"Can't convert from '{stringValue}' to '{typeConverter.StrongType.FullName}'");
         }
 
         private bool TryWriteNumber(IStronglyTyped value, Type innerType, Utf8JsonWriter writer)

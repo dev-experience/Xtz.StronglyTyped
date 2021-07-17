@@ -18,29 +18,24 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
 
         public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            var typeConverter = TypeDescriptor.GetConverter(objectType);
+            var typeConverter = TypeDescriptor.GetConverter(objectType) as ICustomTypeConverter;
 
-            if (reader.Value is long longValue)
+            switch (reader.Value)
             {
-                return ConvertFromLong(longValue, typeConverter as ICustomTypeConverter);
+                case long longValue:
+                    return ConvertFromLong(longValue, typeConverter!);
+                case double doubleValue:
+                    return ConvertFromDouble(doubleValue, typeConverter!);
+                case BigInteger bigIntValue:
+                    return ConvertFromBigInt(bigIntValue, typeConverter!);
             }
 
-            if (reader.Value is double doubleValue)
+            if (typeConverter!.InnerType == typeof(TimeSpan))
             {
-                return ConvertFromDouble(doubleValue, typeConverter as ICustomTypeConverter);
+                return ConvertToTimeSpan(reader.Value!, typeConverter);
             }
 
-            if (reader.Value is BigInteger bigIntValue)
-            {
-                return ConvertFromBigInt(bigIntValue, typeConverter as ICustomTypeConverter);
-            }
-
-            if (typeConverter is ICustomTypeConverter customTypeConverter && customTypeConverter.InnerType == typeof(TimeSpan))
-            {
-                return ConvertToTimeSpan(reader.Value, typeConverter);
-            }
-
-            return (IStronglyTyped)typeConverter.ConvertFrom(reader.Value);
+            return (IStronglyTyped)typeConverter.ConvertFrom(reader.Value!);
         }
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
@@ -51,20 +46,17 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
                 return;
             }
 
-            var typeConverter = TypeDescriptor.GetConverter(value.GetType());
-            if (typeConverter is ICustomTypeConverter customTypeConverter)
+            var typeConverter = TypeDescriptor.GetConverter(value.GetType()) as ICustomTypeConverter;
+            if (typeConverter!.InnerType == typeof(bool))
             {
-                if (customTypeConverter.InnerType == typeof(bool))
-                {
-                    var boolValue = (value as IStronglyTyped<bool>)?.Value ?? default(bool);
-                    writer.WriteValue(boolValue);
-                    return;
-                }
+                var boolValue = (value as IStronglyTyped<bool>)?.Value ?? default(bool);
+                writer.WriteValue(boolValue);
+                return;
+            }
 
-                if (TryWriteNumber(value, customTypeConverter.InnerType, writer))
-                {
-                    return;
-                }
+            if (TryWriteNumber(value, typeConverter!.InnerType, writer))
+            {
+                return;
             }
 
             var stringValue = typeConverter.ConvertTo(value, typeof(string)) as string;
@@ -196,7 +188,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(BigInteger)}' to '{typeConverter.StrongType.FullName}'");
         }
 
-        private IStronglyTyped ConvertToTimeSpan(object value, TypeConverter typeConverter)
+        private IStronglyTyped ConvertToTimeSpan(object value, ICustomTypeConverter typeConverter)
         {
             var timeSpanValue = XmlConvert.ToTimeSpan(value.ToString());
             var result = typeConverter.ConvertFrom(timeSpanValue);
