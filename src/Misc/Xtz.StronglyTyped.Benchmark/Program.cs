@@ -7,7 +7,7 @@ namespace Xtz.StronglyTyped.Benchmark
     {
         public const int VALUE_COUNT = 1000;
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             // ReSharper disable once RedundantAssignment
             var config = DefaultConfig.Instance;

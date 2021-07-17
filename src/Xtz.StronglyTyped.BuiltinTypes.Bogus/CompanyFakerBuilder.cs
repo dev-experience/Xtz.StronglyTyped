@@ -5,7 +5,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
 {
     public class CompanyFakerBuilder : BaseFakerBuilder
     {
-        private CommerceFakerBuilder _commerceFakerBuilder;
+        private readonly CommerceFakerBuilder _commerceFakerBuilder;
 
         public CompanyFakerBuilder(bool useFakerCache = true)
             : base(useFakerCache)

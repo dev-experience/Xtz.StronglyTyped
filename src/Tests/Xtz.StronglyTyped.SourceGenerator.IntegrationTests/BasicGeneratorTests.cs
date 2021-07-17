@@ -111,7 +111,7 @@ namespace IntegrationTests.Generated
             Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace IntegrationTests.Generated
             Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(5));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -193,7 +193,7 @@ namespace IntegrationTests.Generated
             Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(5));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]

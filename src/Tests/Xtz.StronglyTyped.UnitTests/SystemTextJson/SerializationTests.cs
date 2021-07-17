@@ -296,12 +296,31 @@ namespace Xtz.StronglyTyped.UnitTests.SystemTextJson
         [TestCase(34634)]
         [TestCase(6534.353)]
         //[TestCase(79228162514264337593543950335m)]
-        public void ShouldSerialize_GivenStronglyTypedByteClass(decimal value)
+        public void ShouldSerialize_GivenStronglyTypedDecimalClass(decimal value)
         {
             // Arrange
 
             var stronglyTyped = new StronglyTypedDecimal(value);
             var json = JsonSerializer.Serialize(value);
+
+            // Act
+
+            var result = JsonSerializer.Serialize(stronglyTyped);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        public void ShouldSerialize_GivenStronglyTypedDecimalClass()
+        {
+            // Arrange
+
+            var values = new [] { decimal.MinValue, -968.2566m, decimal.MinusOne, decimal.Zero, decimal.One, decimal.MaxValue };
+
+            var stronglyTyped = values.Select(x => (StronglyTypedDecimal)x);
+            var json = JsonSerializer.Serialize(values);
 
             // Act
 

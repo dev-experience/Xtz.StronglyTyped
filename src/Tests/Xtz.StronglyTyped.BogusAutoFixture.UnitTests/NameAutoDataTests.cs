@@ -32,7 +32,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         [StrongAutoData]
         public void ShouldGenerateStronglyTypedFullName(FullName value)
         {
-            Assert.IsFalse(value.FirstName.ToString()!.IsBogusGeneratedValue());
+            Assert.That(value.FirstName.ToString()!.IsBogusGeneratedValue(), Is.False);
         }
     }
 }

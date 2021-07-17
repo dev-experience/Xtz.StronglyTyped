@@ -4,7 +4,7 @@ using System.Runtime.Loader;
 
 namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
 {
-    internal class SimpleUnloadableAssemblyLoadContext : AssemblyLoadContext, IDisposable
+    internal sealed class SimpleUnloadableAssemblyLoadContext : AssemblyLoadContext, IDisposable
     {
         public SimpleUnloadableAssemblyLoadContext()
             : base(true)

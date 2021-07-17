@@ -88,33 +88,6 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
             Assert.That(result, Is.EqualTo(expected));
         }
 
-        [TestCase("00:11:22:33:44:55")]
-        [TestCase("00-11-22-33-44-55")]
-        [TestCase("A0:A1:A2:A3:A4:A5")]
-        [TestCase("A0-A1-A2-A3-A4-A5")]
-        [TestCase("554433221100")]
-        [TestCase("ffeeddbbccaa")]
-        [TestCase("FFEEDDBBCCAA")]
-        [Test]
-        public void TypeConverter_ShouldConvertToString_WhenImplicitlyCastedToString(string value)
-        {
-            //// Arrange
-
-            var stronglyTypedValue = new MacAddress(PhysicalAddress.Parse(ValueToString(value)));
-            var strongType = typeof(MacAddress);
-            var typeConverter = TypeDescriptor.GetConverter(strongType);
-
-            var expected = ValueToString(value);
-
-            //// Act
-
-            var result = typeConverter.ConvertToString(stronglyTypedValue);
-
-            //// Assert
-
-            Assert.That(result, Is.EqualTo(expected));
-        }
-
         private static string ValueToString(string value)
         {
             var normalized = value

@@ -244,7 +244,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             var stronglyTyped = values
                 .Select(x => new SerializationDto<StronglyTypedBool>(x))
                 .ToArray();
-            var json = "[{\"testValue\": false }, {\"testValue\": true }]";
+            const string json = "[{\"testValue\": false }, {\"testValue\": true }]";
 
             // Act
 

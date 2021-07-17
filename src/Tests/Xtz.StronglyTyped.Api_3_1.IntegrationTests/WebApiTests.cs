@@ -10,12 +10,12 @@ using Xtz.StronglyTyped.NewtonsoftJson;
 
 namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 {
-    public class WebApiTests : IDisposable
+    public sealed class WebApiTests : IDisposable
     {
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
         private readonly WebApiFactory _factory = new();
-        
+
         private readonly HttpClient _client;
 
         public WebApiTests()

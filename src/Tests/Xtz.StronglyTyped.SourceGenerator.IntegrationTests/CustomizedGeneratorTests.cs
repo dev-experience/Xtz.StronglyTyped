@@ -14,7 +14,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -68,7 +68,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -122,7 +122,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -176,7 +176,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -265,7 +265,6 @@ namespace IntegrationTests.Generated
 ////            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 ////            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 ////            var compiledBytes = CompileBytes(outputCompilation);
 
 ////            [ExcludeFromCodeCoverage]
@@ -287,7 +286,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -341,7 +340,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -396,7 +395,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -451,7 +450,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -506,7 +505,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -520,7 +519,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(Allow.Unknown)]
+    [StrongType(Allow.None)]
     public partial class City2
     {
     }
@@ -560,7 +559,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -574,7 +573,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(Allow.Unknown)]
+    [StrongType(Allow.None)]
     public partial class City2
     {
     }
@@ -614,7 +613,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -628,7 +627,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(typeof(string), Allow.Unknown)]
+    [StrongType(typeof(string), Allow.None)]
     public partial class CityUri2
     {
     }
@@ -668,7 +667,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -682,7 +681,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(typeof(string), Allow.Unknown)]
+    [StrongType(typeof(string), Allow.None)]
     public partial class CityUri2
     {
     }
@@ -722,7 +721,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -776,7 +775,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -830,7 +829,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -884,7 +883,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -933,6 +932,7 @@ namespace IntegrationTests.Generated
             Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
+#pragma warning disable S125
 //        [Test]
 //        public void ShouldGenerate_AllowNull_WhenAllowNullProvided()
 //        {
@@ -972,7 +972,6 @@ namespace IntegrationTests.Generated
 
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
 
 //            var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1023,7 +1022,6 @@ namespace IntegrationTests.Generated
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 //            var compiledBytes = CompileBytes(outputCompilation);
 
 //            var result = LoadAndExecute(compiledBytes);
@@ -1072,7 +1070,6 @@ namespace IntegrationTests.Generated
 
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
 
 //            var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1123,7 +1120,6 @@ namespace IntegrationTests.Generated
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 //            var compiledBytes = CompileBytes(outputCompilation);
 
 //            var result = LoadAndExecute(compiledBytes);
@@ -1132,13 +1128,14 @@ namespace IntegrationTests.Generated
 
 //            Assert.AreEqual(0, result);
 //        }
+#pragma warning restore S125
 
         [Test]
         public void ShouldGenerate_AllowEmpty_WhenAllowEmptyProvided()
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1187,7 +1184,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1222,7 +1219,6 @@ namespace IntegrationTests.Generated
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
             driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
             var compiledBytes = CompileBytes(outputCompilation);
 
             var result = LoadAndExecute(compiledBytes);
@@ -1237,7 +1233,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1272,7 +1268,6 @@ namespace IntegrationTests.Generated
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
             driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
             var compiledBytes = CompileBytes(outputCompilation);
 
             var result = LoadAndExecute(compiledBytes);
@@ -1287,7 +1282,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1322,7 +1317,6 @@ namespace IntegrationTests.Generated
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
             driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
             var compiledBytes = CompileBytes(outputCompilation);
 
             var result = LoadAndExecute(compiledBytes);
@@ -1332,6 +1326,7 @@ namespace IntegrationTests.Generated
             Assert.That(result, Is.EqualTo(0));
         }
 
+#pragma warning disable S125
 //        [Test]
 //        public void ShouldGenerate_AllowEmpty_WhenTypeAndAllowNullEmptyProvided()
 //        {
@@ -1371,7 +1366,6 @@ namespace IntegrationTests.Generated
 
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
 
 //            var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1422,7 +1416,6 @@ namespace IntegrationTests.Generated
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 //            var compiledBytes = CompileBytes(outputCompilation);
 
 //            var result = LoadAndExecute(compiledBytes);
@@ -1431,5 +1424,6 @@ namespace IntegrationTests.Generated
 
 //            Assert.AreEqual(0, result);
 //        }
+#pragma warning restore S125
     }
 }

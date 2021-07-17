@@ -40,18 +40,18 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         [StrongAutoData]
         public void ShouldGenerateStronglyTypedPrice(Price value)
         {
-            Assert.IsFalse(value.Currency.Code.ToString().IsBogusGeneratedValue());
-            Assert.IsFalse(value.Currency.Name.ToString().IsBogusGeneratedValue());
-            Assert.IsFalse(value.Currency.Symbol?.ToString().IsBogusGeneratedValue());
+            Assert.That(value.Currency.Code.ToString().IsBogusGeneratedValue(), Is.False);
+            Assert.That(value.Currency.Name.ToString().IsBogusGeneratedValue(), Is.False);
+            Assert.That(value.Currency.Symbol?.ToString().IsBogusGeneratedValue(), Is.False);
         }
 
         [Test]
         [StrongAutoData]
         public void ShouldGenerateStronglyTypedProductFullName(ProductFullName value)
         {
-            Assert.IsFalse(value.ProductAdjective.ToString().IsBogusGeneratedValue());
-            Assert.IsFalse(value.ProductMaterial.ToString().IsBogusGeneratedValue());
-            Assert.IsFalse(value.ProductShortName.ToString().IsBogusGeneratedValue());
+            Assert.That(value.ProductAdjective.ToString().IsBogusGeneratedValue(), Is.False);
+            Assert.That(value.ProductMaterial.ToString().IsBogusGeneratedValue(), Is.False);
+            Assert.That(value.ProductShortName.ToString().IsBogusGeneratedValue(), Is.False);
         }
     }
 }

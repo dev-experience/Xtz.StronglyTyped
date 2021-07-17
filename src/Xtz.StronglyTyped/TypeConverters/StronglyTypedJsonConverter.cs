@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml;
 
 namespace Xtz.StronglyTyped.TypeConverters
 {
-    [SuppressMessage("Style", "IDE0034:Simplify 'default' expression", Justification = "Vlad DX: Reviewed (more readable code)")]
     public class StronglyTypedJsonConverter<TStronglyTyped> : JsonConverter<TStronglyTyped>
         where TStronglyTyped : IStronglyTyped
     {
@@ -27,7 +25,7 @@ namespace Xtz.StronglyTyped.TypeConverters
 
             if (typeConverter.InnerType == typeof(DateTime))
             {
-                return ReadDateTime(reader, typeConverter);
+                return StronglyTypedJsonConverter<TStronglyTyped>.ReadDateTime(reader, typeConverter);
             }
 
             if (reader.TokenType is JsonTokenType.True or JsonTokenType.False)
@@ -37,7 +35,7 @@ namespace Xtz.StronglyTyped.TypeConverters
 
             if (reader.TokenType == JsonTokenType.Number)
             {
-                return ReadNumber(reader, typeConverter);
+                return StronglyTypedJsonConverter<TStronglyTyped>.ReadNumber(reader, typeConverter);
             }
 
             var stringValue = reader.GetString();
@@ -69,9 +67,8 @@ namespace Xtz.StronglyTyped.TypeConverters
             writer.WriteStringValue(stringValue);
         }
 
-        private TStronglyTyped ReadNumber(Utf8JsonReader reader, ICustomTypeConverter typeConverter)
+        private static TStronglyTyped ReadNumber(Utf8JsonReader reader, ICustomTypeConverter typeConverter)
         {
-
             if (typeConverter.InnerType == typeof(int))
             {
                 return (TStronglyTyped)typeConverter.ConvertFrom(reader.GetInt32())!;
@@ -130,7 +127,7 @@ namespace Xtz.StronglyTyped.TypeConverters
             throw new JsonConverterException(typeConverter.StrongType, $"Can't convert value to '{typeConverter.StrongType.FullName}'");
         }
 
-        private TStronglyTyped ReadDateTime(Utf8JsonReader reader, ICustomTypeConverter typeConverter)
+        private static TStronglyTyped ReadDateTime(Utf8JsonReader reader, ICustomTypeConverter typeConverter)
         {
             if (reader.TryGetDateTime(out var dateTimeValue))
             {
@@ -142,11 +139,11 @@ namespace Xtz.StronglyTyped.TypeConverters
             {
                 return (TStronglyTyped)typeConverter.ConvertFrom(dateTimeValue2)!;
             }
-        
+
             throw new JsonConverterException(typeConverter.StrongType, $"Can't convert from '{stringValue}' to '{typeConverter.StrongType.FullName}'");
         }
 
-        private bool TryWriteNumber(IStronglyTyped value, Type innerType, Utf8JsonWriter writer)
+        private static bool TryWriteNumber(IStronglyTyped value, Type innerType, Utf8JsonWriter writer)
         {
             if (innerType == typeof(decimal))
             {

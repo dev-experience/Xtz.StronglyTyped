@@ -33,13 +33,13 @@ namespace Xtz.StronglyTyped.SourceGenerator
         {
             // TODO: Replace by pre-built array of spaces. Do substring
             Content.Append(new string(' ', IndentLevel * 4)).AppendLine("{");
-            IndentLevel += 1;
+            IndentLevel++;
             return _scopeTracker;
         }
 
         public void EndScope()
         {
-            IndentLevel -= 1;
+            IndentLevel--;
             Content.Append(new string(' ', IndentLevel * 4)).AppendLine("}");
         }
 
@@ -49,10 +49,10 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         public override string ToString() => Content.ToString();
 
-        public class ScopeTracker : IDisposable
+        public sealed class ScopeTracker : IDisposable
         {
             private readonly CodeWriter _parent;
-            
+
             public ScopeTracker(CodeWriter parent)
             {
                 _parent = parent;

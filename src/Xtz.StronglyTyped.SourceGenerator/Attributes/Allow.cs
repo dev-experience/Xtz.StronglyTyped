@@ -8,7 +8,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
     [Flags]
     public enum Allow
     {
-        Unknown = 0,
+        None = 0,
         /// <summary>
         /// Allow empty strings or default struct values (but doesn't affect numbers).
         /// </summary>

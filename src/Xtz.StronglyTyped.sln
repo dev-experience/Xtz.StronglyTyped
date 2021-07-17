@@ -40,6 +40,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.NewtonsoftJson.UnitTests", "Tests\Xtz.StronglyTyped.NewtonsoftJson.UnitTests\Xtz.StronglyTyped.NewtonsoftJson.UnitTests.csproj", "{97EDCF82-8DA3-4DB1-96C4-FB2481A75666}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{C6D98E0C-09A4-4152-914D-411DB65B1379}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.Api_3_1.IntegrationTests", "Tests\Xtz.StronglyTyped.Api_3_1.IntegrationTests\Xtz.StronglyTyped.Api_3_1.IntegrationTests.csproj", "{975017C6-0E2B-4F10-BE65-B412755BEDF7}"
 EndProject

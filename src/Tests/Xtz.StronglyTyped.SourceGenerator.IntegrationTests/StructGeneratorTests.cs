@@ -11,7 +11,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped;
@@ -56,7 +56,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -88,7 +88,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
