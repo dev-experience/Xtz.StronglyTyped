@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml;
 
 namespace Xtz.StronglyTyped.TypeConverters
 {
+    [SuppressMessage("Style", "IDE0034:Simplify 'default' expression", Justification = "Vlad DX: Reviewed (more readable code)")]
     public class StronglyTypedJsonConverter<TStronglyTyped> : JsonConverter<TStronglyTyped>
         where TStronglyTyped : IStronglyTyped
     {

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -101,7 +100,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
@@ -147,7 +146,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
@@ -183,7 +182,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
@@ -216,7 +215,7 @@ public partial class City2
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
@@ -252,7 +251,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
@@ -292,7 +291,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 

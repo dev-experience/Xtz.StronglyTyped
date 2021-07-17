@@ -56,6 +56,8 @@ namespace Xtz.StronglyTyped.EntityFramework
                             .Entity(entityType.Name)
                             .Property(propertyInfo.Name)
                             .HasConversion(valueConverter);
+
+                        // ReSharper disable once RedundantJumpStatement
                         continue;
                     }
 

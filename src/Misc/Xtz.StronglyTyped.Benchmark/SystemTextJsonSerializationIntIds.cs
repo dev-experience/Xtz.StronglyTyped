@@ -10,8 +10,6 @@ namespace Xtz.StronglyTyped.Benchmark
     [MemoryDiagnoser]
     public class SystemTextJsonSerializationIntIds
     {
-        private readonly Faker<CompanyIntId> _faker;
-
         private readonly CompanyIntId[] _companyIntIds;
 
         private readonly CompanyIntId[] _otherCompanyIntIds;
@@ -22,11 +20,11 @@ namespace Xtz.StronglyTyped.Benchmark
 
         public SystemTextJsonSerializationIntIds()
         {
-            _faker = new Faker<CompanyIntId>()
+            var faker = new Faker<CompanyIntId>()
                 .CustomInstantiator(f => new CompanyIntId(Math.Abs(f.Random.Int())));
 
-            _companyIntIds = _faker.Generate(Program.VALUE_COUNT).ToArray();
-            _otherCompanyIntIds = _faker.Generate(Program.VALUE_COUNT).ToArray();
+            _companyIntIds = faker.Generate(Program.VALUE_COUNT).ToArray();
+            _otherCompanyIntIds = faker.Generate(Program.VALUE_COUNT).ToArray();
             _ints = _companyIntIds.Select(x => x.Value).ToArray();
             _stronglyTypedIntStructs = _companyIntIds.Select(x => (IntStructId)x.Value).ToArray();
         }

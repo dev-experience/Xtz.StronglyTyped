@@ -12,7 +12,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders
     {
         private NoSpecimen NoSpecimen { get; } = new();
 
-        private readonly IdFakerBuilder _builder = new(true);
+        private readonly IdFakerBuilder _builder = new();
 
         private readonly MethodInfo _buildGuidIdFakerMethod;
 

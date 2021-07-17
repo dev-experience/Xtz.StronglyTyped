@@ -14,10 +14,12 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
             var strongType = typeof(StronglyTypedBool);
             var typeConverter = TypeDescriptor.GetConverter(strongType);
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             var expected = new StronglyTypedBool(value);
 
             //// Act
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             var result = typeConverter.ConvertFrom(value) as StronglyTypedBool;
 
             //// Assert

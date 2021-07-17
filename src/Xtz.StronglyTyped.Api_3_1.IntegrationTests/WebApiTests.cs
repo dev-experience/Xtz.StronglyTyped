@@ -49,10 +49,11 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
             Assert.NotNull(response.Content);
 
             Country country = null;
-            var x = JsonConvert.SerializeObject(country);
+            // ReSharper disable once ExpressionIsAlwaysNull
+            var _ = JsonConvert.SerializeObject(country);
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<IReadOnlyCollection<WeatherForecast>>(responseStr, _jsonSerializerSettings);
+            var __ = JsonConvert.DeserializeObject<IReadOnlyCollection<WeatherForecast>>(responseStr, _jsonSerializerSettings);
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
             Assert.NotNull(response.Content);
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            var responseObject = System.Text.Json.JsonSerializer.Deserialize<IReadOnlyCollection<WeatherForecast>>(responseStr);
+            var _ = System.Text.Json.JsonSerializer.Deserialize<IReadOnlyCollection<WeatherForecast>>(responseStr);
         }
 
         [Test]
@@ -91,7 +92,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
             Assert.NotNull(response.Content);
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr, _jsonSerializerSettings);
+            var _ = JsonConvert.DeserializeObject<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr, _jsonSerializerSettings);
         }
 
         [Test]
@@ -105,7 +106,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
             Assert.NotNull(response.Content);
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            var responseObject = System.Text.Json.JsonSerializer.Deserialize<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr);
+            var _ = System.Text.Json.JsonSerializer.Deserialize<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr);
         }
 
         public void Dispose()

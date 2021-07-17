@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Xtz.StronglyTyped
+﻿namespace Xtz.StronglyTyped
 {
     /// <summary>
     /// Base interface for strongly-typed classes.

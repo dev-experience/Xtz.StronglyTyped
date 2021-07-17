@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using NUnit.Framework;
 using Xtz.StronglyTyped.BogusAutoFixture.UnitTests.Extensions;
 using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
@@ -34,7 +32,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         [StrongAutoData]
         public void ShouldGenerateStronglyTypedFullName(FullName value)
         {
-            Assert.IsFalse(value.FirstName.ToString().IsBogusGeneratedValue());
+            Assert.IsFalse(value.FirstName.ToString()!.IsBogusGeneratedValue());
         }
     }
 }

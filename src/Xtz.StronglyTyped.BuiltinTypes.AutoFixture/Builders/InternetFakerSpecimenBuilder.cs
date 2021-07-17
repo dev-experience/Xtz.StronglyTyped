@@ -8,7 +8,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders
 {
     public class InternetFakerSpecimenBuilder : BaseFakerSpecimenBuilder
     {
-        private readonly InternetFakerBuilder _builder = new(true);
+        private readonly InternetFakerBuilder _builder = new();
 
         protected override Dictionary<Type, Func<IFakerTInternal>> FakerFactories => new()
         {

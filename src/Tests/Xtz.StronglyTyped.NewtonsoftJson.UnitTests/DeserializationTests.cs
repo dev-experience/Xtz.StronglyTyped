@@ -104,6 +104,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
         }
 
+        // ReSharper disable once NUnit.IncorrectArgumentType
         [Test]
         [TestCase("61f6e72c-8db3-4a70-89b6-c3d07dbcce11")]
         public void ShouldDeserialize_ToStronglyTypedGuidClass(Guid value)
@@ -123,6 +124,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
         }
 
+        // ReSharper disable once NUnit.IncorrectArgumentType
         [Test]
         [TestCase("57c2a2d3-99cc-4468-998e-f3a3abe089ca")]
         public void ShouldDeserialize_ToStronglyTypedGuidStruct(Guid value)
@@ -142,6 +144,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
             Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
         }
 
+        // ReSharper disable once NUnit.IncorrectArgumentType
         [Test]
         [TestCase("61f6e72c-8db3-4a70-89b6-c3d07dbcce11")]
         public void ShouldDeserialize_ToStronglyTypedGuidIdClass(Guid value)
@@ -743,7 +746,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
                 stringBuilder.AppendFormat("  {0},\n", BuildString(value));
             }
 
-            stringBuilder.Append("]");
+            stringBuilder.Append(']');
             var result = stringBuilder.ToString();
             return result;
         }
@@ -757,7 +760,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
                 stringBuilder.AppendFormat("  {0},\n", BuildNonString(value));
             }
 
-            stringBuilder.Append("]");
+            stringBuilder.Append(']');
             var result = stringBuilder.ToString();
             return result;
         }

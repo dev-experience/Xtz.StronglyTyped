@@ -32,6 +32,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
             //// Act
 
             [ExcludeFromCodeCoverage]
+            // ReSharper disable once ObjectCreationAsStatement
             void Action() => new UserId(value);
 
             //// Assert

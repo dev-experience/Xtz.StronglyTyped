@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Xtz.StronglyTyped.UnitTests.Basic
 {
@@ -32,6 +33,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Act
 
+            [ExcludeFromCodeCoverage]
             // ReSharper disable once ObjectCreationAsStatement
             void Action() => new CountryId(value);
 
@@ -50,6 +52,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Act
 
+            [ExcludeFromCodeCoverage]
+            // ReSharper disable once UnusedLocalFunctionReturnValue
             CountryId Action() => (CountryId)value;
 
             //// Assert

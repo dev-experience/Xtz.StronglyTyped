@@ -13,11 +13,13 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Internet
         /// <summary>
         /// HTTP protocol.
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public static readonly WebsiteProtocol HTTP = new WebsiteProtocol("http");
 
         /// <summary>
         /// HTTPS protocol.
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public static readonly WebsiteProtocol HTTPS = new WebsiteProtocol("https");
 
         protected override bool IsValid(string value)

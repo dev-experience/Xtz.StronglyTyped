@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Text.Json;
 using BenchmarkDotNet.Attributes;
-using Bogus;
 using Xtz.StronglyTyped.Benchmark.Models;
 using Xtz.StronglyTyped.BuiltinTypes.Bogus;
 using Xtz.StronglyTyped.BuiltinTypes.Internet;
@@ -11,10 +10,6 @@ namespace Xtz.StronglyTyped.Benchmark
     [MemoryDiagnoser]
     public class SystemTextJsonSerializationMacAddress
     {
-        private readonly InternetFakerBuilder _fakerBuilder;
-
-        private readonly Faker<MacAddress> _faker;
-
         private readonly MacAddress[] _macAddresses;
 
         private readonly MacAddress[] _otherMacAddresses;
@@ -27,11 +22,11 @@ namespace Xtz.StronglyTyped.Benchmark
 
         public SystemTextJsonSerializationMacAddress()
         {
-            _fakerBuilder = new InternetFakerBuilder(true);
-            _faker = _fakerBuilder.BuildMacAddressFaker();
+            var fakerBuilder = new InternetFakerBuilder();
+            var faker = fakerBuilder.BuildMacAddressFaker();
 
-            _macAddresses = _faker.Generate(Program.VALUE_COUNT).ToArray();
-            _otherMacAddresses = _faker.Generate(Program.VALUE_COUNT).ToArray();
+            _macAddresses = faker.Generate(Program.VALUE_COUNT).ToArray();
+            _otherMacAddresses = faker.Generate(Program.VALUE_COUNT).ToArray();
             _strings = _macAddresses.Select(x => x.ToString()).ToArray();
             _stronglyTypedStrings = _strings.Select(x => (StronglyTypedString)x).ToArray();
             _stronglyTypedStructs = _strings.Select(x => (StronglyTypedStringStruct)x).ToArray();

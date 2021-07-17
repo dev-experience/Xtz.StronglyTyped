@@ -16,6 +16,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
+            // ReSharper disable once EqualExpressionComparison
 #pragma warning disable CS1718 // Comparison made to same variable
             Assert.IsTrue(value == value);
 #pragma warning restore CS1718 // Comparison made to same variable

@@ -89,6 +89,7 @@ namespace Xtz.StronglyTyped.UnitTests.SystemTextJson
             Assert.AreEqual(json, result);
         }
 
+        // ReSharper disable once NUnit.IncorrectArgumentType
         [Test]
         [TestCase("61f6e72c-8db3-4a70-89b6-c3d07dbcce11")]
         public void ShouldSerialize_GivenStronglyTypedGuidClass(Guid value)
@@ -107,6 +108,7 @@ namespace Xtz.StronglyTyped.UnitTests.SystemTextJson
             Assert.AreEqual(json, result);
         }
 
+        // ReSharper disable once NUnit.IncorrectArgumentType
         [Test]
         [TestCase("57c2a2d3-99cc-4468-998e-f3a3abe089ca")]
         public void ShouldSerialize_GivenStronglyTypedGuidStruct(Guid value)
@@ -125,6 +127,7 @@ namespace Xtz.StronglyTyped.UnitTests.SystemTextJson
             Assert.AreEqual(json, result);
         }
 
+        // ReSharper disable once NUnit.IncorrectArgumentType
         [Test]
         [TestCase("61f6e72c-8db3-4a70-89b6-c3d07dbcce11")]
         public void ShouldSerialize_GivenStronglyTypedGuidIdClass(Guid value)

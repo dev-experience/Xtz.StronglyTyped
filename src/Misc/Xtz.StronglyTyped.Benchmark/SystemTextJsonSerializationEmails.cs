@@ -24,7 +24,7 @@ namespace Xtz.StronglyTyped.Benchmark
         {
             ////System.Diagnostics.Debugger.Launch();
 
-            var fakerBuilder = new InternetFakerBuilder(true);
+            var fakerBuilder = new InternetFakerBuilder();
             var faker = fakerBuilder.BuildEmailFaker();
 
             _emails = faker.Generate(Program.VALUE_COUNT).ToArray();

@@ -6,9 +6,9 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
 {
     public abstract class BaseFakerBuilder
     {
-        private static readonly MemoryCacheEntryOptions MemoryCacheEntryOptions = new() { Size = 1 };
+        private static readonly MemoryCacheEntryOptions MEMORY_CACHE_ENTRY_OPTIONS = new() { Size = 1 };
 
-        private static readonly MemoryCache Cache = new(new MemoryCacheOptions { SizeLimit = 500 });
+        private static readonly MemoryCache CACHE = new(new MemoryCacheOptions { SizeLimit = 500 });
 
         private readonly bool _useFakerCache;
 
@@ -30,14 +30,14 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
                 ? $"{typeof(TValue).FullName}_{cacheKey}"
                 : typeof(TValue).FullName;
 
-            var cachedValue = Cache.Get(key);
+            var cachedValue = CACHE.Get(key);
             if (cachedValue != null)
             {
                 return (cachedValue as Faker<TValue>)!;
             }
 
             var result = fakerFactory();
-            Cache.Set(key, result, MemoryCacheEntryOptions);
+            CACHE.Set(key, result, MEMORY_CACHE_ENTRY_OPTIONS);
             return result;
         }
     }

@@ -9,7 +9,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders
     // TODO: Add integration tests to check whether all types are included to the builders
     public class AddressFakerSpecimenBuilder : BaseFakerSpecimenBuilder
     {
-        private readonly AddressFakerBuilder _builder = new(true);
+        private readonly AddressFakerBuilder _builder = new();
 
         protected override Dictionary<Type, Func<IFakerTInternal>> FakerFactories => new()
         {

@@ -57,6 +57,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Act
 
+            // ReSharper disable once ObjectCreationAsStatement
             [ExcludeFromCodeCoverage]
             void Action() => new Country(country);
 
@@ -74,6 +75,9 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Act
 
+            // ReSharper disable once ObjectCreationAsStatement
+            // ReSharper disable once ExpressionIsAlwaysNull
+            // ReSharper disable once AssignNullToNotNullAttribute
             [ExcludeFromCodeCoverage]
             void Action() => new StronglyTypedStringAllowEmpty(value);
 
@@ -97,7 +101,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             Assert.NotNull(result);
             Assert.IsEmpty(result.Value);
-            Assert.IsEmpty(value.ToString());
+            Assert.IsEmpty(value);
         }
     }
 }

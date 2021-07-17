@@ -128,6 +128,8 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
             WriteBanner(writer, workItem, assemblyVersion, timestamp);
 
+            writer.AppendLine("//// ReSharper disable All");
+            writer.AppendLine("#pragma warning disable");
             writer.AppendLine();
             using (writer.BeginScope($"namespace {workItem.Namespace}"))
             {
@@ -463,6 +465,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                         writer.AppendLine("return $\"{Value}\";");
                     }
                     writer.AppendLine();
+                    // ReSharper disable once RedundantJumpStatement
                     return;
                 }
             }

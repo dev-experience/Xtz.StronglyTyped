@@ -22,7 +22,9 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
             var cacheKey = $"{protocol}|{domain}|{fileExt}";
 
             var result = GetFaker(() => new Faker<AbsoluteUri>()
+#pragma warning disable 8604
                 .CustomInstantiator(f => new AbsoluteUri(f.Internet.UrlWithPath(protocol, domain, fileExt))), cacheKey);
+#pragma warning restore 8604
             return result;
         }
 
@@ -64,7 +66,9 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
             var cacheKey = $"{firstName}|{lastName}|{provider}|{uniqueSuffix}";
 
             var result = GetFaker(() => new Faker<Email>()
+#pragma warning disable CS8604 // Possible null reference argument.
                 .CustomInstantiator(f => new Email(f.Internet.Email(firstName, lastName, provider, uniqueSuffix))), cacheKey);
+#pragma warning restore CS8604 // Possible null reference argument.
             return result;
         }
 
@@ -78,7 +82,9 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
             var cacheKey = $"{firstName}|{lastName}";
 
             var result = GetFaker(() => new Faker<ExampleEmail>()
+#pragma warning disable CS8604 // Possible null reference argument.
                 .CustomInstantiator(f => new ExampleEmail(f.Internet.ExampleEmail(firstName, lastName))), cacheKey);
+#pragma warning restore CS8604 // Possible null reference argument.
             return result;
         }
 
@@ -165,7 +171,9 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
             var cacheKey = $"{firstName}|{lastName}";
 
             var result = GetFaker(() => new Faker<UserName>()
+#pragma warning disable CS8604 // Possible null reference argument.
                 .CustomInstantiator(f => new UserName(f.Internet.UserName(firstName, lastName))), cacheKey);
+#pragma warning restore CS8604 // Possible null reference argument.
             return result;
         }
 

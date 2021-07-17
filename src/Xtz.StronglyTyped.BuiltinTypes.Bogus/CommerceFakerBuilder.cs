@@ -98,7 +98,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
         public Faker<ProductFullName> BuildProductFullNameFaker()
         {
             var result = GetFaker(() => new Faker<ProductFullName>()
-                .CustomInstantiator(f =>
+                .CustomInstantiator(_ =>
                 {
                     var productAdjective = BuildProductAdjectiveFaker().Generate();
                     var productMaterial = BuildProductMaterialFaker().Generate();

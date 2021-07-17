@@ -16,7 +16,7 @@ namespace Xtz.StronglyTyped.Swashbuckle
     public class StronglyTypedSchemaFilter : ISchemaFilter
     {
         // TODO: Replace strings by strong types
-        private readonly Dictionary<Type, (string, string?)> TYPE_MAPPING = new()
+        private static readonly Dictionary<Type, (string, string?)> TYPE_MAPPING = new()
         {
             { typeof(string), ("string", "string") },
             { typeof(bool), ("boolean", null) },

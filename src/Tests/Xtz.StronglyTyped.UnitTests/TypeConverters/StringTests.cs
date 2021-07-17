@@ -37,6 +37,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Act
 
+            // ReSharper disable once ExpressionIsAlwaysNull
             var result = typeConverter.ConvertFrom(value);
 
             //// Assert

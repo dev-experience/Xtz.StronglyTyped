@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Xml;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using Xtz.StronglyTyped.TypeConverters;
 
 namespace Xtz.StronglyTyped.NewtonsoftJson
 {
+    [SuppressMessage("Style", "IDE0034:Simplify 'default' expression", Justification = "Vlad DX: Reviewed (more readable code)")]
     public class StronglyTypedNewtonsoftConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
@@ -75,76 +77,76 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             {
                 var value = unchecked((byte)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(decimal))
             {
                 var value = (decimal)longValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(double))
             {
                 var value = (double)longValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(float))
             {
                 var value = (float)longValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(int))
             {
                 var value = unchecked((int)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(long))
             {
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(longValue);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(sbyte))
             {
                 var value = unchecked((sbyte)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(short))
             {
                 var value = unchecked((short)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(uint))
             {
                 var value = unchecked((uint)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(ulong))
             {
                 var value = unchecked((ulong)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(ushort))
             {
                 var value = unchecked((ushort)longValue);
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(long)}' to '{typeConverter.StrongType.FullName}'");
@@ -155,21 +157,21 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             if (typeConverter.InnerType == typeof(double))
             {
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(doubleValue);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(decimal))
             {
                 var value = (decimal)doubleValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(float))
             {
                 var value = (float)doubleValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(double)}' to '{typeConverter.StrongType.FullName}'");
@@ -181,14 +183,14 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             {
                 var value = (decimal)bigIntValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             if (typeConverter.InnerType == typeof(ulong))
             {
                 var value = (ulong)bigIntValue;
                 var result = (typeConverter as TypeConverter)!.ConvertFrom(value);
-                return (IStronglyTyped)result;
+                return (IStronglyTyped)result!;
             }
 
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(BigInteger)}' to '{typeConverter.StrongType.FullName}'");

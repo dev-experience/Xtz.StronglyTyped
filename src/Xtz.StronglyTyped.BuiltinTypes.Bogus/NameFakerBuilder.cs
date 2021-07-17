@@ -20,7 +20,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
             var cacheKey = $"{locale}|{gender}";
 
             var result = GetFaker(() => new Faker<DisplayName>()
-                .CustomInstantiator(f =>
+                .CustomInstantiator(_ =>
                 {
                     var fullName = BuildFullNameFaker(locale, gender).Generate();
                     return new DisplayName($"{fullName.FirstName} {fullName.LastName}");
