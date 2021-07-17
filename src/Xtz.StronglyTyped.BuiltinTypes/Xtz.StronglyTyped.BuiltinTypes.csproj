@@ -35,6 +35,7 @@ Make compiler your friend, introduce semantics to your code.</Description>
 
   <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup>
