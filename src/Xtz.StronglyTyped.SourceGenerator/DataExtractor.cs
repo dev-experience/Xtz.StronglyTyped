@@ -223,8 +223,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             // [StrongType(..., allow: Allow.Empty)]
             //  ^ Constructor method
             var attributeSymbol = semanticModel.GetSymbolInfo(strongTypeAttributeSyntax);
-            var methodSymbol = attributeSymbol.Symbol as IMethodSymbol;
-            if (methodSymbol == null) return (DoesAllowEmpty)false;
+            if (attributeSymbol.Symbol is not IMethodSymbol methodSymbol) return (DoesAllowEmpty)false;
 
             var result = HasEnumArgument(semanticModel, methodSymbol, attributeArgumentSyntaxes, Allow.Empty);
             return (DoesAllowEmpty)result;
