@@ -91,22 +91,5 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             Assert.AreEqual(countryId, result);
         }
-
-        [TestCase(27)]
-        [Test]
-        public void Convert_ShouldConvertToInt_GivenCountryIdAsObject(int countryId)
-        {
-            //// Arrange
-
-            object stronglyTyped = new CountryId(countryId);
-
-            //// Act
-
-            var result = Convert.ToInt32(stronglyTyped, CultureInfo.InvariantCulture);
-
-            //// Assert
-
-            Assert.AreEqual(countryId, result);
-        }
     }
 }

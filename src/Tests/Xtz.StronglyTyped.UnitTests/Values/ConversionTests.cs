@@ -61,24 +61,5 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             Assert.AreEqual(value, result);
         }
-
-        [TestCase(-123)]
-        [TestCase(0)]
-        [TestCase(3697)]
-        [Test]
-        public void Convert_ShouldConvertToInt_GivenStronglyTyped_WhenConvertingFromObject(int value)
-        {
-            //// Arrange
-
-            object stronglyTyped = new EmployeeIntId(value);
-
-            //// Act
-
-            var result = Convert.ToInt32(stronglyTyped);
-
-            //// Assert
-
-            Assert.AreEqual(value, result);
-        }
     }
 }
