@@ -16,6 +16,7 @@
 | **Xtz.StornglyTyped.BuiltinTypes.AutoFixture** | [![NuGet](http://img.shields.io/nuget/v/Xtz.StronglyTyped.BuiltinTypes.AutoFixture.svg)](https://www.nuget.org/packages/Xtz.StronglyTyped.BuiltinTypes.AutoFixture/) |
 | **Xtz.StornglyTyped.BuiltinTypes.Bogus**       | [![NuGet](http://img.shields.io/nuget/v/Xtz.StronglyTyped.BuiltinTypes.Bogus.svg)](https://www.nuget.org/packages/Xtz.StronglyTyped.BuiltinTypes.Bogus/)             |
 | **Xtz.StornglyTyped.EntityFramework**          | [![NuGet](http://img.shields.io/nuget/v/Xtz.StronglyTyped.EntityFramework.svg)](https://www.nuget.org/packages/Xtz.StronglyTyped.EntityFramework/)                   |
+| **Xtz.StronglyTyped.NewtonsoftJson**           | [![NuGet](http://img.shields.io/nuget/v/Xtz.StronglyTyped.NewtonsoftJson.svg)](https://www.nuget.org/packages/Xtz.StronglyTyped.NewtonsoftJson/)                     |
 | **Xtz.StornglyTyped.SourceGenerator**          | [![NuGet](http://img.shields.io/nuget/v/Xtz.StronglyTyped.SourceGenerator.svg)](https://www.nuget.org/packages/Xtz.StronglyTyped.SourceGenerator/)                   |
 | **Xtz.StornglyTyped.Swashbuckle**              | [![NuGet](http://img.shields.io/nuget/v/Xtz.StronglyTyped.Swashbuckle.svg)](https://www.nuget.org/packages/Xtz.StronglyTyped.Swashbuckle/)                           |
 
