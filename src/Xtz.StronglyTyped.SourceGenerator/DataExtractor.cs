@@ -224,8 +224,9 @@ namespace Xtz.StronglyTyped.SourceGenerator
             //  ^ Constructor method
             var attributeSymbol = semanticModel.GetSymbolInfo(strongTypeAttributeSyntax);
             var methodSymbol = attributeSymbol.Symbol as IMethodSymbol;
+            if (methodSymbol == null) return (DoesAllowEmpty)false;
 
-            var result = HasEnumArgument(semanticModel, methodSymbol!, attributeArgumentSyntaxes, Allow.Empty);
+            var result = HasEnumArgument(semanticModel, methodSymbol, attributeArgumentSyntaxes, Allow.Empty);
             return (DoesAllowEmpty)result;
         }
 
@@ -287,7 +288,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
             // [StrongType(..., allow: Allow.Null)]
             //                  ^
-            var hasParameterOfType = methodSymbol!.Parameters.Any(x => x.Type.ToDisplayString() == typeof(TEnum).FullName);
+            var hasParameterOfType = methodSymbol.Parameters.Any(x => x.Type.ToDisplayString() == typeof(TEnum).FullName);
             if (!hasParameterOfType) return false;
 
             // [StrongType(..., allow: Allow.Null)]
@@ -360,9 +361,11 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         private static bool HasSingleParameter(
             SemanticModel semanticModel,
-            BaseMethodDeclarationSyntax methodDeclarationSyntax,
+            BaseMethodDeclarationSyntax? methodDeclarationSyntax,
             Type expectedType)
         {
+            if (methodDeclarationSyntax is null) return false;
+
             // constructor(...)
             //             ^
             if (methodDeclarationSyntax.ParameterList.Parameters.Count != 1) return false;
@@ -382,12 +385,11 @@ namespace Xtz.StronglyTyped.SourceGenerator
         }
 
         private static bool HasNameAndReturnType(
-            MethodDeclarationSyntax methodDeclarationSyntax,
+            MethodDeclarationSyntax? methodDeclarationSyntax,
             string expectedName,
             string expectedReturnType)
         {
-            var result = methodDeclarationSyntax.Identifier.Text == expectedName
-                && methodDeclarationSyntax.ReturnType.ToString() == expectedReturnType;
+            var result = methodDeclarationSyntax?.Identifier.Text == expectedName && methodDeclarationSyntax?.ReturnType.ToString() == expectedReturnType;
             return result;
         }
     }
