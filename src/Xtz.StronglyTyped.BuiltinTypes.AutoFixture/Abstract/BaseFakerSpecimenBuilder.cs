@@ -20,15 +20,15 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture
         {
             if (request is not ParameterInfo parameterInfo)
             {
-                switch (request)
+                return request switch
                 {
-                    case MultipleRequest {Request: SeededRequest { Request: Type multipleType }}:
-                        return CreateArray(multipleType, context);
-                    case SeededRequest { Request: Type type } when type.TryGetSingleGenericTypeArgument(typeof(IEnumerable<>), out Type? enumerableType):
-                        return CreateEnumerable(enumerableType, context);
-                    default:
-                        return NoSpecimen;
-                }
+                    MultipleRequest {Request: SeededRequest {Request: Type multipleType}} =>
+                        CreateArray(multipleType, context),
+                    SeededRequest {Request: Type type}
+                        when type.TryGetSingleGenericTypeArgument(typeof(IEnumerable<>), out var enumerableType) =>
+                            CreateEnumerable(enumerableType, context),
+                    _ => NoSpecimen
+                };
             }
 
             var parameterType = parameterInfo.ParameterType;
