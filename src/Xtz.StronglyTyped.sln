@@ -35,11 +35,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.SourceGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.EntityFramework.IntegrationTests", "Tests\Xtz.StronglyTyped.EntityFramework.IntegrationTests\Xtz.StronglyTyped.EntityFramework.IntegrationTests.csproj", "{857370EC-A6FA-47FE-9005-8CC4D752630F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.Api_3_1.IntegrationTests", "Xtz.StronglyTyped.Api_3_1.IntegrationTests\Xtz.StronglyTyped.Api_3_1.IntegrationTests.csproj", "{1AAE34E7-203E-41D3-A054-4767C5A99FAC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.NewtonsoftJson", "Xtz.StronglyTyped.NewtonsoftJson\Xtz.StronglyTyped.NewtonsoftJson.csproj", "{D7EB61AD-95C7-418C-B1B5-60D0B73905EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.NewtonsoftJson.UnitTests", "Tests\Xtz.StronglyTyped.NewtonsoftJson.UnitTests\Xtz.StronglyTyped.NewtonsoftJson.UnitTests.csproj", "{97EDCF82-8DA3-4DB1-96C4-FB2481A75666}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{C6D98E0C-09A4-4152-914D-411DB65B1379}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.Api_3_1.IntegrationTests", "Tests\Xtz.StronglyTyped.Api_3_1.IntegrationTests\Xtz.StronglyTyped.Api_3_1.IntegrationTests.csproj", "{975017C6-0E2B-4F10-BE65-B412755BEDF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,10 +105,6 @@ Global
 		{857370EC-A6FA-47FE-9005-8CC4D752630F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{857370EC-A6FA-47FE-9005-8CC4D752630F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{857370EC-A6FA-47FE-9005-8CC4D752630F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7EB61AD-95C7-418C-B1B5-60D0B73905EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D7EB61AD-95C7-418C-B1B5-60D0B73905EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7EB61AD-95C7-418C-B1B5-60D0B73905EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -115,6 +113,10 @@ Global
 		{97EDCF82-8DA3-4DB1-96C4-FB2481A75666}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97EDCF82-8DA3-4DB1-96C4-FB2481A75666}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97EDCF82-8DA3-4DB1-96C4-FB2481A75666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{975017C6-0E2B-4F10-BE65-B412755BEDF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{975017C6-0E2B-4F10-BE65-B412755BEDF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{975017C6-0E2B-4F10-BE65-B412755BEDF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{975017C6-0E2B-4F10-BE65-B412755BEDF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,8 +129,8 @@ Global
 		{0002B673-EEEC-42DE-BBD7-B434C01E4F3E} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{F5E5B3F6-F0D7-4B11-A99C-87E3ADCEEFFE} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{857370EC-A6FA-47FE-9005-8CC4D752630F} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
-		{1AAE34E7-203E-41D3-A054-4767C5A99FAC} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{97EDCF82-8DA3-4DB1-96C4-FB2481A75666} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
+		{975017C6-0E2B-4F10-BE65-B412755BEDF7} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4FB6146-7992-4E75-B5F9-22B2ADA3C82F}

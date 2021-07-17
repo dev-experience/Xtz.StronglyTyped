@@ -59,7 +59,7 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Assert
 
-            Assert.AreEqual(cityNames.Count, cities.Length);
+            Assert.That(cities.Length, Is.EqualTo(cityNames.Count));
         }
 
             [Test]
@@ -100,8 +100,8 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Assert
 
-            Assert.AreEqual(cityNames.Count, cities.Length);
-            Assert.AreEqual(weatherForecastEntities.Length, weatherForecasts.Length);
+            Assert.That(cities.Length, Is.EqualTo(cityNames.Count));
+            Assert.That(weatherForecasts.Length, Is.EqualTo(weatherForecastEntities.Length));
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Assert
 
-            Assert.AreEqual(entities.Length, employees.Length);
+            Assert.That(employees.Length, Is.EqualTo(entities.Length));
         }
     }
 }

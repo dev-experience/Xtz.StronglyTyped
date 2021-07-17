@@ -35,7 +35,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 
             Country country = null;
             // ReSharper disable once ExpressionIsAlwaysNull
@@ -64,7 +64,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 
             var responseStr = await response.Content.ReadAsStringAsync();
             var _ = System.Text.Json.JsonSerializer.Deserialize<IReadOnlyCollection<WeatherForecast>>(responseStr);
@@ -78,7 +78,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 
             var responseStr = await response.Content.ReadAsStringAsync();
             var _ = JsonConvert.DeserializeObject<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr, _jsonSerializerSettings);
@@ -103,7 +103,7 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
+            Assert.That(response.Content, Is.Not.Null);
 
             var responseStr = await response.Content.ReadAsStringAsync();
             var _ = System.Text.Json.JsonSerializer.Deserialize<IReadOnlyCollection<StronglyTypedWeatherForecast>>(responseStr);

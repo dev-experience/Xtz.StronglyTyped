@@ -20,7 +20,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(value, result.Value);
+            Assert.That(result.Value, Is.EqualTo(value));
         }
 
         [TestCase(Int32.MinValue)]

@@ -14,8 +14,8 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
             EmployeeGuidId employeeGuidId,
             EmployeeIntId employeeIntId)
         {
-            Assert.AreNotEqual(default(Guid), employeeGuidId.Value);
-            Assert.AreNotEqual(default(int), employeeIntId.Value);
+            Assert.That(employeeGuidId.Value, Is.Not.EqualTo(default(Guid)));
+            Assert.That(employeeIntId.Value, Is.Not.EqualTo(default(int)));
         }
 
         [Test]
@@ -24,8 +24,8 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
             EmployeeGuidId employeeGuidId,
             EmployeeIntId employeeIntId)
         {
-            Assert.AreNotEqual(default(Guid), employeeGuidId.Value);
-            Assert.AreNotEqual(default(int), employeeIntId.Value);
+            Assert.That(employeeGuidId.Value, Is.Not.EqualTo(default(Guid)));
+            Assert.That(employeeIntId.Value, Is.Not.EqualTo(default(int)));
         }
     }
 }

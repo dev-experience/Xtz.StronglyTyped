@@ -59,8 +59,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -167,8 +167,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -221,8 +221,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
 ////        [Test]
@@ -332,8 +332,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -387,8 +387,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -442,8 +442,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -497,8 +497,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -551,8 +551,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -605,8 +605,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -659,8 +659,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -713,8 +713,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -767,8 +767,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -821,8 +821,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -875,8 +875,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -929,8 +929,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
 //        [Test]
@@ -1179,7 +1179,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -1229,7 +1229,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -1279,7 +1279,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -1329,7 +1329,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
 //        [Test]

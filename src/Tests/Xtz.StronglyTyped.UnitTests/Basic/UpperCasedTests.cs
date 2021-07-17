@@ -21,7 +21,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(expected, result.Value);
+            Assert.That(result.Value, Is.EqualTo(expected));
         }
     }
 }

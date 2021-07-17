@@ -51,7 +51,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
         [StrongAutoData]
         public void ShouldGenerateStronglyTypedCollection(IEnumerable<Email> values)
         {
-            Assert.IsNotEmpty(values);
+            Assert.That(values, Is.Not.Empty);
         }
     }
 }

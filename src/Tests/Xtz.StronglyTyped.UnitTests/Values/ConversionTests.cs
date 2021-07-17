@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Xtz.StronglyTyped.UnitTests.Values
 {
@@ -21,7 +20,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase(-123)]
@@ -40,7 +39,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(value, result);
+            Assert.That(result, Is.EqualTo(value));
         }
 
         [TestCase(-123)]
@@ -59,7 +58,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(value, result);
+            Assert.That(result, Is.EqualTo(value));
         }
     }
 }

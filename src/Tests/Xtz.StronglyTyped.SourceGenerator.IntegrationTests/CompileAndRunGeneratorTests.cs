@@ -73,7 +73,7 @@ namespace IntegrationTests.WeatherForecast
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]

@@ -388,7 +388,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             string expectedName,
             string expectedReturnType)
         {
-            var result = methodDeclarationSyntax?.Identifier.Text == expectedName && methodDeclarationSyntax?.ReturnType.ToString() == expectedReturnType;
+            var result = methodDeclarationSyntax?.Identifier.Text == expectedName && methodDeclarationSyntax.ReturnType.ToString() == expectedReturnType;
             return result;
         }
     }

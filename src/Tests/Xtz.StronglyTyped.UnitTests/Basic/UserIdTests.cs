@@ -19,7 +19,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreNotEqual(Guid.Empty, result);
+            Assert.That(result, Is.Not.EqualTo(Guid.Empty));
         }
 
         [Test]

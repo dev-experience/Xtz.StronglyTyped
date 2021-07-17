@@ -23,7 +23,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(value, result.Value);
+            Assert.That(result.Value, Is.EqualTo(value));
         }
 
         [TestCase(Int32.MinValue)]
@@ -44,7 +44,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(expected, stronglyTyped.ToString());
+            Assert.That(stronglyTyped.ToString(), Is.EqualTo(expected));
         }
 
         [TestCase(null)]
@@ -99,7 +99,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.IsEmpty(result.Value);
             Assert.IsEmpty(value);
         }

@@ -18,8 +18,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(result1, result2);
-            Assert.AreEqual(result1.Value, result2.Value);
+            Assert.That(result2, Is.EqualTo(result1));
+            Assert.That(result2.Value, Is.EqualTo(result1.Value));
         }
 
         [TestCase("Norway", "Denmark")]
@@ -35,8 +35,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreNotEqual(result1, result2);
-            Assert.AreNotEqual(result1.Value, result2.Value);
+            Assert.That(result2, Is.Not.EqualTo(result1));
+            Assert.That(result2.Value, Is.Not.EqualTo(result1.Value));
         }
 
         [TestCase("Norway")]
@@ -52,8 +52,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(result1, result2);
-            Assert.AreEqual(result1.Value, result2.Value);
+            Assert.That(result2, Is.EqualTo(result1));
+            Assert.That(result2.Value, Is.EqualTo(result1.Value));
         }
 
         [TestCase("Norway")]
@@ -69,8 +69,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreNotEqual(result1, result2);
-            Assert.AreEqual(result1.Value, result2.Value.ToUpper());
+            Assert.That(result2, Is.Not.EqualTo(result1));
+            Assert.That(result2.Value.ToUpper(), Is.EqualTo(result1.Value));
         }
 
         [TestCase("Norway")]
@@ -86,8 +86,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(result1.GetHashCode(), result2.GetHashCode());
-            Assert.AreEqual(result1.GetHashCode(), result2.GetHashCode());
+            Assert.That(result2.GetHashCode(), Is.EqualTo(result1.GetHashCode()));
+            Assert.That(result2.GetHashCode(), Is.EqualTo(result1.GetHashCode()));
         }
 
         [TestCase("Norway", "Denmark")]
@@ -103,7 +103,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreNotEqual(result1.GetHashCode(), result2.GetHashCode());
+            Assert.That(result2.GetHashCode(), Is.Not.EqualTo(result1.GetHashCode()));
         }
     }
 }

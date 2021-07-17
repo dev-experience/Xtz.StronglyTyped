@@ -38,8 +38,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -58,8 +58,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -79,8 +79,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -100,8 +100,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         // ReSharper disable once NUnit.IncorrectArgumentType
@@ -120,8 +120,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         // ReSharper disable once NUnit.IncorrectArgumentType
@@ -140,8 +140,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         // ReSharper disable once NUnit.IncorrectArgumentType
@@ -160,8 +160,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -184,8 +184,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -208,8 +208,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -230,8 +230,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -252,8 +252,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.IsNotEmpty(result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.Empty);
             Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
             Assert.That(result, Is.All.Matches<SerializationDto<StronglyTypedBool>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
         }
@@ -277,8 +277,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -308,8 +308,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -332,8 +332,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -354,8 +354,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.IsNotEmpty(result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.Empty);
             Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
             Assert.That(result, Is.All.Matches<SerializationDto<StronglyTypedDecimal>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
         }
@@ -383,8 +383,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -410,8 +410,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -435,8 +435,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -459,8 +459,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -485,8 +485,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -510,8 +510,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -536,8 +536,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -557,8 +557,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.IsNotEmpty(result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.Empty);
             Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
             Assert.That(result, Is.All.Matches<SerializationDto<StronglyTypedUshort>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
         }
@@ -582,8 +582,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -608,8 +608,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -634,8 +634,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -653,8 +653,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -674,8 +674,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.IsNotEmpty(result);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.Empty);
             Assert.That(result, Has.Exactly(stronglyTyped.Length).Items);
             Assert.That(result, Is.All.Matches<SerializationDto<Email>>(x => stronglyTyped.Any(s => s.TestValue == x.TestValue)));
         }
@@ -695,8 +695,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -714,8 +714,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         [Test]
@@ -733,8 +733,8 @@ namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
 
             // Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(stronglyTyped.TestValue, result.TestValue);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.TestValue, Is.EqualTo(stronglyTyped.TestValue));
         }
 
         private static string BuildStringArray(IEnumerable<object> values)

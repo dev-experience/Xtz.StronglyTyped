@@ -31,7 +31,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase("00:11:22:33:44:55")]
@@ -58,7 +58,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase("00:11:22:33:44:55")]
@@ -85,7 +85,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase("00:11:22:33:44:55")]
@@ -112,7 +112,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         private static string ValueToString(string value)
