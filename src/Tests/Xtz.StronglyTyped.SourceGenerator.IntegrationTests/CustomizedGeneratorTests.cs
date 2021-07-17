@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
 {
+    // TODO: Write tests for incomplete code (e.g. `[StrongType(]`) to test that generator ignores such cases
+
     public class CustomizedGeneratorTests : GeneratorTestsBase
     {
         [Test]

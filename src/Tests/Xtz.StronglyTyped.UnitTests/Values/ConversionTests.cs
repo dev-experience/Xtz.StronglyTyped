@@ -70,7 +70,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
         {
             //// Arrange
 
-            var stronglyTyped = new EmployeeIntId(value);
+            object stronglyTyped = new EmployeeIntId(value);
 
             //// Act
 

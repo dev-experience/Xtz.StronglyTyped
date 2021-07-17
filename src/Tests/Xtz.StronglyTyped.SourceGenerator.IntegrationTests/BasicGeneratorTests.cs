@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
 {
+    // TODO: Write unit tests for `DataExtractor`
+
     public class BasicGeneratorTests : GeneratorTestsBase
     {
         [Test]

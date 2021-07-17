@@ -1,21 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
-using Xtz.StronglyTyped.TypeConverters;
+using Xtz.StronglyTyped.SourceGenerator;
 
 namespace Xtz.StronglyTyped.UnitTests
 {
-    // TODO: Replace by auto-generated class with [StrongType(typeof(int))]
-    [TypeConverter(typeof(TypeConverter<UserId, Guid>))]
-    public class UserId : StronglyTyped<Guid>
+    [StrongType(typeof(Guid))]
+    public partial class UserId
     {
-        public UserId(Guid value)
-            : base(value)
-        {
-        }
-
-        protected override bool IsValid(Guid value)
-        {
-            return value != Guid.Empty;
-        }
     }
 }

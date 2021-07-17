@@ -3,7 +3,7 @@ using Xtz.StronglyTyped.SourceGenerator;
 
 namespace Xtz.StronglyTyped.BuiltinTypes.Internet
 {
-    // TODO: Use `AbsoluteUri` as inner type
+    // TODO: Vlad DX: Think about using `AbsoluteUri` as inner type (could be not the best idea to use strong type in strong type)
     /// <summary>
     /// Absolute avatar URL.
     /// </summary>
