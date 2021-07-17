@@ -6,7 +6,8 @@ namespace Xtz.StronglyTyped
     [ExcludeFromCodeCoverage]
     public class InvalidValueException : StronglyTypedException
     {
-        public InvalidValueException(Type type, string errorMessage) : base(type, errorMessage)
+        public InvalidValueException(Type type, string errorMessage)
+            : base(type, errorMessage)
         {
         }
     }

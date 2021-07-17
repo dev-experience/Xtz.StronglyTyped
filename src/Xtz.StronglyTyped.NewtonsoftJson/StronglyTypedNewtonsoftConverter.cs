@@ -63,7 +63,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             writer.WriteValue(stringValue);
         }
 
-        private IStronglyTyped ConvertFromLong(long longValue, ICustomTypeConverter typeConverter)
+        private static IStronglyTyped ConvertFromLong(long longValue, ICustomTypeConverter typeConverter)
         {
             if (typeConverter.InnerType == typeof(byte))
             {
@@ -144,7 +144,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(long)}' to '{typeConverter.StrongType.FullName}'");
         }
 
-        private IStronglyTyped ConvertFromDouble(double doubleValue, ICustomTypeConverter typeConverter)
+        private static IStronglyTyped ConvertFromDouble(double doubleValue, ICustomTypeConverter typeConverter)
         {
             if (typeConverter.InnerType == typeof(double))
             {
@@ -169,7 +169,7 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(double)}' to '{typeConverter.StrongType.FullName}'");
         }
 
-        private IStronglyTyped ConvertFromBigInt(BigInteger bigIntValue, ICustomTypeConverter typeConverter)
+        private static IStronglyTyped ConvertFromBigInt(BigInteger bigIntValue, ICustomTypeConverter typeConverter)
         {
             if (typeConverter.InnerType == typeof(decimal))
             {
@@ -188,14 +188,14 @@ namespace Xtz.StronglyTyped.NewtonsoftJson
             throw new NewtonsoftJsonConverterException(typeConverter.StrongType, $"Can't convert from '{typeof(BigInteger)}' to '{typeConverter.StrongType.FullName}'");
         }
 
-        private IStronglyTyped ConvertToTimeSpan(object value, ICustomTypeConverter typeConverter)
+        private static IStronglyTyped ConvertToTimeSpan(object value, ICustomTypeConverter typeConverter)
         {
             var timeSpanValue = XmlConvert.ToTimeSpan(value.ToString());
             var result = typeConverter.ConvertFrom(timeSpanValue);
             return (IStronglyTyped)result;
         }
 
-        private bool TryWriteNumber(object value, Type innerType, JsonWriter writer)
+        private static bool TryWriteNumber(object value, Type innerType, JsonWriter writer)
         {
             if (innerType == typeof(decimal))
             {

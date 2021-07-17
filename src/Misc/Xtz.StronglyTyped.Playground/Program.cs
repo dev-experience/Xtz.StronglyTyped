@@ -5,7 +5,7 @@ namespace Xtz.StronglyTyped.Playground
 {
     // NOTE: Just a simple console app for demo purposes
 
-    public class Program
+    public static class Program
     {
         public static void Main()
         {
