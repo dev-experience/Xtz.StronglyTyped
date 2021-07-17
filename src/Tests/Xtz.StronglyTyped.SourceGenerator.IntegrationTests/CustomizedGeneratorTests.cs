@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
 {
+    // TODO: Write tests for incomplete code (e.g. `[StrongType(]`) to test that generator ignores such cases
+
     public class CustomizedGeneratorTests : GeneratorTestsBase
     {
         [Test]
@@ -12,7 +14,7 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -45,10 +47,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -60,8 +59,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -69,7 +68,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -102,10 +101,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -117,8 +113,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -126,7 +122,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -159,10 +155,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -174,8 +167,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -183,7 +176,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -216,10 +209,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -231,8 +221,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
 ////        [Test]
@@ -275,7 +265,6 @@ namespace IntegrationTests.Generated
 ////            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 ////            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 ////            var compiledBytes = CompileBytes(outputCompilation);
 
 ////            [ExcludeFromCodeCoverage]
@@ -297,7 +286,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -330,10 +319,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -345,8 +331,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -354,7 +340,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -388,10 +374,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -403,8 +386,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -412,7 +395,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -446,10 +429,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -461,8 +441,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -470,7 +450,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -504,10 +484,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -519,8 +496,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -528,7 +505,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -542,7 +519,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(Allow.Unknown)]
+    [StrongType(Allow.None)]
     public partial class City2
     {
     }
@@ -561,10 +538,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -576,8 +550,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -585,7 +559,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -599,7 +573,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(Allow.Unknown)]
+    [StrongType(Allow.None)]
     public partial class City2
     {
     }
@@ -618,10 +592,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -633,8 +604,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -642,7 +613,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -656,7 +627,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(typeof(string), Allow.Unknown)]
+    [StrongType(typeof(string), Allow.None)]
     public partial class CityUri2
     {
     }
@@ -675,10 +646,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -690,8 +658,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -699,7 +667,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -713,7 +681,7 @@ namespace IntegrationTests.Generated
         }
     }
 
-    [StrongType(typeof(string), Allow.Unknown)]
+    [StrongType(typeof(string), Allow.None)]
     public partial class CityUri2
     {
     }
@@ -732,10 +700,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -747,8 +712,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -756,7 +721,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -789,10 +754,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -804,8 +766,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -813,7 +775,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -846,10 +808,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -861,8 +820,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
         [Test]
@@ -870,7 +829,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -903,10 +862,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -918,8 +874,8 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("<null>"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("<null>"), Is.True);
         }
 
         [Test]
@@ -927,7 +883,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -960,10 +916,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
-
-            var compiledBytes = CompileBytes(outputCompilation);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()
@@ -975,10 +928,11 @@ namespace IntegrationTests.Generated
             //// Assert
 
             var exception = Assert.Throws<TestsExecutionException>(Action);
-            Assert.IsInstanceOf<InvalidValueException>(exception?.InnerException);
-            Assert.IsTrue(exception?.InnerException?.Message.Contains("''"));
+            Assert.That(exception?.InnerException, Is.InstanceOf<InvalidValueException>());
+            Assert.That(exception?.InnerException?.Message.Contains("''"), Is.True);
         }
 
+#pragma warning disable S125
 //        [Test]
 //        public void ShouldGenerate_AllowNull_WhenAllowNullProvided()
 //        {
@@ -1018,7 +972,6 @@ namespace IntegrationTests.Generated
 
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
 
 //            var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1069,7 +1022,6 @@ namespace IntegrationTests.Generated
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 //            var compiledBytes = CompileBytes(outputCompilation);
 
 //            var result = LoadAndExecute(compiledBytes);
@@ -1118,7 +1070,6 @@ namespace IntegrationTests.Generated
 
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
 
 //            var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1169,7 +1120,6 @@ namespace IntegrationTests.Generated
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 //            var compiledBytes = CompileBytes(outputCompilation);
 
 //            var result = LoadAndExecute(compiledBytes);
@@ -1178,13 +1128,14 @@ namespace IntegrationTests.Generated
 
 //            Assert.AreEqual(0, result);
 //        }
+#pragma warning restore S125
 
         [Test]
         public void ShouldGenerate_AllowEmpty_WhenAllowEmptyProvided()
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1217,8 +1168,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1226,7 +1176,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -1234,7 +1184,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1267,8 +1217,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1276,7 +1225,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -1284,7 +1233,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1317,8 +1266,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1326,7 +1274,7 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -1334,7 +1282,7 @@ namespace IntegrationTests.Generated
         {
             //// Arrange
 
-            var sourceCode = @"
+            const string sourceCode = @"
 namespace IntegrationTests.Generated
 {
     using Xtz.StronglyTyped.SourceGenerator;
@@ -1367,8 +1315,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1376,9 +1323,10 @@ namespace IntegrationTests.Generated
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
+#pragma warning disable S125
 //        [Test]
 //        public void ShouldGenerate_AllowEmpty_WhenTypeAndAllowNullEmptyProvided()
 //        {
@@ -1418,7 +1366,6 @@ namespace IntegrationTests.Generated
 
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
-
 
 //            var compiledBytes = CompileBytes(outputCompilation);
 
@@ -1469,7 +1416,6 @@ namespace IntegrationTests.Generated
 //            // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
 //            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
-
 //            var compiledBytes = CompileBytes(outputCompilation);
 
 //            var result = LoadAndExecute(compiledBytes);
@@ -1478,5 +1424,6 @@ namespace IntegrationTests.Generated
 
 //            Assert.AreEqual(0, result);
 //        }
+#pragma warning restore S125
     }
 }

@@ -8,12 +8,19 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture
     [AttributeUsage(AttributeTargets.Method)]
     public class StrongAutoDataAttribute : AutoDataAttribute
     {
+        private static readonly Lazy<IFixture> FIXTURE = new(BuildFixture);
+
         public StrongAutoDataAttribute()
-            : base(CreateFixture)
+            : base(FixtureFunc)
         {
         }
 
-        private static IFixture CreateFixture()
+        private static IFixture FixtureFunc()
+        {
+            return FIXTURE.Value;
+        }
+
+        private static IFixture BuildFixture()
         {
             var fixture = new Fixture();
             fixture.Customizations.Add(new AddressFakerSpecimenBuilder());

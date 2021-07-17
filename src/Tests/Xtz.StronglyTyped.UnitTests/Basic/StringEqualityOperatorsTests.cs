@@ -17,7 +17,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
             //// Assert
 
 #pragma warning disable CS1718 // Comparison made to same variable
-            Assert.IsTrue(value == value);
+            // ReSharper disable once EqualExpressionComparison
+            Assert.That(value == value, Is.True);
 #pragma warning restore CS1718 // Comparison made to same variable
         }
 
@@ -33,8 +34,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsTrue(value == objValue);
-            Assert.IsTrue(objValue == value);
+            Assert.That(value == objValue, Is.True);
+            Assert.That(objValue == value, Is.True);
         }
 
         [Test]
@@ -49,8 +50,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsTrue(value1 == value2);
-            Assert.IsTrue(value2 == value1);
+            Assert.That(value1 == value2, Is.True);
+            Assert.That(value2 == value1, Is.True);
         }
 
         [Test]
@@ -65,8 +66,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsTrue(value == objValue);
-            Assert.IsTrue(objValue == value);
+            Assert.That(value == objValue, Is.True);
+            Assert.That(objValue == value, Is.True);
         }
 
         [Test]
@@ -81,8 +82,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsFalse(value1 == value2);
-            Assert.IsFalse(value2 == value1);
+            Assert.That(value1 == value2, Is.False);
+            Assert.That(value2 == value1, Is.False);
         }
 
         [Test]
@@ -97,8 +98,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsFalse(value == objValue);
-            Assert.IsFalse(objValue == value);
+            Assert.That(value == objValue, Is.False);
+            Assert.That(objValue == value, Is.False);
         }
 
         [Test]
@@ -113,8 +114,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsFalse(value1 != value2);
-            Assert.IsFalse(value2 != value1);
+            Assert.That(value1 != value2, Is.False);
+            Assert.That(value2 != value1, Is.False);
         }
 
         [Test]
@@ -129,8 +130,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsFalse(value != objValue);
-            Assert.IsFalse(objValue != value);
+            Assert.That(value != objValue, Is.False);
+            Assert.That(objValue != value, Is.False);
         }
 
         [Test]
@@ -145,8 +146,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsTrue(value1 != value2);
-            Assert.IsTrue(value2 != value1);
+            Assert.That(value1 != value2, Is.True);
+            Assert.That(value2 != value1, Is.True);
         }
 
         [Test]
@@ -161,8 +162,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.IsTrue(value != objValue);
-            Assert.IsTrue(objValue != value);
+            Assert.That(value != objValue, Is.True);
+            Assert.That(objValue != value, Is.True);
         }
     }
 }

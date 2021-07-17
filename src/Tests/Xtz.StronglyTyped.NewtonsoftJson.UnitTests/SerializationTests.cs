@@ -1,0 +1,692 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
+using Xtz.StronglyTyped.BuiltinTypes.Internet;
+using Xtz.StronglyTyped.UnitTests;
+
+namespace Xtz.StronglyTyped.NewtonsoftJson.UnitTests
+{
+    public class SerializationTests
+    {
+        private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS;
+
+        static SerializationTests()
+        {
+            var jsonSerializerSettings = new JsonSerializerSettings();
+            jsonSerializerSettings.Converters.Add(new StronglyTypedNewtonsoftConverter());
+            JSON_SERIALIZER_SETTINGS = jsonSerializerSettings;
+        }
+
+        [Test]
+        [TestCase("New York")]
+        [TestCase("New \"The Big Apple\" York")]
+        public void ShouldSerialize_GivenStronglyTypedStringClass(string value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedString(value);
+            var json = JsonConvert.SerializeObject(value, JSON_SERIALIZER_SETTINGS);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase("New York")]
+        [TestCase("New \"The Big Apple\" York")]
+        public void ShouldSerialize_GivenStronglyTypedStringStruct(string value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedStringStruct(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase("Brazil")]
+        [TestCase("Trinidad and Tobago")]
+        [TestCase("")]
+        public void ShouldSerialize_GivenStronglyTypedStringClassAllowEmpty(string value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedStringAllowEmpty(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase("Brazil")]
+        [TestCase("Trinidad and Tobago")]
+        [TestCase("")]
+        public void ShouldSerialize_GivenStronglyTypedStringStructAllowEmpty(string value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedStringAllowEmptyStruct(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        // ReSharper disable once NUnit.IncorrectArgumentType
+        [Test]
+        [TestCase("61f6e72c-8db3-4a70-89b6-c3d07dbcce11")]
+        public void ShouldSerialize_GivenStronglyTypedGuidClass(Guid value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedGuid(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        // ReSharper disable once NUnit.IncorrectArgumentType
+        [Test]
+        [TestCase("57c2a2d3-99cc-4468-998e-f3a3abe089ca")]
+        public void ShouldSerialize_GivenStronglyTypedGuidStruct(Guid value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedGuidStruct(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        // ReSharper disable once NUnit.IncorrectArgumentType
+        [Test]
+        [TestCase("61f6e72c-8db3-4a70-89b6-c3d07dbcce11")]
+        public void ShouldSerialize_GivenStronglyTypedGuidIdClass(Guid value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedGuidId(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(int.MinValue)]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(6372)]
+        [TestCase(int.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedIntClass(int value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedInt(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(int.MinValue)]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(6372)]
+        [TestCase(int.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedIntStruct(int value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedIntStruct(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(1)]
+        [TestCase(546)]
+        [TestCase(6474)]
+        [TestCase(int.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedIntIdClass(int value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedIntId(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ShouldSerialize_GivenStronglyTypedBoolClass(bool value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedBool(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(byte.MinValue)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(233)]
+        [TestCase(byte.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedByteClass(byte value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedByte(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(char.MinValue)]
+        [TestCase('I')]
+        [TestCase('x')]
+        [TestCase('\xF0')]
+        [TestCase('Ž')]
+        [TestCase('£')]
+        [TestCase('¶')]
+        [TestCase('Ð')]
+        [TestCase('4')]
+        [TestCase('ߡ')]
+        [TestCase('ݓ')]
+        [TestCase('Ѝ')]
+        [TestCase(char.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedCharClass(char value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedChar(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(-5745)]
+        [TestCase(-968.2566)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(34634)]
+        [TestCase(6534.353)]
+        public void ShouldSerialize_GivenStronglyTypedDecimalClass(decimal value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedDecimal(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        public void ShouldSerialize_GivenStronglyTypedDecimalClass()
+        {
+            // Arrange
+
+            var values = new [] { decimal.MinValue, -968.2566m, decimal.MinusOne, decimal.Zero, decimal.One, decimal.MaxValue };
+
+            var stronglyTyped = values.Select(x => (StronglyTypedDecimal)x);
+            var json = JsonConvert.SerializeObject(values);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(double.MinValue)]
+        [TestCase(double.Epsilon)]
+        [TestCase(-5745)]
+        [TestCase(-968.2566)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(34634)]
+        [TestCase(6534.353)]
+        [TestCase(double.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedDoubleClass(double value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedDouble(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(float.MinValue)]
+        [TestCase(float.Epsilon)]
+        [TestCase(-5745)]
+        [TestCase(-968.2566F)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(34634)]
+        [TestCase(6534.353F)]
+        [TestCase(float.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedFloatClass(float value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedFloat(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(long.MinValue)]
+        [TestCase(-5745)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(34634)]
+        [TestCase(41343252352352)]
+        [TestCase(long.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedLongClass(long value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedLong(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(sbyte.MinValue)]
+        [TestCase(-55)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(34)]
+        [TestCase(sbyte.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedSbyteClass(sbyte value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedSbyte(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(short.MinValue)]
+        [TestCase(-24633)]
+        [TestCase(-55)]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(34)]
+        [TestCase(7374)]
+        [TestCase(short.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedShortClass(short value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedShort(value);
+            var json = JsonConvert.SerializeObject(value, JSON_SERIALIZER_SETTINGS);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(uint.MinValue)]
+        [TestCase(0U)]
+        [TestCase(1U)]
+        [TestCase(34U)]
+        [TestCase(7374U)]
+        [TestCase(45745745U)]
+        [TestCase(uint.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedUintClass(uint value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedUint(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(ulong.MinValue)]
+        [TestCase(0U)]
+        [TestCase(1U)]
+        [TestCase(34U)]
+        [TestCase(7374U)]
+        [TestCase(45745745U)]
+        [TestCase(847847645745745U)]
+        [TestCase(ulong.MaxValue)]
+        public void ShouldSerialize_GivenStronglyTypedUlongClass(ulong value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedUlong(value);
+            var json = JsonConvert.SerializeObject(value);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        public void ShouldSerialize_GivenStronglyTypedUshortClass()
+        {
+            // Arrange
+
+            var values = new[] { ushort.MinValue, (ushort)0, (ushort)1, (ushort)34, (ushort)7374, ushort.MaxValue };
+
+            var stronglyTyped = values.Select(x => (StronglyTypedUshort)x);
+            var json = JsonConvert.SerializeObject(values);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase("2020-08-14T14:35:57+0000")]
+        [TestCase("2020-08-14T14:35:57-1000")]
+        [TestCase("2020-08-14T14:35:57Z")]
+        [TestCase("2320-07-21T23:00:35Z")]
+        [TestCase("1539-05-06T09:20:45Z")]
+        public void ShouldSerialize_GivenStronglyTypedDateTimeClass(DateTime value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedDateTime(value);
+            var json = JsonConvert.SerializeObject(value.ToUniversalTime());
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [TestCase(TimeSpan.TicksPerMillisecond)]
+        [TestCase(TimeSpan.TicksPerSecond)]
+        [TestCase(TimeSpan.TicksPerMinute)]
+        [TestCase(TimeSpan.TicksPerHour)]
+        [TestCase(TimeSpan.TicksPerDay)]
+        public void ShouldSerialize_GivenStronglyTypedTimeSpanClass_FromTicks(long value)
+        {
+            // Arrange
+
+            var timeSpan = TimeSpan.FromTicks(value);
+            var stronglyTyped = new StronglyTypedTimeSpan(timeSpan);
+            var expected = $"\"{XmlConvert.ToString(stronglyTyped)}\"";
+            var expectedString = $"\"{stronglyTyped}\"";
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo(expectedString));
+        }
+
+        [Test]
+        [TestCase("6")]
+        [TestCase("6:12")]
+        [TestCase("6:12:14")]
+        [TestCase("6:12:14:45")]
+        [TestCase("6.12:14:45")]
+        [TestCase("6:12:14:45.3448")]
+        public void ShouldSerialize_GivenStronglyTypedTimeSpanClass(TimeSpan value)
+        {
+            // Arrange
+
+            var stronglyTyped = new StronglyTypedTimeSpan(value);
+            var expected = $"\"{XmlConvert.ToString(value)}\"";
+            var expectedString = $"\"{stronglyTyped}\"";
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result, Is.EqualTo(expectedString));
+        }
+
+        [Test]
+        [StrongAutoData]
+        public void ShouldSerialize_GivenStronglyTypedEmailClass(Email stronglyTyped)
+        {
+            // Arrange
+
+            var json = JsonConvert.SerializeObject(stronglyTyped.Value.Address);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [StrongAutoData]
+        public void ShouldSerialize_GivenStronglyTypedEmailsClass(IReadOnlyCollection<Email> stronglyTyped)
+        {
+            // Arrange
+
+            var collection = stronglyTyped.Select(x => x.Value.Address).ToArray();
+            var json = JsonConvert.SerializeObject(collection);
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(collection, Is.Not.Empty);
+            Assert.That(result, Is.EqualTo(json));
+        }
+
+        [Test]
+        [StrongAutoData]
+        public void ShouldSerialize_GivenStronglyTypedIpV4AddressClass(IpV4Address stronglyTyped)
+        {
+            // Arrange
+
+            var expected = $"\"{stronglyTyped.Value}\"";
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [StrongAutoData]
+        public void ShouldSerialize_GivenStronglyTypedIpV6AddressClass(IpV6Address stronglyTyped)
+        {
+            // Arrange
+
+            var expected = $"\"{stronglyTyped.Value}\"";
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [StrongAutoData]
+        public void ShouldSerialize_GivenStronglyTypedMacAddressClass(MacAddress stronglyTyped)
+        {
+            // Arrange
+
+            var expectedToString = $"\"{stronglyTyped.Value}\"";
+            var expected = $"\"{stronglyTyped.ToString(MacAddress.Separator.Hyphen)}\"";
+
+            // Act
+
+            var result = JsonConvert.SerializeObject(stronglyTyped, JSON_SERIALIZER_SETTINGS);
+
+            // Assert
+
+            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result.Replace("-", string.Empty), Is.EqualTo(expectedToString));
+        }
+    }
+}

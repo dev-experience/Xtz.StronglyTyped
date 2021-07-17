@@ -8,7 +8,7 @@ namespace Xtz.StronglyTyped.Benchmark.Models
         private bool IsValid(int value)
         {
             // ID must be greater than 0
-            return value <= 0;
+            return value > 0;
         }
     }
 }

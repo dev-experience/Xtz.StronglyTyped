@@ -64,7 +64,7 @@ namespace IntegrationTests.WeatherForecast
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
 
             var compiledBytes = CompileBytes(outputCompilation);
@@ -73,7 +73,7 @@ namespace IntegrationTests.WeatherForecast
 
             // Assert
 
-            Assert.AreEqual(0, result);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
             [ExcludeFromCodeCoverage]
             void Action()

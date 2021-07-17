@@ -7,6 +7,8 @@ namespace Xtz.StronglyTyped.Api_3_1.IntegrationTests.WebApi
     {
         public City City { get; set; }
 
+        public Country NullValue { get; set; }
+
         public DateTime Date { get; set; }
 
         public DegreesCelsius TemperatureC { get; set; }

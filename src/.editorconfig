@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# RCS1124: Inline local variable.
+dotnet_diagnostic.RCS1124.severity = none

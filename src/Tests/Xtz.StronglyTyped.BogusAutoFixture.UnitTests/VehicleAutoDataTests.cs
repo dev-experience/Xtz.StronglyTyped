@@ -1,6 +1,5 @@
-using System;
-using System.Linq;
 using NUnit.Framework;
+using Xtz.StronglyTyped.BogusAutoFixture.UnitTests.Extensions;
 using Xtz.StronglyTyped.BuiltinTypes.AutoFixture;
 using Xtz.StronglyTyped.BuiltinTypes.Vehicle;
 
@@ -26,10 +25,7 @@ namespace Xtz.StronglyTyped.BogusAutoFixture.UnitTests
                 vin,
             };
 
-            var nonBogusValues = values
-                .Where(x => x.ToString()!.Length >= 36 && Guid.TryParse(x.ToString()![^36..], out _));
-
-            Assert.IsEmpty(nonBogusValues);
+            Assert.That(values, Is.All.Matches<object>(x => !x.ToString()!.IsBogusGeneratedValue()));
         }
     }
 }

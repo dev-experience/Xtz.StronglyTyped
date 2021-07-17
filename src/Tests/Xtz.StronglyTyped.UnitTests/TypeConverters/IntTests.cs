@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Xtz.StronglyTyped.TypeConverters;
 
@@ -24,8 +25,8 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
             //// Assert
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(expected, result);
-            Assert.AreEqual(expected.Value, result.Value);
+            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result.Value, Is.EqualTo(expected.Value));
         }
 
         [TestCase(int.MinValue)]
@@ -41,11 +42,12 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Act
 
-            TestDelegate action = () => typeConverter.ConvertFrom(value);
+            [ExcludeFromCodeCoverage]
+            void Action() => typeConverter.ConvertFrom(value);
 
             //// Assert
 
-            Assert.Throws<TypeConverterException>(action);
+            Assert.Throws<TypeConverterException>(Action);
         }
     }
 }

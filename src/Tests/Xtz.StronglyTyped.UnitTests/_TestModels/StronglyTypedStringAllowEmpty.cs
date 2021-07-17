@@ -2,8 +2,8 @@
 
 namespace Xtz.StronglyTyped.UnitTests
 {
-    [StrongType]
-    public sealed partial class City
+    [StrongType(Allow.Empty)]
+    public sealed partial class StronglyTypedStringAllowEmpty
     {
     }
 }

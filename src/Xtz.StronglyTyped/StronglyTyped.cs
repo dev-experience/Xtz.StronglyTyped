@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Xtz.StronglyTyped
 {
@@ -29,8 +28,9 @@ namespace Xtz.StronglyTyped
                 Throw($"<null> value is invalid for type {GetType()}");
             }
 
-            if (ShouldThrowIfEmpty() && !typeof(TInnerType).IsPrimitive)
+            if (ShouldThrowIfEmpty() && !(typeof(TInnerType).IsPrimitive || typeof(TInnerType) == typeof(decimal)))
             {
+                // ReSharper disable once RedundantNameQualifier
                 if (Equals(value, string.Empty) || object.Equals(value, default(TInnerType)))
                 {
                     Throw($"'{value}' value is invalid for type {GetType()}");
@@ -44,6 +44,7 @@ namespace Xtz.StronglyTyped
         }
 
         // Bypass. Can be overriden
+        // ReSharper disable once VirtualMemberNeverOverridden.Global
         protected virtual bool ShouldThrowIfEmpty() => true;
 
         protected void Throw(string errorMessage) => throw new InvalidValueException(GetType(), errorMessage);
@@ -53,6 +54,7 @@ namespace Xtz.StronglyTyped
 
         public override bool Equals(object? obj)
         {
+            // ReSharper disable once RedundantNameQualifier
             if (object.ReferenceEquals(this, obj))
             {
                 return true;
@@ -78,11 +80,13 @@ namespace Xtz.StronglyTyped
 
         public override int GetHashCode()
         {
+            // ReSharper disable once ConstantConditionalAccessQualifier
             return Value?.GetHashCode() ?? default;
         }
 
         public override string ToString()
         {
+            // ReSharper disable once ConstantConditionalAccessQualifier
             return Value?.ToString() ?? string.Empty;
         }
 

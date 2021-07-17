@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -6,6 +5,8 @@ using NUnit.Framework;
 
 namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
 {
+    // TODO: Write unit tests for `DataExtractor`
+
     public class BasicGeneratorTests : GeneratorTestsBase
     {
         [Test]
@@ -101,16 +102,16 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -147,16 +148,16 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(5, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(5));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -183,16 +184,16 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(5, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(5));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -216,16 +217,16 @@ public partial class City2
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
         }
 
         [Test]
@@ -252,16 +253,16 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
         }
 
         [Test]
@@ -292,16 +293,16 @@ namespace IntegrationTests.Generated
             GeneratorDriver driver = CSharpGeneratorDriver.Create(new StronglyTypedGenerator());
 
             // NOTE: the generator driver itself is immutable, and all calls return an updated version of the driver that you should use for subsequent calls
-            driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+            driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
         }
     }
 }

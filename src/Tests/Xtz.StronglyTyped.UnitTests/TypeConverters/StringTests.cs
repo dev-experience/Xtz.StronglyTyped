@@ -23,7 +23,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -37,11 +37,12 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Act
 
+            // ReSharper disable once ExpressionIsAlwaysNull
             var result = typeConverter.ConvertFrom(value);
 
             //// Assert
 
-            Assert.IsNull(result);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -61,7 +62,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase("Sweden")]

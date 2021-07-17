@@ -10,8 +10,6 @@ namespace Xtz.StronglyTyped.Benchmark
     [MemoryDiagnoser]
     public class SystemTextJsonSerializationGuidIds
     {
-        private readonly Faker<EmployeeGuidId> _faker;
-
         private readonly EmployeeGuidId[] _employeeGuidIds;
 
         private readonly EmployeeGuidId[] _otherEmployeeGuidIds;
@@ -22,10 +20,10 @@ namespace Xtz.StronglyTyped.Benchmark
 
         public SystemTextJsonSerializationGuidIds()
         {
-            _faker = new Faker<EmployeeGuidId>();
+            var faker = new Faker<EmployeeGuidId>();
 
-            _employeeGuidIds = _faker.Generate(Program.VALUE_COUNT).ToArray();
-            _otherEmployeeGuidIds = _faker.Generate(Program.VALUE_COUNT).ToArray();
+            _employeeGuidIds = faker.Generate(Program.VALUE_COUNT).ToArray();
+            _otherEmployeeGuidIds = faker.Generate(Program.VALUE_COUNT).ToArray();
             _guids = _employeeGuidIds.Select(x => x.Value).ToArray();
             _stronglyTypedGuidStructs = _employeeGuidIds.Select(x => (GuidStructId)x.Value).ToArray();
         }
@@ -38,21 +36,21 @@ namespace Xtz.StronglyTyped.Benchmark
         }
 
         [Benchmark(Description = "StronglyTyped<ValueType<Guid>>")]
-        public string SerializeStronglyTypedStringStructs()
+        public string SerializeStronglyTypedGuidStructs()
         {
             var result = JsonSerializer.Serialize(_stronglyTypedGuidStructs);
             return result;
         }
 
         [Benchmark(Description = "StronglyTyped<Guid>")]
-        public string SerializeStronglyTypedEmails()
+        public string SerializeStronglyTypedGuids()
         {
             var result = JsonSerializer.Serialize(_employeeGuidIds);
             return result;
         }
 
         [Benchmark(Description = "Other StronglyTyped<Guid>")]
-        public string SerializeOtherStronglyTypedEmails()
+        public string SerializeOtherStronglyTypedGuids()
         {
             var result = JsonSerializer.Serialize(_otherEmployeeGuidIds);
             return result;

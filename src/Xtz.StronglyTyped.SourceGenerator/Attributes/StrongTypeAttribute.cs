@@ -11,13 +11,13 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         public Allow Allow { get; }
 
-        public StrongTypeAttribute(Type innerType, Allow allow = Allow.Unknown)
+        public StrongTypeAttribute(Type innerType, Allow allow = Allow.None)
         {
             InnerType = innerType;
             Allow = allow;
         }
 
-        public StrongTypeAttribute(Allow allow = Allow.Unknown)
+        public StrongTypeAttribute(Allow allow = Allow.None)
             : this(typeof(string), allow)
         {
         }

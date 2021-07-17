@@ -23,8 +23,9 @@ namespace Xtz.StronglyTyped.IntegrationTests
             configuration.Bind("Xtz.Test", settings);
 
             // Assert
-            
+
             // Shouldn't fail
+            Assert.That(settings.Country, Is.Not.Null);
         }
 
         [Test]
@@ -44,8 +45,8 @@ namespace Xtz.StronglyTyped.IntegrationTests
 
             // Assert
 
-            Assert.NotNull(settings);
-            Assert.AreEqual(expectedCountry, settings.Country);
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.Country, Is.EqualTo(expectedCountry));
         }
 
         [Test]

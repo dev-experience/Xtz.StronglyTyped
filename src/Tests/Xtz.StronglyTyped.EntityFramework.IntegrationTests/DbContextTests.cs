@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Xtz.StronglyTyped.BuiltinTypes.Address;
@@ -18,8 +16,6 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 {
     public class DbContextTests
     {
-        private readonly ServiceProvider _serviceProvider;
-
         private readonly AppDbContext _dbContext;
 
         public DbContextTests()
@@ -27,8 +23,8 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
             var services = new ServiceCollection();
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(GetType().Namespace!));
 
-            _serviceProvider = services.BuildServiceProvider();
-            _dbContext = _serviceProvider.GetRequiredService<AppDbContext>();
+            var serviceProvider = services.BuildServiceProvider();
+            _dbContext = serviceProvider.GetRequiredService<AppDbContext>();
         }
 
         [SetUp]
@@ -63,7 +59,7 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Assert
 
-            Assert.AreEqual(cityNames.Count, cities.Length);
+            Assert.That(cities.Length, Is.EqualTo(cityNames.Count));
         }
 
             [Test]
@@ -104,8 +100,8 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Assert
 
-            Assert.AreEqual(cityNames.Count, cities.Length);
-            Assert.AreEqual(weatherForecastEntities.Length, weatherForecasts.Length);
+            Assert.That(cities.Length, Is.EqualTo(cityNames.Count));
+            Assert.That(weatherForecasts.Length, Is.EqualTo(weatherForecastEntities.Length));
         }
 
         [Test]
@@ -139,7 +135,7 @@ namespace Xtz.StronglyTyped.EntityFramework.IntegrationTests
 
             // Assert
 
-            Assert.AreEqual(entities.Length, employees.Length);
+            Assert.That(employees.Length, Is.EqualTo(entities.Length));
         }
     }
 }

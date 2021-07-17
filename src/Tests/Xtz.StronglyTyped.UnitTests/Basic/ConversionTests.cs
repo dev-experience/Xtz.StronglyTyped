@@ -21,7 +21,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase("Norway")]
@@ -38,7 +38,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(country, result);
+            Assert.That(result, Is.EqualTo(country));
         }
 
         [TestCase("Norway")]
@@ -55,7 +55,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(country, result);
+            Assert.That(result, Is.EqualTo(country));
         }
 
         [TestCase("Norway")]
@@ -72,7 +72,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(country, result);
+            Assert.That(result, Is.EqualTo(country));
         }
 
         [TestCase(27)]
@@ -89,24 +89,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(countryId, result);
-        }
-
-        [TestCase(27)]
-        [Test]
-        public void Convert_ShouldConvertToInt_GivenCountryIdAsObject(int countryId)
-        {
-            //// Arrange
-
-            object stronglyTyped = new CountryId(countryId);
-
-            //// Act
-
-            var result = Convert.ToInt32(stronglyTyped, CultureInfo.InvariantCulture);
-
-            //// Assert
-
-            Assert.AreEqual(countryId, result);
+            Assert.That(result, Is.EqualTo(countryId));
         }
     }
 }

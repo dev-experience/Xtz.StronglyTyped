@@ -23,7 +23,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(value, result.Value);
+            Assert.That(result.Value, Is.EqualTo(value));
         }
 
         [TestCase(Int32.MinValue)]
@@ -44,7 +44,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(expected, stronglyTyped.ToString());
+            Assert.That(stronglyTyped.ToString(), Is.EqualTo(expected));
         }
 
         [TestCase(null)]
@@ -57,6 +57,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Act
 
+            // ReSharper disable once ObjectCreationAsStatement
             [ExcludeFromCodeCoverage]
             void Action() => new Country(country);
 
@@ -74,8 +75,11 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Act
 
+            // ReSharper disable once ObjectCreationAsStatement
+            // ReSharper disable once ExpressionIsAlwaysNull
+            // ReSharper disable once AssignNullToNotNullAttribute
             [ExcludeFromCodeCoverage]
-            void Action() => new CountryAllowingEmpty(value);
+            void Action() => new StronglyTypedStringAllowEmpty(value);
 
             //// Assert
 
@@ -91,13 +95,13 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Act
 
-            var result = new CountryAllowingEmpty(value);
+            var result = new StronglyTypedStringAllowEmpty(value);
 
             //// Assert
 
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
             Assert.IsEmpty(result.Value);
-            Assert.IsEmpty(value.ToString());
+            Assert.IsEmpty(value);
         }
     }
 }

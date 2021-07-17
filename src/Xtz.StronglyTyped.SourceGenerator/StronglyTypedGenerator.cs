@@ -28,15 +28,15 @@ namespace Xtz.StronglyTyped.SourceGenerator
             { typeof(uint), new("uint", "uint.Parse(value)") },
             { typeof(ulong), new("ulong", "ulong.Parse(value)") },
             { typeof(ushort), new("ushort", "ushort.Parse(value)") },
-            { typeof(DateTime), new(typeof(DateTime).FullName, "System.DateTime.Parse(value)") },
-            { typeof(TimeSpan), new(typeof(TimeSpan).FullName, "System.TimeSpan.Parse(value)") },
-            { typeof(Guid), new(typeof(Guid).FullName, "System.Guid.Parse(value)") },
+            { typeof(DateTime), new(typeof(DateTime).FullName, "DateTime.Parse(value)") },
+            { typeof(TimeSpan), new(typeof(TimeSpan).FullName, "TimeSpan.Parse(value)") },
+            { typeof(Guid), new(typeof(Guid).FullName, "Guid.Parse(value)") },
             // Skipping `MailAddress` as it has `(string value)` constructor
             { typeof(IPAddress), new(typeof(IPAddress).FullName, "System.Net.IPAddress.Parse(value)") },
             { typeof(PhysicalAddress), new(typeof(PhysicalAddress).FullName, "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
             // Skipping `Uri` as it has `(string value)` constructor
         };
-        
+
         private readonly IDataExtractor _dataExtractor = new DataExtractor();
 
         private readonly List<string> _log = new();
@@ -89,7 +89,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 #endif
                         // IMPORTANT: Check if you use any types from `Xtz.StronglyTyped` library or any other library. Remove if any. Dependencies are not copied along with source generator (if they are not analyzers as well).
                         // https://github.com/dotnet/roslyn/discussions/47517#discussioncomment-63842
-                        
+
                         _log.Add("\nIMPORTANT: Check if you use any types from `Xtz.StronglyTyped` library or any other library. Remove if any. Dependencies are not copied along with source generator (if they are not analyzers as well).\nhttps://github.com/dotnet/roslyn/discussions/47517#discussioncomment-63842\n");
                         _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\n\nStack trace: {e.StackTrace}\n\nProcess ID: {processId}\n\nProcess name: {processName}\n\nFusion log: {e.FusionLog}");
                     }
@@ -115,7 +115,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             {
                 context.AddSource("_1-receiver-log", BuildLogText(receiver.Log, "SYNTAX RECEIVER LOG"));
                 context.AddSource("_2-data-extractor-log", BuildLogText(_dataExtractor.Log, "DATA EXTRACTOR LOG"));
-                context.AddSource($"_3-generator-log", BuildLogText(_log, "GENERATOR LOG"));
+                context.AddSource("_3-generator-log", BuildLogText(_log, "GENERATOR LOG"));
             }
         }
 
@@ -123,17 +123,29 @@ namespace Xtz.StronglyTyped.SourceGenerator
         {
             var writer = new CodeWriter();
 
-            WriteBanner(writer, workItem, timestamp);
+            var version = GetType().Assembly.GetName().Version;
+            var assemblyVersion = $"{version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
 
+            WriteBanner(writer, workItem, assemblyVersion, timestamp);
+
+            writer.AppendLine("//// ReSharper disable All");
+            writer.AppendLine("#pragma warning disable");
+            writer.AppendLine("#nullable enable");
+            writer.AppendLine("#nullable disable warnings");
             writer.AppendLine();
+
             using (writer.BeginScope($"namespace {workItem.Namespace}"))
             {
+                writer.AppendLine("using System;");
                 writer.AppendLine("using System.ComponentModel;");
                 writer.AppendLine("using System.Text.Json.Serialization;");
+                writer.AppendLine("using Xtz.StronglyTyped;");
+                writer.AppendLine("using Xtz.StronglyTyped.TypeConverters;");
                 writer.AppendLine();
 
+                writer.AppendLine($"[System.CodeDom.Compiler.GeneratedCode(\"{GetType().FullName}\", \"{assemblyVersion}\")]");
                 WriteTypeConverter(writer, workItem);
-                writer.AppendLine($"[JsonConverter(typeof(Xtz.StronglyTyped.TypeConverters.StronglyTypedJsonConverter<{workItem.Namespace}.{workItem.TypeName}>))]");
+                writer.AppendLine($"[JsonConverter(typeof(StronglyTypedJsonConverter<{workItem.TypeName}>))]");
 
                 switch (workItem.Kind)
                 {
@@ -143,6 +155,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     case WorkItemKind.Struct:
                         WriteStruct(writer, workItem);
                         break;
+                    // ReSharper disable once RedundantCaseLabel
                     case WorkItemKind.Unknown:
                     default:
                         throw new CodeWriterException($"Not supported work item type '{workItem.Kind}'");
@@ -153,30 +166,28 @@ namespace Xtz.StronglyTyped.SourceGenerator
             return generatedSourceCode;
         }
 
-        private void WriteBanner(CodeWriter writer, StronglyTypedWorkItem workItem, DateTime timestamp)
+        private void WriteBanner(CodeWriter writer, StronglyTypedWorkItem workItem, string assemblyVersion, DateTime timestamp)
         {
-            var version = GetType().Assembly.GetName().Version;
-            var assemblyVersion = $"{version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
-
             writer.AppendLine(
-                $@"//------------------------------------
-// <auto-generated>
-//     Type `{workItem.Namespace}.{workItem.TypeName}`
-//
-//     This code was generated by generator '{GetType().FullName}'
-//     Assembly Version: {assemblyVersion}
-//     Generation timestamp: {timestamp:s}Z
-// </auto-generated>
-//------------------------------------");
+                $@"/*
+<auto-generated>
+    Type `{workItem.Namespace}.{workItem.TypeName}`
+
+    This code was generated by generator '{GetType().FullName}'
+    Assembly Version: {assemblyVersion}
+    Generation timestamp: {timestamp:s}Z
+</auto-generated>
+*/");
+            writer.AppendLine();
         }
 
-        private void WriteTypeConverter(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteTypeConverter(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             var valueType = workItem.InnerType;
             var typeConverter = valueType switch
             {
-                var t when t == typeof(string) => $"[TypeConverter(typeof(Xtz.StronglyTyped.TypeConverters.StringTypeConverter<{workItem.TypeName}>))]",
-                _ => $"[TypeConverter(typeof(Xtz.StronglyTyped.TypeConverters.TypeConverter<{workItem.TypeName}, {workItem.InnerType.FullName}>))]",
+                var t when t == typeof(string) => $"[TypeConverter(typeof(StringTypeConverter<{workItem.TypeName}>))]",
+                _ => $"[TypeConverter(typeof(TypeConverter<{workItem.TypeName}, {workItem.InnerType.FullName}>))]",
             };
 
             writer.AppendLine(typeConverter);
@@ -185,14 +196,14 @@ namespace Xtz.StronglyTyped.SourceGenerator
         private void WriteClass(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             var baseType = !workItem.ExtraFeatures.HasBaseClass
-                ? $" Xtz.StronglyTyped.StronglyTyped<{workItem.InnerType.FullName}>,"
+                ? $" StronglyTyped<{workItem.InnerType.FullName}>,"
                 : String.Empty;
 
             var sealedStr = workItem.ExtraFeatures.IsAbstract
                 ? string.Empty
                 : " sealed";
 
-            using (writer.BeginScope($"public{sealedStr} partial class {workItem.TypeName} :{baseType} System.IEquatable<{workItem.TypeName}>"))
+            using (writer.BeginScope($"public{sealedStr} partial class {workItem.TypeName} :{baseType} IEquatable<{workItem.TypeName}>"))
             {
                 WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> class.");
                 WriteXmlParam(writer, "value", "Inner value");
@@ -209,7 +220,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
                 TryWriteToString(writer, workItem);
 
-                WriteEquatableEquals(writer, workItem);
+                WriteClassEquatableEquals(writer, workItem);
                 writer.AppendLine();
 
                 WriteExplicitOperatorToStrongType(writer, workItem);
@@ -232,13 +243,13 @@ namespace Xtz.StronglyTyped.SourceGenerator
         private void WriteStruct(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             writer.AppendLine("[System.Diagnostics.DebuggerDisplay(\"[struct {GetType().Name,nq}] {Value}\")]");
-            using (writer.BeginScope($"public readonly partial struct {workItem.TypeName} : Xtz.StronglyTyped.IStronglyTyped<{workItem.InnerType.FullName}>, System.IEquatable<{workItem.TypeName}>"))
+            using (writer.BeginScope($"public readonly partial struct {workItem.TypeName} : IStronglyTyped<{workItem.InnerType.FullName}>, IEquatable<{workItem.TypeName}>"))
             {
                 WriteXmlSummary(writer, "Default instance.");
                 writer.AppendLine($"public static readonly {workItem.TypeName} Default;");
                 writer.AppendLine();
 
-                WriteXmlSummary(writer, $"Inner value.");
+                WriteXmlSummary(writer, "Inner value.");
                 writer.AppendLine($"public {workItem.InnerType.FullName} Value {{ get; }}");
                 writer.AppendLine();
 
@@ -258,7 +269,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
                 TryWriteToString(writer, workItem);
 
-                WriteEquatableEquals(writer, workItem);
+                WriteStructEquatableEquals(writer, workItem);
                 writer.AppendLine();
 
                 WriteStructEqualityMethods(writer, workItem);
@@ -299,7 +310,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 WriteXmlSummary(writer,
                     $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> {typeKindStr}.");
                 writer.AppendLine($"public {workItem.TypeName}()");
-                writer.AppendLine("    : this(System.Guid.NewGuid())");
+                writer.AppendLine("    : this(Guid.NewGuid())");
 
                 using (writer.BeginScope())
                 {
@@ -348,7 +359,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     }
                 }
 
-                if (workItem.InnerType == typeof (string))
+                if (workItem.InnerType == typeof(string) && !workItem.ExtraFeatures.DoesAllowEmpty)
                 {
                     writer.AppendLine();
                     using (writer.BeginScope("if (value == string.Empty)"))
@@ -368,7 +379,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
             writer.AppendLine();
 
-            writer.AppendLine("private void Throw(string errorMessage) => throw new Xtz.StronglyTyped.StronglyTypedException(GetType(), errorMessage);");
+            writer.AppendLine("private void Throw(string errorMessage) => throw new StronglyTypedException(GetType(), errorMessage);");
             writer.AppendLine();
         }
 
@@ -387,6 +398,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             WriteXmlReturns(writer, "A 32-bit signed integer that is the hash code for this instance.");
             using (writer.BeginScope("public override int GetHashCode()"))
             {
+                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (workItem.InnerType.IsValueType)
                 {
                     writer.AppendLine("return Value.GetHashCode();");
@@ -398,12 +410,12 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
-        private static void WriteEquatableEquals(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteClassEquatableEquals(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             WriteXmlSummary(writer, "Determines whether the specified object is equal to the current instance.");
             WriteXmlParam(writer, "other", "The object to compare with the current instance.");
             WriteXmlReturns(writer, "<see langword=\"true\" /> if the specified object is equal to the current instance; otherwise, <see langword=\"false\" />.");
-            using (writer.BeginScope($"public bool Equals({workItem.TypeName} other)"))
+            using (writer.BeginScope($"public bool Equals({workItem.TypeName}? other)"))
             {
                 writer.AppendLine("if (ReferenceEquals(null, other)) return false;");
                 writer.AppendLine("if (ReferenceEquals(this, other)) return true;");
@@ -411,37 +423,72 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
+        private static void WriteStructEquatableEquals(CodeWriter writer, StronglyTypedWorkItem workItem)
+        {
+            WriteXmlSummary(writer, "Determines whether the specified object is equal to the current instance.");
+            WriteXmlParam(writer, "other", "The object to compare with the current instance.");
+            WriteXmlReturns(writer, "<see langword=\"true\" /> if the specified object is equal to the current instance; otherwise, <see langword=\"false\" />.");
+            using (writer.BeginScope($"public bool Equals({workItem.TypeName} other)"))
+            {
+                writer.AppendLine("return Equals(Value, other.Value);");
+            }
+        }
+
         private static void TryWriteToString(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
-            if (workItem.Kind == WorkItemKind.Struct && !workItem.ExtraFeatures.HasToString)
+            if (!workItem.ExtraFeatures.HasToString)
             {
-                WriteXmlSummary(writer, "Returns a string that represents inner value.");
-                WriteXmlReturns(writer, "A string that represents inner value.");
-                using (writer.BeginScope("public override string ToString()"))
+                // Order of ifs is important
+
+                if (workItem.InnerType == typeof(Guid))
                 {
-                    if (workItem.InnerType == typeof(Guid))
+                    WriteXmlSummary(writer, "Returns a string that represents inner <see cref=\"Guid\"/>.");
+                    WriteXmlReturns(writer, "A string that represents inner <see cref=\"Guid\"/>.");
+                    using (writer.BeginScope("public override string ToString()"))
                     {
                         writer.AppendLine("return $\"{Value:D}\";");
                     }
-                    else
+                    writer.AppendLine();
+                    return;
+                }
+
+                if (workItem.InnerType == typeof(DateTime))
+                {
+                    WriteXmlSummary(writer, "Returns an ISO-8601 string that represents inner <see cref=\"DateTime\"/>.");
+                    WriteXmlReturns(writer, "An ISO-8601 string that represents inner <see cref=\"DateTime\"/>.");
+                    using (writer.BeginScope("public override string ToString()"))
+                    {
+                        writer.AppendLine("return $\"{Value.ToUniversalTime():s}Z\";");
+                    }
+                    writer.AppendLine();
+                    return;
+                }
+
+                if (workItem.InnerType == typeof(TimeSpan))
+                {
+                    WriteXmlSummary(writer, "Returns an ISO-8601 string that represents inner <see cref=\"TimeSpan\"/>.");
+                    WriteXmlReturns(writer, "An ISO-8601 string that represents inner <see cref=\"TimeSpan\"/>.");
+                    using (writer.BeginScope("public override string ToString()"))
+                    {
+                        writer.AppendLine("return $\"{System.Xml.XmlConvert.ToString(Value)}\";");
+                    }
+                    writer.AppendLine();
+                    return;
+                }
+
+                if (workItem.Kind == WorkItemKind.Struct)
+                {
+                    WriteXmlSummary(writer, "Returns a string that represents inner value.");
+                    WriteXmlReturns(writer, "A string that represents inner value.");
+                    using (writer.BeginScope("public override string ToString()"))
                     {
                         writer.AppendLine("return $\"{Value}\";");
                     }
-                }
-                writer.AppendLine();
-                return;
-            }
+                    writer.AppendLine();
 
-            if (workItem.Kind == WorkItemKind.Class && !workItem.ExtraFeatures.HasToString && workItem.InnerType == typeof(Guid))
-            {
-                WriteXmlSummary(writer, "Returns a string that represents inner <see cref=\"System.Guid\"/>.");
-                WriteXmlReturns(writer, "A string that represents inner <see cref=\"System.Guid\"/>.");
-                using (writer.BeginScope("public override string ToString()"))
-                {
-                    writer.AppendLine("return $\"{Value:D}\";");
+                    // ReSharper disable once RedundantJumpStatement
+                    return;
                 }
-                writer.AppendLine();
-                return;
             }
         }
 
@@ -534,9 +581,9 @@ namespace Xtz.StronglyTyped.SourceGenerator
         {
             var version = typeof(StronglyTypedGenerator).Assembly.GetName().Version;
             var assemblyVersion = $"{version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
- 
+
             var result = SourceText.From(
-                string.Format(@"/*{0}{1}{0}{0}{2}{0}{0}{3}{0}{0}{4}{0}{0}*/",
+                string.Format("/*{0}{1}{0}{0}{2}{0}{0}{3}{0}{0}{4}{0}{0}*/",
                     Environment.NewLine,
                     title,
                     $"This code was generated by generator '{typeof(StronglyTypedGenerator).FullName}'\nAssembly Version: {assemblyVersion}",

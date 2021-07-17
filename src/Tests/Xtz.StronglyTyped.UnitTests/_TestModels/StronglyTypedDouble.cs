@@ -2,8 +2,8 @@
 
 namespace Xtz.StronglyTyped.UnitTests
 {
-    [StrongType(Allow.Empty)]
-    public sealed partial class CountryAllowingEmpty
+    [StrongType(typeof(double))]
+    public sealed partial class StronglyTypedDouble
     {
     }
 }

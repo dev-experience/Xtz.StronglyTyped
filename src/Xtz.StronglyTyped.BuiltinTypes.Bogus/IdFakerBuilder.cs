@@ -29,6 +29,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Bogus
             where TIntId : IntId
         {
             var result = GetFaker(() => new Faker<TIntId>()
+                // ReSharper disable once RedundantArgumentDefaultValue
                 .CustomInstantiator(f => (TIntId)Activator.CreateInstance(typeof(TIntId), f.Random.Int(1, int.MaxValue))));
             return result;
         }

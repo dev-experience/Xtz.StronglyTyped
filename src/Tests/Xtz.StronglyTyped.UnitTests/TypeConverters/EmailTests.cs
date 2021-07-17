@@ -27,7 +27,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [TestCase("john.doe@example.com", "JOHN.DOE@EXAMPLE.COM")]
@@ -50,7 +50,7 @@ namespace Xtz.StronglyTyped.UnitTests.TypeConverters
 
             //// Assert
 
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 }

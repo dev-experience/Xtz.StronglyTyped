@@ -17,8 +17,8 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(result1, result2);
-            Assert.AreEqual(result1.Value, result2.Value);
+            Assert.That(result2, Is.EqualTo(result1));
+            Assert.That(result2.Value, Is.EqualTo(result1.Value));
         }
 
         [TestCase(27, 45)]
@@ -34,8 +34,8 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreNotEqual(result1, result2);
-            Assert.AreNotEqual(result1.Value, result2.Value);
+            Assert.That(result2, Is.Not.EqualTo(result1));
+            Assert.That(result2.Value, Is.Not.EqualTo(result1.Value));
         }
 
         [TestCase(22, 11)]
@@ -51,8 +51,8 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(result1, result2);
-            Assert.AreEqual(result1.Value, result2.Value);
+            Assert.That(result2, Is.EqualTo(result1));
+            Assert.That(result2.Value, Is.EqualTo(result1.Value));
         }
 
         [TestCase(27)]
@@ -68,7 +68,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreEqual(result1.GetHashCode(), result2.GetHashCode());
+            Assert.That(result2.GetHashCode(), Is.EqualTo(result1.GetHashCode()));
         }
 
         [TestCase(27, 45)]
@@ -84,7 +84,7 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.AreNotEqual(result1.GetHashCode(), result2.GetHashCode());
+            Assert.That(result2.GetHashCode(), Is.Not.EqualTo(result1.GetHashCode()));
         }
     }
 }

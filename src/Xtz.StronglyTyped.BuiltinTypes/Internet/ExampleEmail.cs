@@ -13,7 +13,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.Internet
         public ExampleEmail(string value)
             : base(new MailAddress(value))
         {
-            if (value.Any(c => Email.IllegalChars.Contains(c))) Throw($"Characters {Email.IllegalCharsString} are not allowed in email");
+            if (value.Any(c => Email.ILLEGAL_CHARS.Contains(c))) Throw($"Characters {Email.ILLEGAL_CHARS_STRING} are not allowed in email");
         }
     }
 }

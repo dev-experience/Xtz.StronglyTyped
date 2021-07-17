@@ -5,7 +5,7 @@ namespace Xtz.StronglyTyped.Playground
 {
     // NOTE: Just a simple console app for demo purposes
 
-    public class Program
+    public static class Program
     {
         public static void Main()
         {
@@ -25,7 +25,7 @@ namespace Xtz.StronglyTyped.Playground
 
         private static void RunAddressFakers()
         {
-            var fakerBuilder = new AddressFakerBuilder(true);
+            var fakerBuilder = new AddressFakerBuilder();
 
             var city = fakerBuilder.BuildCityFaker().Generate();
             Console.WriteLine(city);
@@ -72,7 +72,7 @@ namespace Xtz.StronglyTyped.Playground
 
         private static void RunInternetFakers()
         {
-            var fakerBuilder = new InternetFakerBuilder(true);
+            var fakerBuilder = new InternetFakerBuilder();
 
             var absoluteUri = fakerBuilder.BuildAbsoluteUriFaker().Generate();
             Console.WriteLine(absoluteUri);

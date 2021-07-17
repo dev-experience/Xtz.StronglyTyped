@@ -8,7 +8,7 @@ namespace Xtz.StronglyTyped.BuiltinTypes.AutoFixture.Builders
 {
     public class VehicleFakerSpecimenBuilder : BaseFakerSpecimenBuilder
     {
-        private readonly VehicleFakerBuilder _builder = new(true);
+        private readonly VehicleFakerBuilder _builder = new();
 
         protected override Dictionary<Type, Func<IFakerTInternal>> FakerFactories => new()
         {

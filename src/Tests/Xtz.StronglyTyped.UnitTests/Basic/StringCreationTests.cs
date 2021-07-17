@@ -17,8 +17,8 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.NotNull(result);
-            Assert.AreEqual(country, result.Value);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Value, Is.EqualTo(country));
         }
 
         [TestCase("Norway")]
@@ -35,7 +35,7 @@ namespace Xtz.StronglyTyped.UnitTests.Basic
 
             //// Assert
 
-            Assert.AreEqual(country, result);
+            Assert.That(result, Is.EqualTo(country));
         }
     }
 }
