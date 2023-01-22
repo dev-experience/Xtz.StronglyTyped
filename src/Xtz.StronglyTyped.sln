@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29424.173
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.SourceGenerator", "Xtz.StronglyTyped.SourceGenerator\Xtz.StronglyTyped.SourceGenerator.csproj", "{503E274F-8146-4487-B4A9-CF36E32B82F9}"
 EndProject
@@ -36,6 +36,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.EntityFramework.IntegrationTests", "Tests\Xtz.StronglyTyped.EntityFramework.IntegrationTests\Xtz.StronglyTyped.EntityFramework.IntegrationTests.csproj", "{857370EC-A6FA-47FE-9005-8CC4D752630F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.Api_3_1.IntegrationTests", "Xtz.StronglyTyped.Api_3_1.IntegrationTests\Xtz.StronglyTyped.Api_3_1.IntegrationTests.csproj", "{1AAE34E7-203E-41D3-A054-4767C5A99FAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AssemblySize", "AssemblySize", "{B3BED702-A1F7-42FD-8ACA-FB091051EE10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.Strongly.Typed.EmptyLibrary", "AssemblySize\Xtz.Strongly.Typed.EmptyLibrary\Xtz.Strongly.Typed.EmptyLibrary.csproj", "{0C5C1C98-A9C8-404A-AF36-3E569A95D21B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.ManyClasses", "AssemblySize\Xtz.StronglyTyped.ManyClasses\Xtz.StronglyTyped.ManyClasses.csproj", "{6D04BFDF-9A8A-4FD4-AE29-43FE023F3EA5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xtz.StronglyTyped.ManyStrongTypes", "AssemblySize\Xtz.StronglyTyped.ManyStrongTypes\Xtz.StronglyTyped.ManyStrongTypes.csproj", "{E5A3BE06-A83A-4D3E-95DA-13576E1FA188}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +111,18 @@ Global
 		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AAE34E7-203E-41D3-A054-4767C5A99FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C5C1C98-A9C8-404A-AF36-3E569A95D21B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5C1C98-A9C8-404A-AF36-3E569A95D21B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5C1C98-A9C8-404A-AF36-3E569A95D21B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5C1C98-A9C8-404A-AF36-3E569A95D21B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D04BFDF-9A8A-4FD4-AE29-43FE023F3EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D04BFDF-9A8A-4FD4-AE29-43FE023F3EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D04BFDF-9A8A-4FD4-AE29-43FE023F3EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D04BFDF-9A8A-4FD4-AE29-43FE023F3EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5A3BE06-A83A-4D3E-95DA-13576E1FA188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5A3BE06-A83A-4D3E-95DA-13576E1FA188}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5A3BE06-A83A-4D3E-95DA-13576E1FA188}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5A3BE06-A83A-4D3E-95DA-13576E1FA188}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +136,9 @@ Global
 		{F5E5B3F6-F0D7-4B11-A99C-87E3ADCEEFFE} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{857370EC-A6FA-47FE-9005-8CC4D752630F} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
 		{1AAE34E7-203E-41D3-A054-4767C5A99FAC} = {364CF428-8597-468D-9B5E-8D9A7BC6CC29}
+		{0C5C1C98-A9C8-404A-AF36-3E569A95D21B} = {B3BED702-A1F7-42FD-8ACA-FB091051EE10}
+		{6D04BFDF-9A8A-4FD4-AE29-43FE023F3EA5} = {B3BED702-A1F7-42FD-8ACA-FB091051EE10}
+		{E5A3BE06-A83A-4D3E-95DA-13576E1FA188} = {B3BED702-A1F7-42FD-8ACA-FB091051EE10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4FB6146-7992-4E75-B5F9-22B2ADA3C82F}
