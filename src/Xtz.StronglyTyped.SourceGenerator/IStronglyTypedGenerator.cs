@@ -2,7 +2,7 @@
 
 namespace Xtz.StronglyTyped.SourceGenerator
 {
-    public interface IStronglyTypedGenerator : ISourceGenerator
+    public interface IStronglyTypedGenerator : IIncrementalGenerator
     {
     }
 }

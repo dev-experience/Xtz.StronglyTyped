@@ -47,7 +47,6 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         public bool BuildWorkItem(
             SemanticModel semanticModel,
-            SyntaxReceiver receiver,
             StrongTypeDeclaration declaration,
             out StronglyTypedWorkItem? workItem)
         {
@@ -67,7 +66,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
             var strongTypeAttributeSyntax = typeDeclarationSyntax.AttributeLists
                 .SelectMany(x => x.Attributes)
-                .FirstOrDefault(x => receiver.IsStrongTypeAttribute(x));
+                .FirstOrDefault(x => IsStrongTypeAttribute(x));
             if (strongTypeAttributeSyntax is null)
             {
                 _log.Add($"Unable to to find '[{nameof(StrongTypeAttribute)}]' attribute on type '{originalTypeName}'. Ignoring");
@@ -384,6 +383,12 @@ namespace Xtz.StronglyTyped.SourceGenerator
             var result = methodDeclarationSyntax.Identifier.Text == expectedName
                 && methodDeclarationSyntax.ReturnType.ToString() == expectedReturnType;
             return result;
+        }
+
+        private static bool IsStrongTypeAttribute(AttributeSyntax attributeSyntax)
+        {
+            var name = attributeSyntax.Name.ToString();
+            return name == "StrongType" || name.EndsWith(".StrongType");
         }
     }
 }

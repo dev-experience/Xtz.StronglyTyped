@@ -9,7 +9,6 @@ namespace Xtz.StronglyTyped.SourceGenerator
 
         bool BuildWorkItem(
             SemanticModel semanticModel,
-            SyntaxReceiver receiver,
             StrongTypeDeclaration declaration,
             out StronglyTypedWorkItem? workItem);
     }

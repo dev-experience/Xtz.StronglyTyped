@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.NetworkInformation;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Xtz.StronglyTyped.SourceGenerator
@@ -13,113 +10,85 @@ namespace Xtz.StronglyTyped.SourceGenerator
     [Generator]
     public class StronglyTypedGenerator : IStronglyTypedGenerator
     {
-        private static readonly Dictionary<Type, ConstructorDescriptor> KNOWN_CONSTRUCTORS = new()
+        public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            { typeof(bool), new("bool", "bool.Parse(value)") },
-            { typeof(byte), new("byte", "byte.Parse(value)") },
-            { typeof(char), new("char", "char.Parse(value)") },
-            { typeof(decimal), new("decimal", "decimal.Parse(value)") },
-            { typeof(double), new("double", "double.Parse(value)") },
-            { typeof(float), new("float", "float.Parse(value)") },
-            { typeof(int), new("int", "int.Parse(value)") },
-            { typeof(long), new("long", "long.Parse(value)") },
-            { typeof(sbyte), new("sbyte", "sbyte.Parse(value)") },
-            { typeof(short), new("short", "short.Parse(value)") },
-            { typeof(uint), new("uint", "uint.Parse(value)") },
-            { typeof(ulong), new("ulong", "ulong.Parse(value)") },
-            { typeof(ushort), new("ushort", "ushort.Parse(value)") },
-            { typeof(DateTime), new(typeof(DateTime).FullName!, "System.DateTime.Parse(value)") },
-            { typeof(TimeSpan), new(typeof(TimeSpan).FullName!, "System.TimeSpan.Parse(value)") },
-            { typeof(Guid), new(typeof(Guid).FullName!, "System.Guid.Parse(value)") },
-            // Skipping `MailAddress` as it has `(string value)` constructor
-            { typeof(IPAddress), new(typeof(IPAddress).FullName!, "System.Net.IPAddress.Parse(value)") },
-            { typeof(PhysicalAddress), new(typeof(PhysicalAddress).FullName!, "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
-            // Skipping `Uri` as it has `(string value)` constructor
-        };
-        
-        private readonly IDataExtractor _dataExtractor = new DataExtractor();
+            // Create a provider for syntax trees
+            var syntaxProvider = context.SyntaxProvider
+                .CreateSyntaxProvider(
+                    predicate: static (s, _) => IsSyntaxTargetForGeneration(s),
+                    transform: static (ctx, _) => GetTargetForGeneration(ctx))
+                .Where(static m => m is not null)
+                .Select(static (m, _) => m!.Value);
 
-        private readonly List<string> _log = new();
-
-        public void Initialize(GeneratorInitializationContext context)
-        {
-            // Register a syntax receiver that will be created for each generation pass
-            context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+            // Generate the source
+            context.RegisterSourceOutput(syntaxProvider, static (spc, source) => Execute(source, spc));
         }
 
-        public void Execute(GeneratorExecutionContext context)
+        private static bool IsSyntaxTargetForGeneration(SyntaxNode node)
         {
-            if (context.SyntaxReceiver is not SyntaxReceiver receiver) return;
+            return node is TypeDeclarationSyntax typeDeclarationSyntax &&
+                   HasStrongTypeAttribute(typeDeclarationSyntax);
+        }
 
+        private static (StrongTypeDeclaration Declaration, Compilation Compilation, SemanticModel SemanticModel)? GetTargetForGeneration(GeneratorSyntaxContext context)
+        {
+            if (context.Node is TypeDeclarationSyntax typeDeclarationSyntax)
+            {
+                var semanticModel = context.SemanticModel;
+                var compilation = semanticModel.Compilation;
+                var declaration = new StrongTypeDeclaration(typeDeclarationSyntax);
+                return (declaration, compilation, semanticModel);
+            }
+            return null;
+        }
+
+        private static bool HasStrongTypeAttribute(TypeDeclarationSyntax typeDeclarationSyntax)
+        {
+            return typeDeclarationSyntax.AttributeLists
+                .SelectMany(attrList => attrList.Attributes)
+                .Any(attr => IsStrongTypeAttribute(attr));
+        }
+
+        private static bool IsStrongTypeAttribute(AttributeSyntax attributeSyntax)
+        {
+            var name = attributeSyntax.Name.ToString();
+            return name == "StrongType" || name.EndsWith(".StrongType");
+        }
+
+        private static void Execute((StrongTypeDeclaration Declaration, Compilation Compilation, SemanticModel SemanticModel) data, SourceProductionContext context)
+        {
             try
             {
                 var now = DateTime.UtcNow;
-
-                foreach (var declaration in receiver.Declarations)
+                var semanticModel = data.SemanticModel;
+                
+                var dataExtractor = new DataExtractor();
+                if (dataExtractor.BuildWorkItem(semanticModel, data.Declaration, out var workItem))
                 {
-                    try
+                    if (workItem is null)
                     {
-                        var semanticModel = context.Compilation.GetSemanticModel(declaration.TypeDeclarationSyntax.SyntaxTree, true);
-                        if (_dataExtractor.BuildWorkItem(semanticModel, receiver, declaration, out var workItem))
-                        {
-                            if (workItem is null)
-                            {
-                                _log.Add($"Error: Work item is <null>. Syntax '{declaration.TypeDeclarationSyntax.Identifier}'");
-                                continue;
-                            }
-
-                            if (workItem.Namespace is null)
-                            {
-                                _log.Add($"Error: Work namespace is <null>. Syntax '{declaration.TypeDeclarationSyntax.Identifier}'");
-                                continue;
-                            }
-
-                            var fileName = $"{workItem.Namespace}.{workItem.TypeName}.cs";
-                            var generatedSourceCode = GenerateSourceCode(workItem, now);
-                            context.AddSource(fileName, SourceText.From(generatedSourceCode, Encoding.UTF8));
-                        }
+                        context.AddSource("_error_null_workitem", SourceText.From($"// Error: Work item is <null>. Syntax '{data.Declaration.TypeDeclarationSyntax.Identifier}'", Encoding.UTF8));
+                        return;
                     }
-                    catch (FileNotFoundException e)
+
+                    if (workItem.Namespace is null)
                     {
-                        var process = Process.GetCurrentProcess();
-                        var processId = process.Id;
-                        var processName = process.ProcessName;
-#if DEBUG
-                        if (!Debugger.IsAttached) Debugger.Launch();
-#endif
-                        // IMPORTANT: Check if you use any types from `Xtz.StronglyTyped` library or any other library. Remove if any. Dependencies are not copied along with source generator (if they are not analyzers as well).
-                        // https://github.com/dotnet/roslyn/discussions/47517#discussioncomment-63842
-                        
-                        _log.Add("\nIMPORTANT: Check if you use any types from `Xtz.StronglyTyped` library or any other library. Remove if any. Dependencies are not copied along with source generator (if they are not analyzers as well).\nhttps://github.com/dotnet/roslyn/discussions/47517#discussioncomment-63842\n");
-                        _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\n\nStack trace: {e.StackTrace}\n\nProcess ID: {processId}\n\nProcess name: {processName}\n\nFusion log: {e.FusionLog}");
+                        context.AddSource("_error_null_namespace", SourceText.From($"// Error: Work namespace is <null>. Syntax '{data.Declaration.TypeDeclarationSyntax.Identifier}'", Encoding.UTF8));
+                        return;
                     }
-                    catch (Exception e)
-                    {
-#if DEBUG
-                        if (!Debugger.IsAttached) Debugger.Launch();
-#endif
 
-                        _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\nStack trace: {e.StackTrace}");
-                    }
+                    var fileName = $"{workItem.Namespace}.{workItem.TypeName}.cs";
+                    var generatedSourceCode = GenerateSourceCode(workItem, now);
+                    context.AddSource(fileName, SourceText.From(generatedSourceCode, Encoding.UTF8));
                 }
             }
             catch (Exception e)
             {
-#if DEBUG
-                if (!Debugger.IsAttached) Debugger.Launch();
-#endif
-
-                _log.Add($"Method '{nameof(StronglyTypedGenerator)}.{nameof(Execute)}()' threw an exception '{e.Message}'.\nStack trace: {e.StackTrace}");
-            }
-            finally
-            {
-                context.AddSource("_1-receiver-log", BuildLogText(receiver.Log, "SYNTAX RECEIVER LOG"));
-                context.AddSource("_2-data-extractor-log", BuildLogText(_dataExtractor.Log, "DATA EXTRACTOR LOG"));
-                context.AddSource($"_3-generator-log", BuildLogText(_log, "GENERATOR LOG"));
+                context.AddSource("_error_exception", SourceText.From($"// Error: {e.Message}\n// Stack trace: {e.StackTrace}", Encoding.UTF8));
             }
         }
 
-        private string GenerateSourceCode(StronglyTypedWorkItem workItem, DateTime timestamp)
+        private static string GenerateSourceCode(StronglyTypedWorkItem workItem, DateTime timestamp)
         {
             var writer = new CodeWriter();
 
@@ -153,9 +122,9 @@ namespace Xtz.StronglyTyped.SourceGenerator
             return generatedSourceCode;
         }
 
-        private void WriteBanner(CodeWriter writer, StronglyTypedWorkItem workItem, DateTime timestamp)
+        private static void WriteBanner(CodeWriter writer, StronglyTypedWorkItem workItem, DateTime timestamp)
         {
-            var version = GetType().Assembly.GetName().Version;
+            var version = typeof(StronglyTypedGenerator).Assembly.GetName().Version;
             var assemblyVersion = $"{version!.Major}.{version.Minor}.{version.Revision}.{version.Build}";
 
             writer.AppendLine(
@@ -163,14 +132,14 @@ namespace Xtz.StronglyTyped.SourceGenerator
 // <auto-generated>
 //     Type `{workItem.Namespace}.{workItem.TypeName}`
 //
-//     This code was generated by generator '{GetType().FullName}'
+//     This code was generated by generator '{typeof(StronglyTypedGenerator).FullName}'
 //     Assembly Version: {assemblyVersion}
 //     Generation timestamp: {timestamp:s}Z
 // </auto-generated>
 //------------------------------------");
         }
 
-        private void WriteTypeConverter(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteTypeConverter(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             var valueType = workItem.InnerType;
             var typeConverter = valueType switch
@@ -182,7 +151,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             writer.AppendLine(typeConverter);
         }
 
-        private void WriteClass(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteClass(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             var baseType = !workItem.ExtraFeatures.HasBaseClass
                 ? $" Xtz.StronglyTyped.StronglyTyped<{workItem.InnerType.FullName}>,"
@@ -219,7 +188,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
-        private void TryWriteAllowEmpty(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void TryWriteAllowEmpty(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             if (workItem.ExtraFeatures.DoesAllowEmpty)
             {
@@ -229,9 +198,9 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
-        private void WriteStruct(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteStruct(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
-            writer.AppendLine("[System.Diagnostics.DebuggerDisplay(\"[struct {GetType().Name,nq}] {Value}\")]");
+            writer.AppendLine("[System.Diagnostics.DebuggerDisplay(\"[struct {typeof(StronglyTypedGenerator).Name,nq}] {Value}\")]");
             using (writer.BeginScope($"public readonly partial struct {workItem.TypeName} : Xtz.StronglyTyped.IStronglyTyped<{workItem.InnerType.FullName}>, System.IEquatable<{workItem.TypeName}>"))
             {
                 WriteXmlSummary(writer, "Default instance.");
@@ -271,7 +240,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
-        private void TryWriteCustomConstructors(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void TryWriteCustomConstructors(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             if (workItem.InnerType == typeof(Guid))
             {
@@ -282,13 +251,9 @@ namespace Xtz.StronglyTyped.SourceGenerator
             {
                 WriteStringConstructor(writer, workItem);
             }
-            else
-            {
-                TryWriteParsingStringConstructor(writer, workItem);
-            }
         }
 
-        private void WriteGuidStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteGuidStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             var typeKindStr = workItem.Kind == WorkItemKind.Struct
                 ? "struct"
@@ -309,7 +274,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
             }
         }
 
-        private void WriteStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> class.");
             WriteXmlParam(writer, "value", "String value to convert");
@@ -321,22 +286,9 @@ namespace Xtz.StronglyTyped.SourceGenerator
             writer.AppendLine();
         }
 
-        private void TryWriteParsingStringConstructor(CodeWriter writer, StronglyTypedWorkItem workItem)
-        {
-            if (KNOWN_CONSTRUCTORS.TryGetValue(workItem.InnerType, out var descriptor))
-            {
-                WriteXmlSummary(writer, $"Initializes a new instance of the <see cref=\"{workItem.TypeName}\"/> class.");
-                WriteXmlParam(writer, "value", "String value to convert");
-                writer.AppendLine($"public {workItem.TypeName}(string value)");
-                writer.AppendLine($"    : this({descriptor.ParsingExpression})");
-                using (writer.BeginScope())
-                {
-                }
-                writer.AppendLine();
-            }
-        }
 
-        private void WriteStructThrowIfInvalid(CodeWriter writer, StronglyTypedWorkItem workItem)
+
+        private static void WriteStructThrowIfInvalid(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             using (writer.BeginScope($"private void ThrowIfInvalid({workItem.InnerType.FullName} value)"))
             {
@@ -344,7 +296,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                 {
                     using (writer.BeginScope("if (value == null)"))
                     {
-                        writer.AppendLine("Throw($\"<null> value is invalid for type {GetType()}\");");
+                        writer.AppendLine("Throw($\"<null> value is invalid for type {typeof(StronglyTypedGenerator)}\");");
                     }
                 }
 
@@ -353,7 +305,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     writer.AppendLine();
                     using (writer.BeginScope("if (value == string.Empty)"))
                     {
-                        writer.AppendLine("Throw($\"'' value is invalid for type {GetType()}\");");
+                        writer.AppendLine("Throw($\"'' value is invalid for type {typeof(StronglyTypedGenerator)}\");");
                     }
                 }
 
@@ -362,17 +314,17 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     writer.AppendLine();
                     using (writer.BeginScope("if (!IsValid(value))"))
                     {
-                        writer.AppendLine("Throw($\"'{Value}' value is invalid for type {GetType()}\");");
+                        writer.AppendLine("Throw($\"'{value}' value is invalid for type {typeof(StronglyTypedGenerator)}\");");
                     }
                 }
             }
             writer.AppendLine();
 
-            writer.AppendLine("private void Throw(string errorMessage) => throw new Xtz.StronglyTyped.StronglyTypedException(GetType(), errorMessage);");
+            writer.AppendLine("private void Throw(string errorMessage) => throw new Xtz.StronglyTyped.StronglyTypedException(typeof(StronglyTypedGenerator), errorMessage);");
             writer.AppendLine();
         }
 
-        private void WriteStructEqualityMethods(CodeWriter writer, StronglyTypedWorkItem workItem)
+        private static void WriteStructEqualityMethods(CodeWriter writer, StronglyTypedWorkItem workItem)
         {
             WriteXmlSummary(writer, "Determines whether the specified object is equal to the current struct.");
             WriteXmlParam(writer, "obj", "The object to compare with the current struct.");
@@ -530,20 +482,6 @@ namespace Xtz.StronglyTyped.SourceGenerator
             writer.AppendLine($"/// <param name=\"{paramName}\">{description}</param>");
         }
 
-        private static SourceText BuildLogText(IReadOnlyCollection<string> log, string title)
-        {
-            var version = typeof(StronglyTypedGenerator).Assembly.GetName().Version;
-            var assemblyVersion = $"{version!.Major}.{version.Minor}.{version.Revision}.{version.Build}";
- 
-            var result = SourceText.From(
-                string.Format(@"/*{0}{1}{0}{0}{2}{0}{0}{3}{0}{0}{4}{0}{0}*/",
-                    Environment.NewLine,
-                    title,
-                    $"This code was generated by generator '{typeof(StronglyTypedGenerator).FullName}'\nAssembly Version: {assemblyVersion}",
-                    $"{DateTime.UtcNow:s}Z",
-                    string.Join(Environment.NewLine, log)),
-                Encoding.UTF8);
-            return result;
-        }
+
     }
 }
