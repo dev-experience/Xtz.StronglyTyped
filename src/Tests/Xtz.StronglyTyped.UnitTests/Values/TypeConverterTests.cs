@@ -25,9 +25,9 @@ namespace Xtz.StronglyTyped.UnitTests.Values
 
             //// Assert
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expected, result);
-            Assert.AreEqual(expected.Value, result.Value);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result.Value, Is.EqualTo(expected.Value));
         }
 
         [TestCase(Int32.MinValue)]

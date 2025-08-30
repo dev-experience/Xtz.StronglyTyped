@@ -105,12 +105,12 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -151,12 +151,12 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(5, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(5));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
@@ -187,26 +187,26 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(5, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(5));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsFalse(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.False);
         }
 
         [Test]
-        public void ShouldNotGenerate_WhenNoNamespace()
+                public void ShouldNotGenerate_WhenNoNamespace()
         {
             //// Arrange
 
             var sourceCode = @"
-using Xtz.StronglyTyped.SourceGenerator;
+    using Xtz.StronglyTyped.SourceGenerator;
 
-[StrongType]
-public partial class City2
-{
-}
+    [StrongType]
+    public partial class City2
+    {
+    }
             ";
 
             var inputCompilation = CreateCompilation(sourceCode, OutputKind.DynamicallyLinkedLibrary);
@@ -220,12 +220,12 @@ public partial class City2
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
         }
 
         [Test]
@@ -256,12 +256,12 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
         }
 
         [Test]
@@ -296,12 +296,12 @@ namespace IntegrationTests.Generated
 
             //// Assert
 
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(4, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(4));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
         }
     }
 }

@@ -110,23 +110,23 @@ namespace Xtz.StronglyTyped.SourceGenerator.IntegrationTests
         protected static void AssertGenerationSuccess(int treeNumber, ImmutableArray<Diagnostic> diagnostics, Compilation outputCompilation,
             GeneratorDriverRunResult runResult)
         {
-            Assert.IsTrue(diagnostics.IsEmpty);
+            Assert.That(diagnostics.IsEmpty, Is.True);
             // Input syntax tree, a generated one, and logs
-            Assert.AreEqual(treeNumber + 1, outputCompilation.SyntaxTrees.Count());
+            Assert.That(outputCompilation.SyntaxTrees.Count(), Is.EqualTo(treeNumber + 1));
 
             PrintDiagnosticsToDebug(outputCompilation);
-            Assert.IsTrue(outputCompilation.GetDiagnostics().IsEmpty);
+            Assert.That(outputCompilation.GetDiagnostics().IsEmpty, Is.True);
 
             // A generated syntax tree and logs
-            Assert.AreEqual(treeNumber, runResult.GeneratedTrees.Length);
-            Assert.IsTrue(runResult.Diagnostics.IsEmpty);
+            Assert.That(runResult.GeneratedTrees.Length, Is.EqualTo(treeNumber));
+            Assert.That(runResult.Diagnostics.IsEmpty, Is.True);
 
             // Asserting the individual results on a by-generator basis
             var generatorResult = runResult.Results[0];
-            Assert.AreEqual(typeof(StronglyTypedGenerator), generatorResult.Generator.GetType());
-            Assert.IsTrue(generatorResult.Diagnostics.IsEmpty);
-            Assert.AreEqual(treeNumber, generatorResult.GeneratedSources.Length);
-            Assert.IsNull(generatorResult.Exception);
+            Assert.That(generatorResult.Generator.GetType(), Is.EqualTo(typeof(StronglyTypedGenerator)));
+            Assert.That(generatorResult.Diagnostics.IsEmpty, Is.True);
+            Assert.That(generatorResult.GeneratedSources.Length, Is.EqualTo(treeNumber));
+            Assert.That(generatorResult.Exception, Is.Null);
         }
 
         [ExcludeFromCodeCoverage]

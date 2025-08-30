@@ -44,8 +44,8 @@ namespace Xtz.StronglyTyped.IntegrationTests
 
             // Assert
 
-            Assert.NotNull(settings);
-            Assert.AreEqual(expectedCountry, settings.Country);
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.Country, Is.EqualTo(expectedCountry));
         }
 
         [Test]

@@ -48,7 +48,7 @@ namespace Xtz.StronglyTyped.IntegrationTests
             // Assert
 
             Assert.That(() => result.Contains(country));
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -66,8 +66,8 @@ namespace Xtz.StronglyTyped.IntegrationTests
 
             // Assert
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expected, result.Country);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Country, Is.EqualTo(expected));
         }
 
         [Test]
@@ -85,8 +85,8 @@ namespace Xtz.StronglyTyped.IntegrationTests
 
             // Assert
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expected, result.Inner.Country);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Inner.Country, Is.EqualTo(expected));
         }
     }
 }
