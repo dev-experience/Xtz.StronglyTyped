@@ -12,7 +12,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
 {
     public class DataExtractor : IDataExtractor
     {
-        private static readonly Assembly SYSTEM_PRIVATE_CORE_LIB_ASSEMBLY = Assembly.GetAssembly(typeof(string));
+        private static readonly Assembly SYSTEM_PRIVATE_CORE_LIB_ASSEMBLY = Assembly.GetAssembly(typeof(string))!;
 
         private static readonly Dictionary<string, Type> KNOWN_TYPES = new()
         {
@@ -30,13 +30,13 @@ namespace Xtz.StronglyTyped.SourceGenerator
             { "uint", typeof(uint) },
             { "ulong", typeof(ulong) },
             { "ushort", typeof(ushort) },
-            { typeof(DateTime).FullName, typeof(DateTime) },
-            { typeof(TimeSpan).FullName, typeof(TimeSpan) },
-            { typeof(Guid).FullName, typeof(Guid) },
-            { typeof(Uri).FullName, typeof(Uri) },
-            { typeof(MailAddress).FullName, typeof(MailAddress) },
-            { typeof(IPAddress).FullName, typeof(IPAddress) },
-            { typeof(PhysicalAddress).FullName, typeof(PhysicalAddress) },
+            { typeof(DateTime).FullName!, typeof(DateTime) },
+            { typeof(TimeSpan).FullName!, typeof(TimeSpan) },
+            { typeof(Guid).FullName!, typeof(Guid) },
+            { typeof(Uri).FullName!, typeof(Uri) },
+            { typeof(MailAddress).FullName!, typeof(MailAddress) },
+            { typeof(IPAddress).FullName!, typeof(IPAddress) },
+            { typeof(PhysicalAddress).FullName!, typeof(PhysicalAddress) },
         };
 
         private static readonly Type DEFAULT_INNER_TYPE = typeof(string);
@@ -133,18 +133,13 @@ namespace Xtz.StronglyTyped.SourceGenerator
         {
             if (string.IsNullOrEmpty(typeName)) return null;
 
-            if (KNOWN_TYPES.TryGetValue(typeName, out var knownType))
+            if (KNOWN_TYPES.TryGetValue(typeName!, out var knownType))
             {
                 return knownType;
             }
 
             var systemType = SYSTEM_PRIVATE_CORE_LIB_ASSEMBLY.GetType(typeName);
-            if (systemType != null)
-            {
-                return systemType;
-            }
-
-            return null;
+            return systemType ?? null;
         }
 
         private string? ExtractNamespace(SemanticModel semanticModel, TypeDeclarationSyntax typeDeclarationSyntax)
@@ -305,7 +300,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
                     // [StrongType(..., allow: Allow.Null | Allow.Empty)]
                     //                         ^
                     var binaryOperation = semanticModel.GetOperation(binaryExpressionSyntax);
-                    if (binaryOperation?.Type.ToDisplayString() == typeof(TEnum).FullName)
+                    if (binaryOperation?.Type?.ToDisplayString() == typeof(TEnum).FullName)
                     {
                         // [StrongType(..., allow: Allow.Null | Allow.Empty)]
                         //                         ^

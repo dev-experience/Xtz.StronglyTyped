@@ -28,12 +28,12 @@ namespace Xtz.StronglyTyped.SourceGenerator
             { typeof(uint), new("uint", "uint.Parse(value)") },
             { typeof(ulong), new("ulong", "ulong.Parse(value)") },
             { typeof(ushort), new("ushort", "ushort.Parse(value)") },
-            { typeof(DateTime), new(typeof(DateTime).FullName, "System.DateTime.Parse(value)") },
-            { typeof(TimeSpan), new(typeof(TimeSpan).FullName, "System.TimeSpan.Parse(value)") },
-            { typeof(Guid), new(typeof(Guid).FullName, "System.Guid.Parse(value)") },
+            { typeof(DateTime), new(typeof(DateTime).FullName!, "System.DateTime.Parse(value)") },
+            { typeof(TimeSpan), new(typeof(TimeSpan).FullName!, "System.TimeSpan.Parse(value)") },
+            { typeof(Guid), new(typeof(Guid).FullName!, "System.Guid.Parse(value)") },
             // Skipping `MailAddress` as it has `(string value)` constructor
-            { typeof(IPAddress), new(typeof(IPAddress).FullName, "System.Net.IPAddress.Parse(value)") },
-            { typeof(PhysicalAddress), new(typeof(PhysicalAddress).FullName, "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
+            { typeof(IPAddress), new(typeof(IPAddress).FullName!, "System.Net.IPAddress.Parse(value)") },
+            { typeof(PhysicalAddress), new(typeof(PhysicalAddress).FullName!, "System.Net.NetworkInformation.PhysicalAddress.Parse(value)") },
             // Skipping `Uri` as it has `(string value)` constructor
         };
         
@@ -156,7 +156,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
         private void WriteBanner(CodeWriter writer, StronglyTypedWorkItem workItem, DateTime timestamp)
         {
             var version = GetType().Assembly.GetName().Version;
-            var assemblyVersion = $"{version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
+            var assemblyVersion = $"{version!.Major}.{version.Minor}.{version.Revision}.{version.Build}";
 
             writer.AppendLine(
                 $@"//------------------------------------
@@ -533,7 +533,7 @@ namespace Xtz.StronglyTyped.SourceGenerator
         private static SourceText BuildLogText(IReadOnlyCollection<string> log, string title)
         {
             var version = typeof(StronglyTypedGenerator).Assembly.GetName().Version;
-            var assemblyVersion = $"{version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
+            var assemblyVersion = $"{version!.Major}.{version.Minor}.{version.Revision}.{version.Build}";
  
             var result = SourceText.From(
                 string.Format(@"/*{0}{1}{0}{0}{2}{0}{0}{3}{0}{0}{4}{0}{0}*/",
