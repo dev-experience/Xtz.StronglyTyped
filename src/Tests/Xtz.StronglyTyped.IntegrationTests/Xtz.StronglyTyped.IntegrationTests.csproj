@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.10.3" />
-    <PackageReference Include="nunit" Version="4.4.0" />
+    <PackageReference Include="nunit" Version="3.14.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
   </ItemGroup>
